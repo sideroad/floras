@@ -41,7 +41,12 @@ module.exports = {
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" },
       { test: webpackIsomorphicToolsPlugin.regular_expression('images'), loader: 'url-loader?limit=10240' }
-    ]
+    ],
+    postLoaders: [{
+      include: /node_modules\/mapbox-gl/,
+      loader: 'transform-loader',
+      query: 'brfs',
+    }],
   },
   progress: true,
   resolve: {
@@ -49,7 +54,11 @@ module.exports = {
       'src',
       'node_modules'
     ],
-    extensions: ['', '.json', '.js', '.jsx']
+    extensions: ['', '.json', '.js', '.jsx'],
+    alias: {
+      webworkify: 'webworkify-webpack-dropin',
+      'gl-matrix': path.resolve('./node_modules/gl-matrix/dist/gl-matrix.js'),
+    }
   },
   plugins: [
     new CleanPlugin([relativeAssetsPath]),
