@@ -1,0 +1,7 @@
+node_modules
+static/docs
+static/dist
+npm-debug.log
+.DS_Store
+webpack-assets.json
+copycss.sh
