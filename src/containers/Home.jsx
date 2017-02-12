@@ -89,7 +89,7 @@ class Home extends Component {
           {...this.props.mapViewState}
           mapboxApiAccessToken={TOKEN}
           perspectiveEnabled
-          mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapStyle="mapbox://styles/sideroad/ciz10g2k7000p2rq7hd9jp215"
           onChangeViewport={
             (mapViewState) => {
               this.props.updateMap({
