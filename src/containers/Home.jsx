@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import { asyncConnect } from 'redux-connect';
 import MapGL from 'react-map-gl';
 import DeckGL from 'deck.gl/react';
 import Slider from 'rc-slider';
@@ -53,33 +54,22 @@ class Home extends Component {
   render() {
     const layers = [new ScatterplotLayer({
       id: 'grid',
-      data: [
-        {
-          color: [255, 135, 175],
-          position: [135.8647839, 34.3603986, 0],
-          radius: 5
-        },
-        {
-          color: [255, 135, 175],
-          position: [138.0613931, 35.8335566, 0],
-          radius: 5
-        },
-        {
-          color: [255, 135, 175],
-          position: [138.9225609, 34.7469469, 0],
-          radius: 5
-        },
-        {
-          color: [255, 135, 175],
-          position: [135.819585, 34.951465, 0],
-          radius: 5
+      data: this.props.events.map((event) => {
+        if (Number(event.day) === this.state.dayOfYear) {
+          return {
+            ...event,
+            color: [255, 135, 175],
+            radius: event.strength * 5,
+            position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
+          };
         }
-      ],
+        return undefined;
+      }).filter(item => item),
       opacity: 0.5,
       strokeWidth: 2,
       pickable: true,
-      radiusMinPixels: 5,
-      radiusMaxPixels: 150,
+      radiusMinPixels: 4,
+      radiusMaxPixels: 300,
     })];
     return (
       <div>
@@ -105,6 +95,13 @@ class Home extends Component {
             height={this.state.height}
             {...this.props.mapViewState}
             layers={layers}
+            onLayerClick={
+              (info) => {
+                if (info) {
+                  console.log(info.object);
+                }
+              }
+            }
           />
         </MapGL>
         <div className={styles.date}>
@@ -129,6 +126,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
+  events: PropTypes.array.isRequired,
   mapViewState: PropTypes.object,
   dayOfYear: PropTypes.number.isRequired,
   updateMap: PropTypes.func.isRequired,
@@ -147,10 +145,22 @@ Home.contextTypes = {
 
 const connected = connect(
   state => ({
+    events: state.event.items,
     mapViewState: state.map.mapViewState,
     dayOfYear: state.date.dayOfYear
   }),
   { updateMap, setDate }
 )(Home);
 
-export default connected;
+const asynced = asyncConnect([{
+  promise: ({ helpers: { fetcher } }) => {
+    const promises = [];
+    promises.push(fetcher.event.gets({
+      offset: 0,
+      limit: 100000
+    }));
+    return Promise.all(promises);
+  }
+}])(connected);
+
+export default asynced;

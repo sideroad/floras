@@ -4,15 +4,10 @@ import config from './config';
 const base = normalize(`${config.api.host}:${config.api.port}`);
 
 export default {
-  person: {
-    load: {
-      url: `${base}/apis/koiki/people`,
+  event: {
+    gets: {
+      url: `${base}/apis/fs/events`,
       method: 'GET'
-    }
-  },
-  hobby: {
-    load: {
-      url: `${base}/apis/koiki/hobbies`
     }
   }
 };

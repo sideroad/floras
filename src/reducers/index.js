@@ -1,3 +1,4 @@
+import event from './event';
 import date from './date';
 import map from './map';
 import person from './person';
@@ -7,5 +8,6 @@ export default {
   person,
   hobby,
   map,
-  date
+  date,
+  event
 };
