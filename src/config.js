@@ -24,6 +24,9 @@ module.exports = Object.assign({
     host: 'chaus.herokuapp.com',
     port: Number('443')
   },
+  googleapis: {
+    key: 'AIzaSyD-cN8kJmyaYkxOfYfda-MC4Llb62LpMOE'
+  },
   app: {
     base,
     host: appHost,

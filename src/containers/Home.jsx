@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { asyncConnect } from 'redux-connect';
 import MapGL from 'react-map-gl';
 import DeckGL from 'deck.gl/react';
 import Slider from 'rc-slider';
@@ -152,15 +151,4 @@ const connected = connect(
   { updateMap, setDate }
 )(Home);
 
-const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher } }) => {
-    const promises = [];
-    promises.push(fetcher.event.gets({
-      offset: 0,
-      limit: 100000
-    }));
-    return Promise.all(promises);
-  }
-}])(connected);
-
-export default asynced;
+export default connected;
