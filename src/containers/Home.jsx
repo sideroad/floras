@@ -109,6 +109,7 @@ class Home extends Component {
               })
             }
             onSelect={(item) => {
+              this.chips.input.inputDOM.blur();
               this.context.fetcher.place.get({
                 placeid: item.id
               }).then(
@@ -120,7 +121,6 @@ class Home extends Component {
                     longitude: location.lng,
                     zoom: 13,
                   });
-                  this.chips.input.inputDOM.blur();
                 }
               );
             }}
