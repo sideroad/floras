@@ -90,6 +90,8 @@
     "lodash": "^4.17.2",
     "luma.gl": "^2.10.3",
     "moment": "^2.10.6",
+    "passport": "^0.3.2",
+    "passport-instagram": "^1.0.0",
     "piping": "^0.3.0",
     "pretty-error": "^1.2.0",
     "query-string": "^3.0.0",

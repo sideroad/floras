@@ -14,7 +14,8 @@ import uris from './uris';
 import urls from './urls';
 import routes from './routes';
 import reducers from './reducers';
-import bff from './bff';
+import passporter from './helpers/passporter';
+import bff from './helpers/bff';
 
 const app = new Express();
 const pretty = new PrettyError();
@@ -27,6 +28,12 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+
+passporter.use(app);
+
+bff({
+  app
+});
 
 server({
   urls,
@@ -41,10 +48,6 @@ server({
   handlers: {
     error: error => console.error('ROUTER ERROR:', pretty.render(error))
   }
-});
-
-bff({
-  app
 });
 
 if (config.port) {

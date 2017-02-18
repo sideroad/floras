@@ -81,6 +81,10 @@ module.exports = {
         NODE_ENV: '"' + process.env.NODE_ENV + '"',
         GLOBAL_HOST: '"' + process.env.GLOBAL_HOST + '"',
         GLOBAL_PORT: '"' + process.env.GLOBAL_PORT + '"',
+        FOUR_SEASONS_MAPBOX_TOKEN: '"' + process.env.FOUR_SEASONS_MAPBOX_TOKEN + '"',
+        FOUR_SEASONS_GOOGLE_API_KEY: '"' + process.env.FOUR_SEASONS_GOOGLE_API_KEY + '"',
+        FOUR_SEASONS_INSTAGRAM_APP_ID: '"' + process.env.FOUR_SEASONS_INSTAGRAM_APP_ID + '"',
+        FOUR_SEASONS_INSTAGRAM_APP_SECRET: '""',
       }
     }),
 

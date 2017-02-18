@@ -6,7 +6,7 @@ import config from '../config';
 const App = props =>
   <div>
     {props.children}
-    <Helmet {...config.app.head} title="Visualize 4 seasons" />
+    <Helmet {...config.app.head} title="Feel 4 seasons, Find best date in the place" />
   </div>;
 
 App.propTypes = {

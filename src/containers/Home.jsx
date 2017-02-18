@@ -82,7 +82,7 @@ class Home extends Component {
         strokeWidth: 2,
         pickable: true,
         radiusMinPixels: 4,
-        radiusMaxPixels: 300,
+        radiusMaxPixels: 50,
       }),
       new ScatterplotLayer({
         id: 'grid',
@@ -91,7 +91,7 @@ class Home extends Component {
         strokeWidth: 2,
         pickable: true,
         radiusMinPixels: 4,
-        radiusMaxPixels: 300,
+        radiusMaxPixels: 30,
       })
     ];
     return (

@@ -1,6 +1,6 @@
 export default {
   pages: {
     root: '/:lang',
-    people: '/:lang/people'
+    instagram: '/:lang/instagram'
   }
 };

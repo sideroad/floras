@@ -24,12 +24,16 @@ module.exports = Object.assign({
     host: 'chaus.herokuapp.com',
     port: Number('443')
   },
+  instagram: {
+    appId: process.env.FOUR_SEASONS_INSTAGRAM_APP_ID,
+    secret: process.env.FOUR_SEASONS_INSTAGRAM_APP_SECRET
+  },
   googleapis: {
-    key: 'AIzaSyD-cN8kJmyaYkxOfYfda-MC4Llb62LpMOE',
+    key: process.env.FOUR_SEASONS_GOOGLE_API_KEY,
     host: 'maps.googleapis.com'
   },
   mapbox: {
-    token: 'pk.eyJ1Ijoic2lkZXJvYWQiLCJhIjoiY2l5ems4dHB0MDQyczJxcDh3Nmhjc2h3eCJ9.4vItskqhevUMLJv2ogNdlA'
+    token: process.env.FOUR_SEASONS_MAPBOX_TOKEN,
   },
   app: {
     base,
