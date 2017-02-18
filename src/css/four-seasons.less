@@ -1,5 +1,8 @@
 @import "variables.less";
 
+.container {
+  overflow: hidden;
+}
 .slider {
   position: absolute;
   margin: 0 10%;
@@ -14,4 +17,30 @@
   font-size: 5em;
   right: 10%;
   bottom: 50px;
+}
+
+.chips {
+  position: absolute;
+  left: 10%;
+  top: 50px;
+  z-index: 1;
+  width: 60px;
+  transition-property: width;
+  transition-duration: 0.2s;
+}
+
+.chips.focused {
+  width: 300px;
+  transition-property: width;
+  transition-duration: 0.2s;
+}
+
+.chips .input{
+  padding: 0;
+}
+
+@media(max-width:768px) {
+  .chips.focused {
+    width: 80%;
+  }
 }

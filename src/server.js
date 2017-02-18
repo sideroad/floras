@@ -14,6 +14,7 @@ import uris from './uris';
 import urls from './urls';
 import routes from './routes';
 import reducers from './reducers';
+import bff from './bff';
 
 const app = new Express();
 const pretty = new PrettyError();
@@ -40,6 +41,10 @@ server({
   handlers: {
     error: error => console.error('ROUTER ERROR:', pretty.render(error))
   }
+});
+
+bff({
+  app
 });
 
 if (config.port) {

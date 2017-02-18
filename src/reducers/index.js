@@ -1,3 +1,4 @@
+import place from './place';
 import event from './event';
 import date from './date';
 import map from './map';
@@ -9,5 +10,6 @@ export default {
   hobby,
   map,
   date,
-  event
+  event,
+  place
 };

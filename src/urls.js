@@ -9,5 +9,21 @@ export default {
       url: `${base}/apis/fs/events`,
       method: 'GET'
     }
+  },
+  place: {
+    gets: {
+      url: '/bff/maps/api/place/autocomplete/json',
+      method: 'GET',
+      defaults: {
+        key: config.googleapis.key
+      }
+    },
+    get: {
+      url: '/bff/maps/api/place/details/json',
+      method: 'GET',
+      defaults: {
+        key: config.googleapis.key
+      }
+    }
   }
 };

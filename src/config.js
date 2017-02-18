@@ -25,7 +25,11 @@ module.exports = Object.assign({
     port: Number('443')
   },
   googleapis: {
-    key: 'AIzaSyD-cN8kJmyaYkxOfYfda-MC4Llb62LpMOE'
+    key: 'AIzaSyD-cN8kJmyaYkxOfYfda-MC4Llb62LpMOE',
+    host: 'maps.googleapis.com'
+  },
+  mapbox: {
+    token: 'pk.eyJ1Ijoic2lkZXJvYWQiLCJhIjoiY2l5ems4dHB0MDQyczJxcDh3Nmhjc2h3eCJ9.4vItskqhevUMLJv2ogNdlA'
   },
   app: {
     base,
