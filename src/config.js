@@ -1,7 +1,7 @@
 require('babel-polyfill');
 const normalize = require('koiki').normalize;
 
-const title = 'four-seasons';
+const title = 'ryoran';
 const description = 'Visualize 4 seasons';
 
 const environment = {
@@ -25,15 +25,15 @@ module.exports = Object.assign({
     port: Number('443')
   },
   instagram: {
-    appId: process.env.FOUR_SEASONS_INSTAGRAM_APP_ID,
-    secret: process.env.FOUR_SEASONS_INSTAGRAM_APP_SECRET
+    appId: process.env.RYORAN_INSTAGRAM_APP_ID,
+    secret: process.env.RYORAN_INSTAGRAM_APP_SECRET
   },
   googleapis: {
-    key: process.env.FOUR_SEASONS_GOOGLE_API_KEY,
+    key: process.env.RYORAN_GOOGLE_API_KEY,
     host: 'maps.googleapis.com'
   },
   mapbox: {
-    token: process.env.FOUR_SEASONS_MAPBOX_TOKEN,
+    token: process.env.RYORAN_MAPBOX_TOKEN,
   },
   app: {
     base,

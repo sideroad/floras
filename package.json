@@ -1,13 +1,13 @@
 {
-  "name": "four-seasons",
-  "title": "four-seasons",
+  "name": "ryoran",
+  "title": "ryoran",
   "description": "Visualize 4 seasons",
   "author": "sideroad",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {},
   "keywords": [
-    "four-seasons"
+    "ryoran"
   ],
   "main": "bin/server.js",
   "scripts": {
@@ -29,7 +29,7 @@
       "command": "webpack --verbose --colors --display-error-details --config webpack/prod.config.js",
       "env": {
         "NODE_ENV": "production",
-        "GLOBAL_HOST": "four-seasons.herokuapp.com",
+        "GLOBAL_HOST": "ryoran.herokuapp.com",
         "GLOBAL_PORT": 443
       }
     },
