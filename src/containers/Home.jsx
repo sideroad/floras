@@ -11,7 +11,7 @@ import { update as updateMap } from '../reducers/map';
 import { set as setDate } from '../reducers/date';
 import config from '../config';
 
-require('rc-slider/assets/index.css');
+require('../css/rc-slider.css');
 const styles = require('../css/home.less');
 
 const ui = {
