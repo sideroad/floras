@@ -87,10 +87,10 @@ module.exports = {
         NODE_ENV: '"' + process.env.NODE_ENV + '"',
         GLOBAL_HOST: '"' + process.env.GLOBAL_HOST + '"',
         GLOBAL_PORT: '"' + process.env.GLOBAL_PORT + '"',
-        RYORAN_MAPBOX_TOKEN: '"' + process.env.RYORAN_MAPBOX_TOKEN + '"',
-        RYORAN_GOOGLE_API_KEY: '"' + process.env.RYORAN_GOOGLE_API_KEY + '"',
-        RYORAN_INSTAGRAM_APP_ID: '"' + process.env.RYORAN_INSTAGRAM_APP_ID + '"',
-        RYORAN_INSTAGRAM_APP_SECRET: '""',
+        FLORAS_MAPBOX_TOKEN: '"' + process.env.FLORAS_MAPBOX_TOKEN + '"',
+        FLORAS_GOOGLE_API_KEY: '"' + process.env.FLORAS_GOOGLE_API_KEY + '"',
+        FLORAS_INSTAGRAM_APP_ID: '"' + process.env.FLORAS_INSTAGRAM_APP_ID + '"',
+        FLORAS_INSTAGRAM_APP_SECRET: '""',
       }
     }),
     webpackIsomorphicToolsPlugin.development()

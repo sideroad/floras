@@ -12,7 +12,7 @@ import { set as setDate } from '../reducers/date';
 import config from '../config';
 
 require('rc-slider/assets/index.css');
-const styles = require('../css/ryoran.less');
+const styles = require('../css/home.less');
 
 const ui = {
   // eslint-disable-next-line global-require
