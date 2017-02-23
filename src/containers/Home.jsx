@@ -91,7 +91,7 @@ class Home extends Component {
         strokeWidth: 2,
         pickable: true,
         radiusMinPixels: 4,
-        radiusMaxPixels: 30,
+        radiusMaxPixels: 20,
       })
     ];
     return (
