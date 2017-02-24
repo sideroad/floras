@@ -11,6 +11,7 @@ Prepare enviroment variables below
 |FLORAS_INSTAGRAM_APP_ID|Instagram application ID. It use to display photos ( Under development )|
 |FLORAS_INSTAGRAM_APP_SECRET|Instagram secret ID. It use to display photos ( Under development )|
 |FLORAS_GOOGLE_API_KEY|Google Map Place API Key. It use to use place finding|
+|REDISCLOUD_URL|Redis URL. It use to store event data|
 
 # Development
 

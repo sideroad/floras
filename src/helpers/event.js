@@ -7,6 +7,7 @@ import moment from 'moment';
 import path from 'path';
 import url from 'url';
 import redis from 'redis';
+import config from '../config';
 
 const redisURL = url.parse(process.env.REDISCLOUD_URL);
 const client = redis.createClient(redisURL.port, redisURL.hostname, { no_ready_check: true });
@@ -116,7 +117,7 @@ export default function ({ app }) {
         const query = `${spot.pref} ${spot.name}`;
         console.log(`# fetch ${query} in google place API`);
         request
-          .get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${process.env.GOOGLE_API_KEY}&language=ja`)
+          .get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${config.googleapis.key}&language=ja`)
           .end(
             (fetchError, json) => {
               if (fetchError) {
