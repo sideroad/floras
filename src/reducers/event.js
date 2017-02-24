@@ -1,11 +1,10 @@
-import items from '../data/sakura';
 
 const GETS_START = 'event/GETS_START';
 const GETS_SUCCESS = 'event/GETS_SUCCESS';
 const GETS_FAIL = 'event/GETS_FAIL';
 
 const initialState = {
-  items,
+  items: [],
   loaded: false,
   loading: false
 };

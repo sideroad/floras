@@ -1,7 +1,7 @@
 require('babel-polyfill');
 const normalize = require('koiki').normalize;
 
-const title = 'floras';
+const title = 'flora';
 const description = 'Visualize 4 seasons';
 
 const environment = {

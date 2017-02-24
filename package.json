@@ -1,13 +1,13 @@
 {
-  "name": "floras",
-  "title": "floras",
+  "name": "flora",
+  "title": "flora",
   "description": "Visualize 4 seasons",
   "author": "sideroad",
   "license": "MIT",
   "version": "1.0.0",
   "repository": {},
   "keywords": [
-    "floras"
+    "flora"
   ],
   "main": "bin/server.js",
   "scripts": {
@@ -74,6 +74,7 @@
     "express": "^4.13.3",
     "express-session": "^1.12.1",
     "file-loader": "^0.9.0",
+    "fs-extra": "^2.0.0",
     "geolib": "^2.0.21",
     "gl": "^4.0.1",
     "highlight.js": "^9.7.0",
@@ -81,7 +82,7 @@
     "immutability-helper": "^2.1.1",
     "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.0",
-    "jsdom": "^9.4.2",
+    "jsdom": "^9.11.0",
     "jsx-loader": "^0.13.2",
     "koiki": "^4.1.12",
     "koiki-ui": "0.0.52",
@@ -105,6 +106,7 @@
     "react-router": "^2.8.1",
     "react-router-redux": "^4.0.4",
     "react-swipeable": "^3.6.0",
+    "redis": "^2.6.5",
     "redux": "^3.0.4",
     "redux-connect": "^3.0.0",
     "redux-form": "^6.1.0",
@@ -112,6 +114,7 @@
     "serialize-javascript": "^1.1.2",
     "serve-favicon": "^2.3.0",
     "sinon": "^1.17.7",
+    "superagent": "^3.5.0",
     "touch-emulator": "^1.0.0",
     "url-loader": "^0.5.7",
     "uuid": "^2.0.3",

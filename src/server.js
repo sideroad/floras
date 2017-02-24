@@ -16,6 +16,7 @@ import routes from './routes';
 import reducers from './reducers';
 import passporter from './helpers/passporter';
 import bff from './helpers/bff';
+import event from './helpers/event';
 
 const app = new Express();
 const pretty = new PrettyError();
@@ -32,6 +33,9 @@ app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized
 passporter.use(app);
 
 bff({
+  app
+});
+event({
   app
 });
 

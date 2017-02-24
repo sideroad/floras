@@ -6,6 +6,7 @@ import Slider from 'rc-slider';
 import moment from 'moment';
 import { Chips } from 'koiki-ui';
 import { ScatterplotLayer } from 'deck.gl';
+import { asyncConnect } from 'redux-connect';
 // import update from 'immutability-helper';
 import { update as updateMap } from '../reducers/map';
 import { set as setDate } from '../reducers/date';
@@ -210,4 +211,15 @@ const connected = connect(
   { updateMap, setDate }
 )(Home);
 
-export default connected;
+const asynced = asyncConnect([{
+  promise: ({ helpers: { fetcher } }) => {
+    const promises = [];
+    promises.push(
+      fetcher.event
+        .gets()
+    );
+    return Promise.all(promises);
+  }
+}])(connected);
+
+export default asynced;
