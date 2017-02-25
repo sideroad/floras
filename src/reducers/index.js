@@ -9,5 +9,5 @@ export default {
   date,
   event,
   place,
-  user
+  user,
 };

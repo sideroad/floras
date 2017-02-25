@@ -1,0 +1,62 @@
+@import "variables.less";
+
+.logo {
+  position: absolute;
+  right: 5%;
+  top: 25px;
+  z-index: 2;
+  width: 3.45em;
+  height: 3.45em;
+  background: url(../images/logo.png);
+  background-size: cover;
+  background-position: center;
+  border: none;
+  outline: none;
+}
+
+.list {
+  position: absolute;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  font-family: 'Tangerine';
+  transition-duration: 0.2s;
+  transition-property: right;
+  z-index: 1;
+  background-color: @sumi;
+  color: @gofun;
+  padding-top: 25px;
+  padding-left: 5%;
+  &.open {
+    right: 0;
+    box-shadow: @shadow;
+  }
+  &.close {
+    right: -35%;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 4em;
+  font-weight: normal;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: @gofun;
+  transition-duration: 0.2s;
+  transition-property: opacity;
+  &.open {
+    z-index: 1;
+    opacity: 0.2;
+  }
+  &.close {
+    z-index: 0;
+    opacity: 0;
+  }
+}

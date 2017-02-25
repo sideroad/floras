@@ -8,6 +8,7 @@ import { ScatterplotLayer } from 'deck.gl';
 import { asyncConnect } from 'redux-connect';
 // import update from 'immutability-helper';
 import FindPlace from '../components/FindPlace';
+import SideBar from '../components/SideBar';
 import { update as updateMap } from '../reducers/map';
 import { set as setDate } from '../reducers/date';
 import config from '../config';
@@ -108,6 +109,9 @@ class Home extends Component {
             )
           }
         />
+        <SideBar
+          lang={this.context.lang}
+        />
         <MapGL
           width={this.state.width}
           height={this.state.height}
@@ -187,7 +191,7 @@ const connected = connect(
     places: state.place.items,
     place: state.place.item,
     mapViewState: state.map.mapViewState,
-    dayOfYear: state.date.dayOfYear
+    dayOfYear: state.date.dayOfYear,
   }),
   { updateMap, setDate }
 )(Home);
