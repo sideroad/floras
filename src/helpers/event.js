@@ -5,12 +5,10 @@ import mapSeries from 'async/mapSeries';
 import _ from 'lodash';
 import moment from 'moment';
 import path from 'path';
-import url from 'url';
 import redis from 'redis';
 import config from '../config';
 
-const redisURL = url.parse(process.env.REDISCLOUD_URL);
-const client = redis.createClient(redisURL.port, redisURL.hostname, { no_ready_check: true });
+const client = redis.createClient(process.env.REDISCLOUD_URL, { no_ready_check: true });
 
 const CHERRY_BLOSSOM = '105ec6d';
 const file = fs.readFileSync(path.resolve(__dirname, '../data/sakura-urls.txt'), 'utf-8');
@@ -84,14 +82,14 @@ export default function ({ app }) {
     queued = true;
     res.send({ msg: 'crawling started' });
     let prefIndex = 0;
-    mapSeries(file.split('\n'), (sakuraUrl, callback) => {
-      if (!sakuraUrl || sakuraUrl.match(/^#/)) {
+    mapSeries(file.split('\n'), (url, callback) => {
+      if (!url || url.match(/^#/)) {
         callback();
         return;
       }
-      console.log(`# fetching ${sakuraUrl}`);
+      console.log(`# fetching ${url}`);
       jsdom.env({
-        url: sakuraUrl,
+        url,
         scripts: ['http://code.jquery.com/jquery.js'],
         done: (err, window) => {
           const $ = window.$;
