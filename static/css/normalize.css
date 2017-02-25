@@ -429,3 +429,14 @@ th {
 a{
   text-decoration: none;
 }
+
+@media (max-width: 568px) {
+  body {
+    font-size: 0.8em;
+  }
+}
+@media (max-width: 768px) {
+  body {
+    font-size: 0.9em;
+  }
+}
