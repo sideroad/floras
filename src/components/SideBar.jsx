@@ -2,8 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { stringify } from 'koiki';
 import { Link } from 'react-router';
 import uris from '../uris';
+import CloseButton from '../components/CloseButton';
 
 const styles = require('../css/side-bar.less');
+const img = require('../images/logo.png');
 
 class SideBar extends Component {
   constructor(props) {
@@ -28,21 +30,36 @@ class SideBar extends Component {
           }}
         />
         <button
-          className={styles.logo}
+          className={`${styles.logo} ${this.state.opened ? styles.open : styles.close}`}
           onClick={(evt) => {
             evt.preventDefault();
             this.setState({
-              opened: !this.state.opened
+              opened: true
+            });
+          }}
+        />
+        <CloseButton
+          className={styles.closeButton}
+          opened={this.state.opened}
+          onClick={() => {
+            this.setState({
+              opened: false
             });
           }}
         />
         <div
-          className={`${styles.list} ${this.state.opened ? styles.open : styles.close}`}
+          className={`${styles.container} ${this.state.opened ? styles.open : styles.close}`}
         >
-          <h1 className={styles.title}>Flora</h1>
-          <ul>
-            <li>
-              <Link to={stringify(uris.pages.privacy, { lang: this.props.lang })}>
+          <h1 className={styles.title}>
+            <img src={img} alt="logo" />
+            Flora
+          </h1>
+          <ul className={styles.list}>
+            <li className={styles.item}>
+              <Link
+                className={styles.link}
+                to={stringify(uris.pages.privacy, { lang: this.props.lang })}
+              >
                 Privacy Policy
               </Link>
             </li>

@@ -1,0 +1,22 @@
+@import "variables.less";
+
+.page {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Tangerine';
+  transition-duration: 0.2s;
+  transition-property: right;
+  z-index: 1;
+  background-color: @sumi;
+  color: @gofun;
+  padding-top: 25px;
+  &.open {
+    right: 0;
+    box-shadow: @shadow;
+  }
+  &.close {
+    right: -35%;
+  }
+}

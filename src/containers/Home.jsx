@@ -62,7 +62,7 @@ class Home extends Component {
             return {
               ...event,
               color: [255, 135, 175],
-              radius: event.strength * 5,
+              radius: event.strength * 3,
               position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
             };
           }
@@ -160,6 +160,7 @@ class Home extends Component {
             value => this.props.setDate(value)
           }
         />
+        {this.props.children}
       </div>
     );
   }
@@ -173,6 +174,7 @@ Home.propTypes = {
   dayOfYear: PropTypes.number.isRequired,
   updateMap: PropTypes.func.isRequired,
   setDate: PropTypes.func.isRequired,
+  children: PropTypes.element,
 };
 
 Home.defaultProps = {

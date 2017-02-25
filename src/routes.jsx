@@ -63,7 +63,10 @@ export default (store, cookie) => {
      * Please keep routes in alphabetical order
      */
     <Route path={uris.pages.root} component={App} >
-      <IndexRoute component={Home} />
+      <Route path={uris.pages.home} >
+        <IndexRoute component={Home} />
+        <Route path={uris.pages.privacy} component={Home} />
+      </Route>
       { /* Catch all route */ }
       <Route path={uris.pages.instagram} component={Home} onEnter={login} />
       <Route path="*" component={NotFound} status={404} />
