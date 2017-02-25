@@ -4,27 +4,16 @@ import MapGL from 'react-map-gl';
 import DeckGL from 'deck.gl/react';
 import Slider from 'rc-slider';
 import moment from 'moment';
-import { Chips } from 'koiki-ui';
 import { ScatterplotLayer } from 'deck.gl';
 import { asyncConnect } from 'redux-connect';
 // import update from 'immutability-helper';
+import FindPlace from '../components/FindPlace';
 import { update as updateMap } from '../reducers/map';
 import { set as setDate } from '../reducers/date';
 import config from '../config';
 
 require('../css/rc-slider.css');
 const styles = require('../css/home.less');
-
-const ui = {
-  // eslint-disable-next-line global-require
-  fa: require('../css/koiki-ui/fa/less/font-awesome.less'),
-  // eslint-disable-next-line global-require
-  chips: require('../css/koiki-ui/chips.less'),
-  // eslint-disable-next-line global-require
-  input: require('../css/koiki-ui/input.less'),
-  // eslint-disable-next-line global-require
-  iconButton: require('../css/koiki-ui/icon-button.less'),
-};
 
 const TOKEN = config.mapbox.token;
 
@@ -35,8 +24,7 @@ class Home extends Component {
     this.state = {
       width: 1,
       height: 1,
-      dayOfYear: props.dayOfYear,
-      focused: false
+      dayOfYear: props.dayOfYear
     };
     this.onResize = this.onResize.bind(this);
   }
@@ -82,8 +70,8 @@ class Home extends Component {
         opacity: 0.5,
         strokeWidth: 2,
         pickable: true,
-        radiusMinPixels: 4,
-        radiusMaxPixels: 50,
+        radiusMinPixels: 3,
+        radiusMaxPixels: 20,
       }),
       new ScatterplotLayer({
         id: 'grid',
@@ -92,41 +80,34 @@ class Home extends Component {
         strokeWidth: 2,
         pickable: true,
         radiusMinPixels: 4,
-        radiusMaxPixels: 20,
+        radiusMaxPixels: 10,
       })
     ];
     return (
       <div className={styles.container}>
-        <div className={`${styles.chips} ${this.state.focused ? styles.focused : ''}`}>
-          <Chips
-            ref={(elem) => { this.chips = elem; }}
-            styles={ui}
-            suggests={this.props.places}
-            onFocus={() => this.setState({ focused: true })}
-            onBlur={() => this.setState({ focused: false })}
-            onChange={evt =>
-              this.context.fetcher.place.gets({
-                input: evt.target.value
-              })
-            }
-            onSelect={(item) => {
-              this.chips.input.inputDOM.blur();
-              this.context.fetcher.place.get({
-                placeid: item.id
-              }).then(
-                (res) => {
-                  const location = res.body.result.geometry.location;
-                  this.props.updateMap({
-                    ...this.props.mapViewState,
-                    latitude: location.lat,
-                    longitude: location.lng,
-                    zoom: 13,
-                  });
-                }
-              );
-            }}
-          />
-        </div>
+        <FindPlace
+          places={this.props.places}
+          onChange={input =>
+            this.context.fetcher.place.gets({
+              input
+            })
+          }
+          onSelect={item =>
+            this.context.fetcher.place.get({
+              placeid: item.id
+            }).then(
+              (res) => {
+                const location = res.body.result.geometry.location;
+                this.props.updateMap({
+                  ...this.props.mapViewState,
+                  latitude: location.lat,
+                  longitude: location.lng,
+                  zoom: 13,
+                });
+              }
+            )
+          }
+        />
         <MapGL
           width={this.state.width}
           height={this.state.height}
