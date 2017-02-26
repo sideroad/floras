@@ -44,12 +44,6 @@ class Home extends Component {
     window.addEventListener('resize', () => this.onResize());
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      dayOfYear: nextProps.dayOfYear
-    });
-  }
-
   onResize() {
     this.setState({
       width: window.innerWidth,
