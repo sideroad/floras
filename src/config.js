@@ -61,6 +61,7 @@ module.exports = Object.assign({
       link: [
         { rel: 'shortcut icon', href: '/images/favicon.png' },
         { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Tangerine', },
+        { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/earlyaccess/hannari.css', },
         { rel: 'stylesheet', type: 'text/css', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' },
         { rel: 'stylesheet', type: 'text/css', href: '/css/normalize.css' }
       ]

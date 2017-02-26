@@ -16,10 +16,11 @@ export default {
       }
     },
     get: {
-      url: '/bff/google/maps/api/place/details/json',
+      url: `${config.app.base}/bff/google/maps/api/place/details/json`,
       method: 'GET',
       defaults: {
-        key: config.googleapis.key
+        key: config.googleapis.key,
+        language: 'en'
       }
     }
   }

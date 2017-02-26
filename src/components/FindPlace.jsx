@@ -43,8 +43,8 @@ class FindPlace extends Component {
 
 FindPlace.propTypes = {
   places: PropTypes.array.isRequired,
-  onChange: PropTypes.string,
-  onSelect: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default FindPlace;

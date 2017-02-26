@@ -17,11 +17,12 @@ const CloseButton = props =>
 CloseButton.propTypes = {
   className: PropTypes.string,
   icon: PropTypes.string,
-  opened: PropTypes.bool.isRequired,
+  opened: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
 CloseButton.defaultProps = {
+  opened: true,
   className: '',
   icon: 'fa-angle-right',
   onClick: () => {},

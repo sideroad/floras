@@ -47,7 +47,7 @@
     box-shadow: @shadow;
   }
   &.close {
-    right: -35%;
+    right: -30%;
   }
 }
 
@@ -138,5 +138,23 @@
     transform: rotateX(0deg);
     z-index: 2;
     opacity: 1;
+  }
+}
+
+@media(max-width:1024px) {
+  .container {
+    width: 50%;
+    &.close {
+      right: -50%;
+    }
+  }
+}
+
+@media(max-width:768px) {
+  .container {
+    width: 100%;
+    &.close {
+      right: -100%;
+    }
   }
 }

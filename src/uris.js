@@ -1,8 +1,8 @@
 export default {
   pages: {
     root: '/:lang',
-    home: '',
+    place: '/:lang/places/:id',
     instagram: '/:lang/instagram',
-    privacy: 'privacy'
+    privacy: '/:lang/privacy'
   }
 };

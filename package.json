@@ -39,7 +39,9 @@
       "command": "node webpack/webpack-dev-server.js",
       "env": {
         "UV_THREADPOOL_SIZE": 100,
-        "NODE_PATH": "./src"
+        "NODE_PATH": "./src",
+        "GLOBAL_HOST": "localhost",
+        "GLOBAL_PORT": "3000"
       }
     },
     "dev": {
@@ -47,8 +49,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "HOST": "localhost",
-        "PORT": "3000"
+        "GLOBAL_HOST": "localhost",
+        "GLOBAL_PORT": "3000"
       }
     }
   },

@@ -4,19 +4,31 @@
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100%;
-  font-family: 'Tangerine';
+  min-height: 100%;
+  font-family: 'Tangerine', "Hiragino Kaku Gothic ProN","メイリオ", sans-serif;
   transition-duration: 0.2s;
   transition-property: right;
-  z-index: 1;
+  z-index: 3;
   background-color: @sumi;
   color: @gofun;
   padding-top: 25px;
   &.open {
-    right: 0;
+    left: 0;
     box-shadow: @shadow;
   }
   &.close {
-    right: -35%;
+    left: -100vw;
   }
+}
+
+.closeButton {
+  position: absolute;
+  left: 5%;
+}
+
+.lead {
+  text-align: center;
+  font-size: 4em;
+  font-weight: normal;
+  margin: 0;
 }

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { stringify } from 'koiki';
-import { Link } from 'react-router';
 import uris from '../uris';
 import CloseButton from '../components/CloseButton';
 
@@ -56,12 +55,21 @@ class SideBar extends Component {
           </h1>
           <ul className={styles.list}>
             <li className={styles.item}>
-              <Link
+              <a
+                href=""
                 className={styles.link}
-                to={stringify(uris.pages.privacy, { lang: this.props.lang })}
+                onClick={
+                  (evt) => {
+                    evt.preventDefault();
+                    this.setState({
+                      opened: false
+                    });
+                    this.props.push(stringify(uris.pages.privacy, { lang: this.props.lang }));
+                  }
+                }
               >
                 Privacy Policy
-              </Link>
+              </a>
             </li>
           </ul>
         </div>
@@ -72,6 +80,7 @@ class SideBar extends Component {
 
 SideBar.propTypes = {
   lang: PropTypes.string.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 export default SideBar;

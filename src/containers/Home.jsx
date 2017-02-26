@@ -4,6 +4,8 @@ import MapGL from 'react-map-gl';
 import DeckGL from 'deck.gl/react';
 import Slider from 'rc-slider';
 import moment from 'moment';
+import { stringify } from 'koiki';
+import { push } from 'react-router-redux';
 import { ScatterplotLayer } from 'deck.gl';
 import { asyncConnect } from 'redux-connect';
 // import update from 'immutability-helper';
@@ -12,6 +14,7 @@ import SideBar from '../components/SideBar';
 import { update as updateMap } from '../reducers/map';
 import { set as setDate } from '../reducers/date';
 import config from '../config';
+import uris from '../uris';
 
 require('../css/rc-slider.css');
 const styles = require('../css/home.less');
@@ -110,6 +113,7 @@ class Home extends Component {
           }
         />
         <SideBar
+          push={this.props.push}
           lang={this.context.lang}
         />
         <MapGL
@@ -138,6 +142,10 @@ class Home extends Component {
             onLayerClick={
               (info) => {
                 if (info) {
+                  this.props.push(stringify(uris.pages.place, {
+                    id: info.object.id,
+                    lang: this.context.lang
+                  }));
                   console.log(info.object);
                 }
               }
@@ -160,7 +168,7 @@ class Home extends Component {
             value => this.props.setDate(value)
           }
         />
-        {this.props.children}
+        {this.props.children ? this.props.children : ''}
       </div>
     );
   }
@@ -174,6 +182,7 @@ Home.propTypes = {
   dayOfYear: PropTypes.number.isRequired,
   updateMap: PropTypes.func.isRequired,
   setDate: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
   children: PropTypes.element,
 };
 
@@ -195,7 +204,7 @@ const connected = connect(
     mapViewState: state.map.mapViewState,
     dayOfYear: state.date.dayOfYear,
   }),
-  { updateMap, setDate }
+  { updateMap, setDate, push }
 )(Home);
 
 const asynced = asyncConnect([{
