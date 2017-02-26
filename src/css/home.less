@@ -22,12 +22,15 @@
 .prevDay,
 .nextDay {
   position: absolute;
-  bottom: 0.25em;
+  bottom: 0.575em;
   font-size: 3em;
   color: @maso;
   outline: none;
   background: none;
   border: none;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
 }
 
 .prevDay {
@@ -37,9 +40,9 @@
   right: 5%;
 }
 
-@@media (max-width: 768px) {  
+@media (max-width: 768px) {
   .prevDay,
   .nextDay {
-    bottom: 0.3em;
+    bottom: 0.7em;
   }
 }
