@@ -18,6 +18,7 @@ import uris from '../uris';
 
 require('../css/rc-slider.css');
 const styles = require('../css/home.less');
+const fa = require('../css/koiki-ui/fa/less/font-awesome.less');
 
 const TOKEN = config.mapbox.token;
 
@@ -155,11 +156,19 @@ class Home extends Component {
         <div className={styles.date}>
           {moment().dayOfYear(this.state.dayOfYear).format('MMM D')}
         </div>
+        <button
+          className={styles.prevDay}
+          onClick={
+            () => this.setState({ dayOfYear: this.state.dayOfYear - 1 })
+          }
+        >
+          <i className={`${fa.fa} ${fa['fa-angle-left']}`} />
+        </button>
         <Slider
           step={1}
           min={1}
           max={moment().endOf('year').dayOfYear()}
-          defaultValue={this.state.dayOfYear}
+          value={this.state.dayOfYear}
           className={styles.slider}
           onChange={
             value => this.setState({ dayOfYear: value })
@@ -168,6 +177,14 @@ class Home extends Component {
             value => this.props.setDate(value)
           }
         />
+        <button
+          className={styles.nextDay}
+          onClick={
+            () => this.setState({ dayOfYear: this.state.dayOfYear + 1 })
+          }
+        >
+          <i className={`${fa.fa} ${fa['fa-angle-right']}`} />
+        </button>
         {this.props.children ? this.props.children : ''}
       </div>
     );
