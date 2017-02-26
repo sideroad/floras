@@ -8,4 +8,10 @@ export default function ({ app }) {
     host: config.googleapis.host,
     prefix: '/bff/google',
   });
+  proxy({
+    app,
+    protocol: 'https',
+    host: config.instagram.host,
+    prefix: '/bff/instagram',
+  });
 }

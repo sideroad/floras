@@ -1,3 +1,4 @@
+import photo from './photo';
 import user from './user';
 import place from './place';
 import event from './event';
@@ -10,4 +11,5 @@ export default {
   event,
   place,
   user,
+  photo
 };

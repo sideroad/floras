@@ -41,10 +41,10 @@ export default {
       });
 
     app.get('/auth/instagram',
-      passport.authenticate('instagram', { scope: ['basic', 'public_content'], session: true }));
+      passport.authenticate('instagram', { scope: ['public_content'], session: true }));
 
     app.get('/auth/instagram/callback',
-      passport.authenticate('instagram', { scope: ['basic', 'public_content'], session: true, failureRedirect: '/auth/instagram' }),
+      passport.authenticate('instagram', { scope: ['public_content'], session: true, failureRedirect: '/auth/instagram' }),
       (req, res) => {
         res.redirect(req.cookies.redirect || '/');
       });

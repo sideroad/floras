@@ -23,13 +23,27 @@ const PlaceDetail = props =>
             onClick={props.onClickLogin}
           />
         </div>
-      : ''
+      :
+        <ul className={styles.list}>
+          {
+            props.items.map(
+              item =>
+                <li
+                  className={styles.item}
+                  style={{
+                    backgroundImage: `url(${item.images.low_resolution.url})`
+                  }}
+                />
+            )
+          }
+        </ul>
     }
   </div>;
 
 PlaceDetail.propTypes = {
   user: PropTypes.object.isRequired,
   onClickLogin: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired,
 };
 
 export default PlaceDetail;

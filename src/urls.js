@@ -7,6 +7,12 @@ export default {
       method: 'GET'
     }
   },
+  photo: {
+    gets: {
+      url: `${config.app.base}/bff/instagram/v1/media/search`,
+      method: 'GET'
+    }
+  },
   place: {
     gets: {
       url: '/bff/google/maps/api/place/autocomplete/json',

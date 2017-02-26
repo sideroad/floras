@@ -2,14 +2,34 @@
 
 .placeDetail {
   width: auto;
-  height:calc(100vh - 25px - 2.5em);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .button {
   width: 15em;
-  margin: auto;
   font-size: 1.25em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  width: 100%;
+  padding: 0;
+}
+.item {
+  background-size: cover;
+  background-position: center;
+  background-color: initial;
+  width: 150px;
+  height: 150px;
+  filter: grayscale(0.5) brightness(0.5);
+  transition-duration: 0.2s;
+  transition-property: filter;
+}
+
+.item:hover{
+  filter: none;
 }

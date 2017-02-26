@@ -5,7 +5,7 @@ const styles = require('../css/page.less');
 
 const Page = props =>
   <div
-    className={`${styles.page} ${props.className}`}
+    className={styles.page}
   >
     <CloseButton
       icon="fa-angle-left"
@@ -21,14 +21,12 @@ const Page = props =>
   </div>;
 
 Page.propTypes = {
-  className: PropTypes.string,
   lead: PropTypes.string,
   onClose: PropTypes.func,
   children: PropTypes.element.isRequired
 };
 
-Page.propTypes = {
-  className: '',
+Page.defaultProps = {
   lead: '',
   onClose: () => {}
 };

@@ -27,6 +27,7 @@ const Place = (props, context) =>
             location.href = uris.pages.auth;
           }
         }
+        items={props.photos}
       />
     </Page>
   </div>;
@@ -35,6 +36,7 @@ Place.propTypes = {
   push: PropTypes.func.isRequired,
   place: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+  photos: PropTypes.array.isRequired
 };
 
 Place.contextTypes = {
@@ -47,17 +49,34 @@ Place.contextTypes = {
 const connected = connect(
   state => ({
     place: state.place.item,
-    user: state.user.item
+    user: state.user.item,
+    photos: state.photo.items,
   }),
   { push }
 )(Place);
 
 const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher }, params }) => {
+  promise: ({ store: { getState }, helpers: { fetcher }, params }) => {
     const promises = [];
-    promises.push(fetcher.place.get({
-      placeid: params.id
-    }));
+    const user = getState().user.item;
+    promises.push(
+      fetcher.place.get({
+        placeid: params.id
+      }).then(
+        (res) => {
+          if (user.token) {
+            const location = res.body.result.geometry.location;
+            return fetcher.photo.gets({
+              access_token: user.token,
+              lat: location.lat,
+              lng: location.lng,
+              distance: 5000,
+            });
+          }
+          return Promise.resolve();
+        }
+      )
+    );
     return Promise.all(promises);
   }
 }])(connected);

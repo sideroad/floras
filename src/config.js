@@ -26,7 +26,8 @@ module.exports = Object.assign({
   },
   instagram: {
     appId: process.env.FLORAS_INSTAGRAM_APP_ID,
-    secret: process.env.FLORAS_INSTAGRAM_APP_SECRET
+    secret: process.env.FLORAS_INSTAGRAM_APP_SECRET,
+    host: 'api.instagram.com'
   },
   googleapis: {
     key: process.env.FLORAS_GOOGLE_API_KEY,
