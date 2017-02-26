@@ -67,7 +67,7 @@ export default (store, cookie) => {
     <Route path={uris.pages.root} component={App} >
       <IndexRoute path={uris.pages.home} component={Home} />
       <Route path={uris.pages.home} component={Home} >
-        <Route path={uris.pages.place} component={Place} />
+        <Route path={uris.pages.place} component={Place} onEnter={checkAuth} />
         <Route path={uris.pages.privacy} component={PrivacyPolicy} />
       </Route>
       { /* Catch all route */ }

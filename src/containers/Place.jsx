@@ -17,24 +17,37 @@ const Place = (props, context) =>
         }
       }
     >
-      <PlaceDetail />
+      <PlaceDetail
+        user={props.user}
+        onClickLogin={
+          () => {
+            context.cookie.set('redirect', location.href, {
+              path: '/'
+            });
+            location.href = uris.pages.auth;
+          }
+        }
+      />
     </Page>
   </div>;
 
 Place.propTypes = {
   push: PropTypes.func.isRequired,
   place: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 Place.contextTypes = {
   lang: PropTypes.string.isRequired,
   fetcher: PropTypes.object.isRequired,
-  i18n: PropTypes.object.isRequired
+  i18n: PropTypes.object.isRequired,
+  cookie: PropTypes.object.isRequired,
 };
 
 const connected = connect(
   state => ({
-    place: state.place.item
+    place: state.place.item,
+    user: state.user.item
   }),
   { push }
 )(Place);
