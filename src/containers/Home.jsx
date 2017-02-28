@@ -72,7 +72,7 @@ class Home extends Component {
             return {
               ...event,
               color: [255, 135, 175],
-              radius: event.strength * 1.5,
+              radius: event.strength,
               position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
             };
           }
