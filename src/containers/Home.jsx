@@ -29,7 +29,7 @@ class Home extends Component {
     this.state = {
       width: 1,
       height: 1,
-      dayOfYear: props.dayOfYear
+      dayOfYear: props.dayOfYear,
     };
     this.onResize = this.onResize.bind(this);
   }
@@ -49,6 +49,18 @@ class Home extends Component {
       width: window.innerWidth,
       height: window.innerHeight
     });
+  }
+
+  onStartPressDay(delta) {
+    this.keepPressId = setInterval(() => this.onPressDay(delta), 250);
+  }
+
+  onEndPressDay() {
+    clearInterval(this.keepPressId);
+  }
+
+  onPressDay(delta) {
+    this.setState({ dayOfYear: this.state.dayOfYear + delta });
   }
 
   render() {
@@ -152,8 +164,16 @@ class Home extends Component {
         </div>
         <button
           className={styles.prevDay}
-          onClick={
-            () => this.setState({ dayOfYear: this.state.dayOfYear - 1 })
+          onMouseDown={
+            () => {
+              this.onPressDay(-1);
+              this.onStartPressDay(-1);
+            }
+          }
+          onMouseUp={
+            () => {
+              this.onEndPressDay();
+            }
           }
         >
           <i className={`${fa.fa} ${fa['fa-angle-left']}`} />
@@ -173,8 +193,16 @@ class Home extends Component {
         />
         <button
           className={styles.nextDay}
-          onClick={
-            () => this.setState({ dayOfYear: this.state.dayOfYear + 1 })
+          onMouseDown={
+            () => {
+              this.onPressDay(1);
+              this.onStartPressDay(1);
+            }
+          }
+          onMouseUp={
+            () => {
+              this.onEndPressDay();
+            }
           }
         >
           <i className={`${fa.fa} ${fa['fa-angle-right']}`} />
