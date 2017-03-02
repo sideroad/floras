@@ -93,7 +93,7 @@ export default function ({ app }) {
         scripts: ['http://code.jquery.com/jquery.js'],
         done: (err, window) => {
           const $ = window.$;
-          const spots = $('.cw-in.mb10 > h3.mt20.sttl').map((index, item) => ({
+          const spots = $('.set-in').map((index, item) => ({
             name: $(item).text(),
             pref: prefs[prefIndex]
           })).get();

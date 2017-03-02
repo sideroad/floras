@@ -14,7 +14,6 @@ import uris from './uris';
 import urls from './urls';
 import routes from './routes';
 import reducers from './reducers';
-import passporter from './helpers/passporter';
 import bff from './helpers/bff';
 import event from './helpers/event';
 
@@ -29,8 +28,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-
-passporter.use(app);
 
 bff({
   app

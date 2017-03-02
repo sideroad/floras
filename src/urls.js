@@ -9,7 +9,7 @@ export default {
   },
   photo: {
     gets: {
-      url: `${config.app.base}/bff/instagram/v1/media/search`,
+      url: `${config.app.base}/bff/photos`,
       method: 'GET'
     }
   },

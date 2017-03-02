@@ -120,6 +120,7 @@
     "sinon": "^1.17.7",
     "superagent": "^3.5.0",
     "touch-emulator": "^1.0.0",
+    "twitter": "^1.7.0",
     "url-loader": "^0.5.7",
     "uuid": "^2.0.3",
     "viewport-mercator-project": "^3.0.0-beta3",

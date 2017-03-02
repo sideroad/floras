@@ -7,72 +7,17 @@ import { default as Place } from './containers/Place';
 import { default as PrivacyPolicy } from './containers/PrivacyPolicy';
 import NotFound from './containers/NotFound';
 import uris from './uris';
-import config from './config';
-import { set } from './reducers/user';
-import { get } from './helpers/auth';
 
-
-export default (store, cookie) => {
+export default () =>
   /**
    * Please keep routes in alphabetical order
    */
-  const checkAuth = (nextState, replace, cb) => {
-    const isLogin = store.getState().user &&
-                    store.getState().user.item &&
-                    store.getState().user.item.id;
-    if (isLogin) {
-      cb();
-    } else {
-      get(`${config.app.base}/auth`, cookie)
-        .then(
-          // login user
-          (res) => {
-            store.dispatch(set({
-              id: res.id,
-              token: res.token
-            }));
-            cb();
-          },
-          () => {
-            cb();
-          }
-        );
-    }
-  };
-  const login = (nextState, replace, cb) => {
-    checkAuth(nextState, replace, () => {
-      const isLogin = store.getState().user &&
-                      store.getState().user.item &&
-                      store.getState().user.item.id;
-      if (isLogin) {
-        cb();
-      } else {
-        cookie.set('redirect', nextState.location.pathname, {
-          path: '/'
-        });
-        if (__SERVER__) {
-          replace('/auth/instagram');
-        } else {
-          location.href = `${config.app.base}/auth/instagram`;
-        }
-        cb();
-      }
-    });
-  };
-
-  return (
-    /**
-     * Please keep routes in alphabetical order
-     */
-    <Route path={uris.pages.root} component={App} >
-      <IndexRoute path={uris.pages.home} component={Home} />
-      <Route path={uris.pages.home} component={Home} >
-        <Route path={uris.pages.place} component={Place} onEnter={checkAuth} />
-        <Route path={uris.pages.privacy} component={PrivacyPolicy} />
-      </Route>
-      { /* Catch all route */ }
-      <Route path={uris.pages.instagram} component={Home} onEnter={login} />
-      <Route path="*" component={NotFound} status={404} />
+  <Route path={uris.pages.root} component={App} >
+    <IndexRoute path={uris.pages.home} component={Home} />
+    <Route path={uris.pages.home} component={Home} >
+      <Route path={uris.pages.place} component={Place} />
+      <Route path={uris.pages.privacy} component={PrivacyPolicy} />
     </Route>
-  );
-};
+    { /* Catch all route */ }
+    <Route path="*" component={NotFound} status={404} />
+  </Route>;
