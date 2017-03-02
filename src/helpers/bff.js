@@ -16,19 +16,23 @@ export default function ({ app }) {
     prefix: '/bff/google',
   });
   app.use('/bff/photos', (req, res) => {
+    console.log(req.query);
     client.get('search/tweets', {
-      q: '桜',
+      q: '桜 filter:images',
       geocode: `${req.query.lat},${req.query.lng},1km`,
       result_type: 'popular',
     }, (error, tweets) => {
       if (error) {
+        console.log(error);
         res.send({
           items: []
         });
         return;
       }
-      console.log(error);
-      res.send(tweets);
+      console.log(tweets);
+      res.send({
+        items: tweets.statuses || []
+      });
     });
   });
 }

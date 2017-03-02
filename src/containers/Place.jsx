@@ -3,6 +3,7 @@ import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
+import moment from 'moment';
 import uris from '../uris';
 import Page from '../components/Page';
 import PlaceDetail from '../components/PlaceDetail';
@@ -26,7 +27,7 @@ const Place = (props, context) =>
 Place.propTypes = {
   push: PropTypes.func.isRequired,
   place: PropTypes.object.isRequired,
-  photos: PropTypes.array.isRequired
+  photos: PropTypes.array.isRequired,
 };
 
 Place.contextTypes = {
@@ -45,8 +46,10 @@ const connected = connect(
 )(Place);
 
 const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher }, params }) => {
+  promise: ({ store, helpers: { fetcher }, params }) => {
     const promises = [];
+    const dayOfYear = store.getState().date.dayOfYear || moment().dayOfYear();
+    const date = moment().dayOfYear(dayOfYear);
     promises.push(
       fetcher.place.get({
         placeid: params.id
@@ -56,6 +59,7 @@ const asynced = asyncConnect([{
           return fetcher.photo.gets({
             lat: location.lat,
             lng: location.lng,
+            date: date.subtract(1, 'years').subtract(3, 'days').format('YYYY-MM-DD')
           });
         }
       )
