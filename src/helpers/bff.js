@@ -18,8 +18,8 @@ export default function ({ app }) {
   app.use('/bff/photos', (req, res) => {
     console.log(req.query);
     client.get('search/tweets', {
-      q: '桜 filter:images',
-      geocode: `${req.query.lat},${req.query.lng},1km`,
+      q: '桜 高遠城址公園 filter:images',
+      // geocode: `${req.query.lat},${req.query.lng},1km`,
       result_type: 'popular',
     }, (error, tweets) => {
       if (error) {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { stringify } from 'koiki';
-import uris from '../uris';
+// import { stringify } from 'koiki';
+// import uris from '../uris';
 import CloseButton from '../components/CloseButton';
 
 const styles = require('../css/side-bar.less');
@@ -53,25 +53,29 @@ class SideBar extends Component {
             <img src={img} alt="logo" />
             Flora
           </h1>
-          <ul className={styles.list}>
-            <li className={styles.item}>
-              <a
-                href=""
-                className={styles.link}
-                onClick={
-                  (evt) => {
-                    evt.preventDefault();
-                    this.setState({
-                      opened: false
-                    });
-                    this.props.push(stringify(uris.pages.privacy, { lang: this.props.lang }));
+          {
+            /**
+            <ul className={styles.list}>
+              <li className={styles.item}>
+                <a
+                  href=""
+                  className={styles.link}
+                  onClick={
+                    (evt) => {
+                      evt.preventDefault();
+                      this.setState({
+                        opened: false
+                      });
+                      this.props.push(stringify(uris.pages.privacy, { lang: this.props.lang }));
+                    }
                   }
-                }
-              >
-                Privacy Policy
-              </a>
-            </li>
-          </ul>
+                >
+                  Privacy Policy
+                </a>
+              </li>
+            </ul>
+            */
+          }
         </div>
       </div>
     );
