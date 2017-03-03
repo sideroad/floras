@@ -7,15 +7,17 @@ const Page = props =>
   <div
     className={styles.page}
   >
-    <CloseButton
-      icon="fa-angle-left"
-      className={styles.closeButton}
-      onClick={props.onClose}
-    />
-    <h1 className={styles.lead}>
-      {props.lead}
-    </h1>
-    <div>
+    <header className={styles.header}>
+      <CloseButton
+        icon="fa-angle-left"
+        className={styles.closeButton}
+        onClick={props.onClose}
+      />
+      <h1 className={styles.lead}>
+        {props.lead}
+      </h1>
+    </header>
+    <div className={styles.contents}>
       {props.children}
     </div>
   </div>;

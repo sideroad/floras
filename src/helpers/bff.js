@@ -17,13 +17,14 @@ export default function ({ app }) {
       .query({
         method: 'flickr.photos.search',
         api_key: config.flickr.key,
-        text: '桜',
+        tags: '桜',
         lat: req.query.lat,
         lon: req.query.lng,
         radius: 1,
         radius_units: 'km',
         extras: 'url_z,url_l',
         format: 'json',
+        media: 'photos',
         nojsoncallback: '1'
       })
       .end((error, json) => {
@@ -34,14 +35,13 @@ export default function ({ app }) {
           });
           return;
         }
-        console.log(json);
         res.send({
           items: json.body.photos.photo.map(item => ({
             id: item.id,
             title: item.title,
             thumbnail: item.url_z,
             image: item.url_l
-          }))
+          })).filter(item => item.thumbnail && item.image)
         });
       });
   });

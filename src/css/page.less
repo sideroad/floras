@@ -11,7 +11,6 @@
   z-index: 3;
   background-color: @sumi;
   color: @gofun;
-  padding-top: 25px;
   &.open {
     left: 0;
     box-shadow: @shadow;
@@ -19,6 +18,14 @@
   &.close {
     left: -100vw;
   }
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  background-color: @sumi;
+  padding-top: 25px;
+  z-index: 3;
 }
 
 .closeButton {
@@ -32,6 +39,10 @@
   font-weight: normal;
   margin: 0;
   margin-bottom: 25px;
+}
+
+.contents {
+  margin-top: 8em;
 }
 
 @media(max-width: 568px) {
