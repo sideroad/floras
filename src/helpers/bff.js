@@ -20,7 +20,7 @@ export default function ({ app }) {
         tags: '桜',
         lat: req.query.lat,
         lon: req.query.lng,
-        radius: 1,
+        radius: 0.5,
         radius_units: 'km',
         extras: 'url_z,url_l',
         format: 'json',
