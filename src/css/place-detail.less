@@ -15,10 +15,12 @@
 }
 .list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   list-style: none;
   width: 100%;
   padding: 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .item {
   background-size: cover;
@@ -26,11 +28,13 @@
   background-color: initial;
   width: 150px;
   height: 150px;
-  filter: grayscale(0.5) brightness(0.5);
+  filter: grayscale(0.75) brightness(0.75);
   transition-duration: 0.2s;
-  transition-property: filter;
+  transition-property: filter, transform;
 }
 
 .item:hover{
   filter: none;
+  transform: scale(1.25);
+  z-index: 2;
 }

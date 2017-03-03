@@ -24,10 +24,8 @@ module.exports = Object.assign({
     host: 'chaus.herokuapp.com',
     port: Number('443')
   },
-  twitter: {
-    consumerKey: process.env.FLORAS_TWITTER_CONSUMER_KEY,
-    consumerSecret: process.env.FLORAS_TWITTER_CONSUMER_SECRET,
-    bearerToken: process.env.FLORAS_TWITTER_BEARER_TOKEN
+  flickr: {
+    key: process.env.FLORAS_FLICKR_API_KEY,
   },
   googleapis: {
     key: process.env.FLORAS_GOOGLE_API_KEY,

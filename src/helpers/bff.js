@@ -1,13 +1,7 @@
 import { proxy } from 'koiki';
-import Twitter from 'twitter';
+import superagent from 'superagent';
 import config from '../config';
 
-const client = new Twitter({
-  consumer_key: config.twitter.consumerKey,
-  consumer_secret: config.twitter.consumerSecret,
-  bearer_token: config.twitter.bearerToken,
-});
-console.log(config.twitter);
 export default function ({ app }) {
   proxy({
     app,
@@ -17,22 +11,38 @@ export default function ({ app }) {
   });
   app.use('/bff/photos', (req, res) => {
     console.log(req.query);
-    client.get('search/tweets', {
-      q: '桜 高遠城址公園 filter:images',
-      // geocode: `${req.query.lat},${req.query.lng},1km`,
-      result_type: 'popular',
-    }, (error, tweets) => {
-      if (error) {
-        console.log(error);
+
+    superagent
+      .get('https://api.flickr.com/services/rest/')
+      .query({
+        method: 'flickr.photos.search',
+        api_key: config.flickr.key,
+        text: '桜',
+        lat: req.query.lat,
+        lon: req.query.lng,
+        radius: 1,
+        radius_units: 'km',
+        extras: 'url_z,url_l',
+        format: 'json',
+        nojsoncallback: '1'
+      })
+      .end((error, json) => {
+        if (error) {
+          console.log(error);
+          res.send({
+            items: []
+          });
+          return;
+        }
+        console.log(json);
         res.send({
-          items: []
+          items: json.body.photos.photo.map(item => ({
+            id: item.id,
+            title: item.title,
+            thumbnail: item.url_z,
+            image: item.url_l
+          }))
         });
-        return;
-      }
-      console.log(tweets);
-      res.send({
-        items: tweets.statuses || []
       });
-    });
   });
 }
