@@ -12,6 +12,7 @@
   "main": "bin/server.js",
   "scripts": {
     "start": "better-npm-run prod",
+    "test": "jest",
     "build": "better-npm-run build",
     "postinstall": "npm run build",
     "lint": "eslint -c .eslintrc src",
@@ -93,6 +94,7 @@
     "less": "^2.5.3",
     "less-loader": "^2.2.1",
     "lodash": "^4.17.2",
+    "loop-array-calc": "^1.0.0",
     "luma.gl": "^2.10.3",
     "moment": "^2.10.6",
     "passport": "^0.3.2",
@@ -144,6 +146,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.4.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "jest": "^18.0.0",
     "json-loader": "^0.5.4",
     "open": "0.0.5",
     "react-addons-test-utils": "^15.3.2",

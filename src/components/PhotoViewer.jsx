@@ -1,72 +1,143 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 import Swipeable from 'react-swipeable';
+import { next, prev } from 'loop-array-calc';
 import CloseButton from './CloseButton';
+import Prefetch from './Prefetch';
 
 const styles = require('../css/photo-viewer.less');
 
-const getNextImage = (items, id) => {
+const getNextImage = (items, id, delta = 1) => {
   const index = _.findIndex(items, { id });
-  return items[index < items.length - 1 ? index + 1 : 0];
+  return next(items, index, delta);
 };
 
-const getPrevImage = (items, id) => {
+const getPrevImage = (items, id, delta = 1) => {
   const index = _.findIndex(items, { id });
-  return items[index > 0 ? index - 1 : items.length - 1];
+  return prev(items, index, delta);
 };
 
-const PhotoViewer = props =>
-  <div
-    className={styles.photoViewer}
-  >
-    <Swipeable
-      key={props.id}
-      onSwipedLeft={
-        () => props.onPrevNext(getPrevImage(props.items, props.id))
-      }
-      onSwipedRight={
-        () => props.onPrevNext(getNextImage(props.items, props.id))
-      }
-      onSwipedUp={
-        () => props.onClose()
-      }
-      className={styles.photo}
-      style={{
-        backgroundImage: `url(${_.find(props.items, { id: props.id }).image})`,
-      }}
-    />
-    <CloseButton
-      className={styles.closeButton}
-      icon="fa-times"
-      onClick={
-        () => props.onClose()
-      }
-    />
-    <CloseButton
-      className={styles.prevButton}
-      icon="fa-angle-left"
-      onClick={
-        () => props.onPrevNext(getPrevImage(props.items, props.id))
-      }
-    />
-    <CloseButton
-      className={styles.nextButton}
-      icon="fa-angle-right"
-      onClick={
-        () => props.onPrevNext(getNextImage(props.items, props.id))
-      }
-    />
-    <img
-      className={styles.prefecth}
-      src={getPrevImage(props.items, props.id).image}
-      alt="prefecth"
-    />
-    <img
-      className={styles.prefecth}
-      src={getNextImage(props.items, props.id).image}
-      alt="prefecth"
-    />
-  </div>;
+// eslint-disable-next-line
+class PhotoViewer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      className: '',
+      swiping: false
+    };
+  }
+
+  componentWillReceiveProps() {
+    console.log('update from ', this.state.className);
+    this.setState({
+      className: this.state.className === 'leftOut' ? 'rightIn' :
+                 this.state.className === 'rightOut' ? 'leftIn' :
+                 this.state.className || '',
+      swiping: false
+    });
+  }
+
+  prev() {
+    if (!this.state.swiping) {
+      this.setState({
+        className: 'leftOut',
+        swiping: true,
+      });
+      setTimeout(() => {
+        this.props.onPrevNext(getPrevImage(this.props.items, this.props.id));
+        // this.setState({
+        //   swiping: false
+        // });
+      }, 150);
+    }
+  }
+
+  next() {
+    if (!this.state.swiping) {
+      this.setState({
+        className: 'rightOut',
+        swiping: true,
+      });
+      setTimeout(() => {
+        this.props.onPrevNext(getNextImage(this.props.items, this.props.id));
+        // this.setState({
+        //   swiping: false
+        // });
+      }, 150);
+    }
+  }
+
+  render() {
+    return (
+      <div
+        className={styles.photoViewer}
+      >
+        <Swipeable
+          key={this.props.id}
+          onSwipedLeft={
+            () => {
+              this.prev();
+            }
+          }
+          onSwipedRight={
+            () => {
+              this.next();
+            }
+          }
+          onSwipedUp={
+            () => this.props.onClose()
+          }
+          onSwipedDown={
+            () => this.props.onClose()
+          }
+          className={`${styles.photo} ${styles[this.state.className]}`}
+          style={{
+            backgroundImage: `url(${_.find(this.props.items, { id: this.props.id }).image})`,
+          }}
+        />
+        <CloseButton
+          className={styles.closeButton}
+          icon="fa-times"
+          onClick={
+            () => this.props.onClose()
+          }
+        />
+        <CloseButton
+          className={styles.prevButton}
+          icon="fa-angle-left"
+          onClick={
+            () => {
+              this.prev();
+            }
+          }
+        />
+        <CloseButton
+          className={styles.nextButton}
+          icon="fa-angle-right"
+          onClick={
+            () => {
+              this.next();
+            }
+          }
+        />
+        <Prefetch
+          items={[
+            getPrevImage(this.props.items, this.props.id, 1).image,
+            getNextImage(this.props.items, this.props.id, 1).image,
+            getPrevImage(this.props.items, this.props.id, 2).image,
+            getNextImage(this.props.items, this.props.id, 2).image,
+            getPrevImage(this.props.items, this.props.id, 3).image,
+            getNextImage(this.props.items, this.props.id, 3).image,
+            getPrevImage(this.props.items, this.props.id, 4).image,
+            getNextImage(this.props.items, this.props.id, 4).image,
+            getPrevImage(this.props.items, this.props.id, 5).image,
+            getNextImage(this.props.items, this.props.id, 5).image,
+          ]}
+        />
+      </div>
+    );
+  }
+}
 
 PhotoViewer.propTypes = {
   id: PropTypes.number.isRequired,

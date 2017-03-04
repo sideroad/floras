@@ -22,6 +22,7 @@ const PlaceDetail = props =>
                     photo: item.id
                   })
                 }
+                className={styles.link}
               >
                 <li
                   className={styles.item}

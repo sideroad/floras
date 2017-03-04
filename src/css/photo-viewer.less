@@ -20,12 +20,23 @@
   background-color: none;
 }
 
+.leftOut{
+  animation: left-out 0.15s ease-out;
+}
+.rightOut{
+  animation: right-out 0.15s ease-out;
+}
+.leftIn{
+  animation: left-in 0.15s ease-out;
+}
+.rightIn{
+  animation: right-in 0.15s ease-out;
+}
+
 .closeButton,
 .prevButton,
 .nextButton {
   position: absolute;
-  background-color: @sumi;
-  border-radius: 50%;
   color: @maso;
 }
 
@@ -45,21 +56,68 @@
   right: 5%;
 }
 
-.prefecth {
-  display: none;
-}
-
 @media (max-width: 768px) {
+  .photoViewer {
+    width: 100vw;
+    height: 100vh;
+  }
   .photo {
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
   }
 
   .closeButton,
   .prevButton,
   .nextButton {
     display: none;
+  }
+}
+
+
+@keyframes left-out {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.75) translateX(-50%);
+  }
+  100% {
+    transform: scale(0.75) translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes right-out {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.75) translateX(50%);
+  }
+  100% {
+    transform: scale(0.75) translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes left-in {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes right-in {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
