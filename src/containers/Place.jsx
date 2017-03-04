@@ -11,41 +11,38 @@ import PhotoViewer from '../components/PhotoViewer';
 
 const Place = (props, context) =>
   <div>
-    {
-      props.params.photo ?
-        <PhotoViewer
-          id={props.params.photo}
-          items={props.photos}
-          onClose={
-            () =>
-              props.push(stringify(uris.pages.place, {
-                lang: context.lang,
-                id: props.params.id
-              }))
-          }
-          onPrevNext={
-            photo =>
-              props.push(stringify(uris.pages.photos, {
-                lang: context.lang,
-                id: props.params.id,
-                photo: photo.id
-              }))
-          }
-        />
-      :
-        <Page
-          lead={props.place.name.replace(/ō/g, 'ou').replace(/ū/g, 'u')}
-          onClose={
-            () => props.push(stringify(uris.pages.root, { lang: context.lang }))
-          }
-        >
-          <PlaceDetail
-            id={props.params.id}
-            items={props.photos}
-            lang={context.lang}
-          />
-        </Page>
-    }
+    <Page
+      lead={props.place.name.replace(/ō/g, 'ou').replace(/ū/g, 'u')}
+      onClose={
+        () => props.push(stringify(uris.pages.root, { lang: context.lang }))
+      }
+    >
+      <PlaceDetail
+        id={props.params.id}
+        items={props.photos}
+        lang={context.lang}
+      />
+    </Page>
+    <PhotoViewer
+      id={props.params.photo}
+      items={props.photos}
+      isOpen={props.params.photo !== undefined}
+      onClose={
+        () =>
+          props.push(stringify(uris.pages.place, {
+            lang: context.lang,
+            id: props.params.id
+          }))
+      }
+      onPrevNext={
+        photo =>
+          props.push(stringify(uris.pages.photos, {
+            lang: context.lang,
+            id: props.params.id,
+            photo: photo.id
+          }))
+      }
+    />
   </div>;
 
 Place.propTypes = {

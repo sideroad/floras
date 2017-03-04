@@ -70,7 +70,7 @@ class PhotoViewer extends Component {
   render() {
     return (
       <div
-        className={styles.photoViewer}
+        className={`${styles.photoViewer} ${this.props.isOpen ? styles.open : styles.close}`}
       >
         <Swipeable
           key={this.props.id}
@@ -92,7 +92,7 @@ class PhotoViewer extends Component {
           }
           className={`${styles.photo} ${styles[this.state.className]}`}
           style={{
-            backgroundImage: `url(${_.find(this.props.items, { id: this.props.id }).image})`,
+            backgroundImage: `url(${(_.find(this.props.items, { id: this.props.id }) || {}).image})`,
           }}
         />
         <CloseButton
@@ -140,8 +140,9 @@ class PhotoViewer extends Component {
 }
 
 PhotoViewer.propTypes = {
-  id: PropTypes.number.isRequired,
-  items: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  items: PropTypes.array.isRequired,
   onClose: PropTypes.func.isRequired,
   onPrevNext: PropTypes.func.isRequired,
 };
