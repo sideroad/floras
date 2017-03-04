@@ -36,12 +36,10 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    console.log('will mount');
     this.onResize();
   }
 
   componentDidMount() {
-    console.log('did mount');
     window.addEventListener('resize', () => this.onResize());
   }
 
@@ -133,7 +131,6 @@ class Home extends Component {
           mapStyle="mapbox://styles/sideroad/ciz10g2k7000p2rq7hd9jp215"
           onChangeViewport={
             (mapViewState) => {
-              console.log(mapViewState);
               this.props.updateMap({
                 ...mapViewState,
                 pitch: mapViewState.pitch > 60 ? 60 : mapViewState.pitch
@@ -154,7 +151,6 @@ class Home extends Component {
                     id: info.object.id,
                     lang: this.context.lang
                   }));
-                  console.log(info.object);
                 }
               }
             }

@@ -28,7 +28,6 @@ class PhotoViewer extends Component {
   }
 
   componentWillReceiveProps() {
-    console.log('update from ', this.state.className);
     this.setState({
       className: this.state.className === 'leftOut' ? 'rightIn' :
                  this.state.className === 'rightOut' ? 'leftIn' :
@@ -140,11 +139,15 @@ class PhotoViewer extends Component {
 }
 
 PhotoViewer.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   onClose: PropTypes.func.isRequired,
   onPrevNext: PropTypes.func.isRequired,
+};
+
+PhotoViewer.defaultProps = {
+  id: '',
 };
 
 export default PhotoViewer;

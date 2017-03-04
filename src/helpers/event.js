@@ -73,7 +73,6 @@ export function get(id) {
   return new Promise(resolve =>
     client.get('sakura', (err, json) => {
       const events = JSON.parse(json || '{"items":[]}').items;
-      console.log(_.find(events, { id }));
       resolve(_.find(events, { id }));
     })
   );

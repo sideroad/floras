@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 
 const styles = require('../css/prefetch.less');
 
@@ -7,9 +8,11 @@ const Prefetch = props =>
     className={styles.prefetch}
   >
     {
-      props.items.map(
-        item => <img key={item} src={item} alt="prefetch" />
-      )
+      _.uniq(props.items)
+       .filter(item => item)
+       .map(
+         item => <img key={item} src={item} alt="prefetch" />
+       )
     }
   </div>;
 

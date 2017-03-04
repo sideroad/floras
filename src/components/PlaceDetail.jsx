@@ -15,6 +15,7 @@ const PlaceDetail = props =>
           props.items.map(
             item =>
               <Link
+                key={item.id}
                 to={
                   stringify(uris.pages.photos, {
                     lang: props.lang,
