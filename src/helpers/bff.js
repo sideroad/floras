@@ -28,7 +28,10 @@ export default function ({ app }) {
         nojsoncallback: '1'
       })
       .end((error, json) => {
-        if (error) {
+        if (error ||
+            !json.body.photos ||
+            !json.body.photos.photo
+          ) {
           console.log(error);
           res.send({
             items: []
