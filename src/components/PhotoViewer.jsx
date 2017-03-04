@@ -9,12 +9,12 @@ const styles = require('../css/photo-viewer.less');
 
 const getNextImage = (items, id, delta = 1) => {
   const index = _.findIndex(items, { id });
-  return next(items, index, delta);
+  return next(items, index, delta) || {};
 };
 
 const getPrevImage = (items, id, delta = 1) => {
   const index = _.findIndex(items, { id });
-  return prev(items, index, delta);
+  return prev(items, index, delta) || {};
 };
 
 // eslint-disable-next-line
