@@ -1,14 +1,35 @@
 import React, { PropTypes } from 'react';
 import _ from 'lodash';
+import Swipeable from 'react-swipeable';
 import CloseButton from './CloseButton';
 
 const styles = require('../css/photo-viewer.less');
+
+const getNextImage = (items, id) => {
+  const index = _.findIndex(items, { id });
+  return items[index < items.length - 1 ? index + 1 : 0];
+};
+
+const getPrevImage = (items, id) => {
+  const index = _.findIndex(items, { id });
+  return items[index > 0 ? index - 1 : items.length - 1];
+};
 
 const PhotoViewer = props =>
   <div
     className={styles.photoViewer}
   >
-    <div
+    <Swipeable
+      key={props.id}
+      onSwipedLeft={
+        () => props.onPrevNext(getPrevImage(props.items, props.id))
+      }
+      onSwipedRight={
+        () => props.onPrevNext(getNextImage(props.items, props.id))
+      }
+      onSwipedUp={
+        () => props.onClose()
+      }
       className={styles.photo}
       style={{
         backgroundImage: `url(${_.find(props.items, { id: props.id }).image})`,
@@ -25,21 +46,25 @@ const PhotoViewer = props =>
       className={styles.prevButton}
       icon="fa-angle-left"
       onClick={
-        () => {
-          const index = _.findIndex(props.items, { id: props.id });
-          props.onPrevNext(props.items[index > 0 ? index - 1 : props.items.length - 1].id);
-        }
+        () => props.onPrevNext(getPrevImage(props.items, props.id))
       }
     />
     <CloseButton
       className={styles.nextButton}
       icon="fa-angle-right"
       onClick={
-        () => {
-          const index = _.findIndex(props.items, { id: props.id });
-          props.onPrevNext(props.items[index < props.items.length - 1 ? index + 1 : 0].id);
-        }
+        () => props.onPrevNext(getNextImage(props.items, props.id))
       }
+    />
+    <img
+      className={styles.prefecth}
+      src={getPrevImage(props.items, props.id).image}
+      alt="prefecth"
+    />
+    <img
+      className={styles.prefecth}
+      src={getNextImage(props.items, props.id).image}
+      alt="prefecth"
     />
   </div>;
 

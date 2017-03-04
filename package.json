@@ -109,7 +109,7 @@
     "react-redux": "^4.0.0",
     "react-router": "^2.8.1",
     "react-router-redux": "^4.0.4",
-    "react-swipeable": "^3.6.0",
+    "react-swipeable": "^3.9.2",
     "redis": "^2.6.5",
     "redux": "^3.0.4",
     "redux-connect": "^3.0.0",

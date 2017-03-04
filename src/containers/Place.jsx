@@ -28,7 +28,7 @@ const Place = (props, context) =>
               props.push(stringify(uris.pages.photos, {
                 lang: context.lang,
                 id: props.params.id,
-                photo
+                photo: photo.id
               }))
           }
         />
