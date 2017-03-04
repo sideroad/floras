@@ -15,6 +15,7 @@ import { update as updateMap } from '../reducers/map';
 import { set as setDate } from '../reducers/date';
 import config from '../config';
 import uris from '../uris';
+import constants from '../constants';
 
 require('../css/rc-slider.css');
 const styles = require('../css/home.less');
@@ -71,7 +72,7 @@ class Home extends Component {
           if (Number(event.day) === this.state.dayOfYear) {
             return {
               ...event,
-              color: [255, 135, 175],
+              color: constants[event.type].color,
               radius: event.strength,
               position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
             };

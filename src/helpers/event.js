@@ -68,6 +68,17 @@ const prefs = [
 ];
 
 let queued = false;
+
+export function get(id) {
+  return new Promise(resolve =>
+    client.get('sakura', (err, json) => {
+      const events = JSON.parse(json || '{"items":[]}').items;
+      console.log(_.find(events, { id }));
+      resolve(_.find(events, { id }));
+    })
+  );
+}
+
 export default function ({ app }) {
   app.get('/events', (req, res) => {
     client.get('sakura', (err, json) => {

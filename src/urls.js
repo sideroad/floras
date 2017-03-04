@@ -4,13 +4,19 @@ export default {
   event: {
     gets: {
       url: `${config.app.base}/events`,
-      method: 'GET'
+      method: 'GET',
+      cache: {
+        client: true
+      }
     }
   },
   photo: {
     gets: {
       url: `${config.app.base}/bff/photos`,
-      method: 'GET'
+      method: 'GET',
+      cache: {
+        client: true
+      }
     }
   },
   place: {
@@ -27,6 +33,9 @@ export default {
       defaults: {
         key: config.googleapis.key,
         language: 'en'
+      },
+      cache: {
+        client: true
       }
     }
   }

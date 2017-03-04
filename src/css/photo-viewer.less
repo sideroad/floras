@@ -1,0 +1,55 @@
+@import "variables.less";
+
+.photoViewer {
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: @sumi;
+}
+.photo {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  width: 70%;
+  height: 70%;
+  background-size: cover;
+  background-position: center;
+  background-color: none;
+}
+
+.closeButton,
+.prevButton,
+.nextButton {
+  position: absolute;
+  background-color: @sumi;
+  border-radius: 50%;
+  color: @maso;
+}
+
+.closeButton {
+  top: 0.5em;
+  right: 5%;
+}
+
+.prevButton {
+  top: 50%;
+  transform: translateY(-50%);
+  left: 5%;
+}
+.nextButton {
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5%;
+}
+
+@media (max-width: 768px) {
+  .photo {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

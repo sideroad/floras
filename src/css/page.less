@@ -13,7 +13,6 @@
   color: @gofun;
   &.open {
     left: 0;
-    box-shadow: @shadow;
   }
   &.close {
     left: -100vw;
@@ -24,7 +23,7 @@
   position: fixed;
   width: 100%;
   background-color: @sumi;
-  padding-top: 25px;
+  padding-top: 0.5em;
   z-index: 3;
 }
 
@@ -35,19 +34,19 @@
 
 .lead {
   text-align: center;
-  font-size: 4em;
+  font-size: 3em;
   font-weight: normal;
   margin: 0;
-  margin-bottom: 25px;
+  margin-top: 0.15em;
 }
 
 .contents {
-  margin-top: 8em;
+  margin-top: 4em;
 }
 
 @media(max-width: 568px) {
   .lead {
     font-size: 2em;
-    line-height: 2em;
+    margin-top: 0.5em;
   }
 }

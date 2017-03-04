@@ -15,6 +15,7 @@ export default () =>
   <Route path={uris.pages.root} component={App} >
     <IndexRoute path={uris.pages.home} component={Home} />
     <Route path={uris.pages.home} component={Home} >
+      <Route path={uris.pages.photos} component={Place} />
       <Route path={uris.pages.place} component={Place} />
       <Route path={uris.pages.privacy} component={PrivacyPolicy} />
     </Route>

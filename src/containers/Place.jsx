@@ -7,27 +7,52 @@ import moment from 'moment';
 import uris from '../uris';
 import Page from '../components/Page';
 import PlaceDetail from '../components/PlaceDetail';
+import PhotoViewer from '../components/PhotoViewer';
 
 const Place = (props, context) =>
   <div>
-    <Page
-      lead={props.place.name.replace(/ō/g, 'ou')}
-      onClose={
-        () => {
-          props.push(stringify(uris.pages.root, { lang: context.lang }));
-        }
-      }
-    >
-      <PlaceDetail
-        items={props.photos}
-      />
-    </Page>
+    {
+      props.params.photo ?
+        <PhotoViewer
+          id={props.params.photo}
+          items={props.photos}
+          onClose={
+            () =>
+              props.push(stringify(uris.pages.place, {
+                lang: context.lang,
+                id: props.params.id
+              }))
+          }
+          onPrevNext={
+            photo =>
+              props.push(stringify(uris.pages.photos, {
+                lang: context.lang,
+                id: props.params.id,
+                photo
+              }))
+          }
+        />
+      :
+        <Page
+          lead={props.place.name.replace(/ō/g, 'ou').replace(/ū/g, 'u')}
+          onClose={
+            () => props.push(stringify(uris.pages.root, { lang: context.lang }))
+          }
+        >
+          <PlaceDetail
+            id={props.params.id}
+            items={props.photos}
+            lang={context.lang}
+          />
+        </Page>
+    }
   </div>;
 
 Place.propTypes = {
   push: PropTypes.func.isRequired,
   place: PropTypes.object.isRequired,
   photos: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
 Place.contextTypes = {
@@ -57,6 +82,7 @@ const asynced = asyncConnect([{
         (res) => {
           const location = res.body.result.geometry.location;
           return fetcher.photo.gets({
+            id: params.id,
             lat: location.lat,
             lng: location.lng,
             date: date.subtract(1, 'years').subtract(3, 'days').format('YYYY-MM-DD')
