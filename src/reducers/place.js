@@ -16,14 +16,11 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case GETS_START:
       return {
-        ...state,
-        loading: true
+        ...state
       };
     case GETS_SUCCESS:
       return {
         ...state,
-        loading: false,
-        loaded: true,
         items: action.res.body.predictions.map(prediction => ({
           id: prediction.place_id,
           name: prediction.structured_formatting.main_text,
@@ -32,8 +29,6 @@ export default function reducer(state = initialState, action = {}) {
     case GETS_FAIL:
       return {
         ...state,
-        loading: false,
-        loaded: false,
         error: action.error
       };
     case GET_START:

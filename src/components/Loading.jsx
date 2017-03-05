@@ -1,0 +1,14 @@
+import React from 'react';
+
+const styles = require('../css/loading.less');
+
+const Loading = () =>
+  <div className={styles.container}>
+    <div className={styles.loading}>
+      <div className={`${styles.circle} ${styles.left}`} />
+      <div className={`${styles.circle} ${styles.right}`} />
+      <div className={styles.icon} />
+    </div>
+  </div>;
+
+export default Loading;
