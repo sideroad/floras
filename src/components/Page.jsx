@@ -4,9 +4,7 @@ import CloseButton from '../components/CloseButton';
 const styles = require('../css/page.less');
 
 const Page = props =>
-  <div
-    className={styles.page}
-  >
+  <div className={styles.page}>
     <header className={styles.header}>
       <CloseButton
         icon="fa-angle-left"
