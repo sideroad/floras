@@ -84,7 +84,7 @@ class PhotoViewer extends Component {
           onSwipedDown={
             () => this.props.onClose()
           }
-          className={`${styles.photo} ${styles[this.state.className]}`}
+          className={`${styles.photo} ${styles.animate} ${styles[this.state.className]}`}
           style={{
             backgroundImage: `url(${(_.find(this.props.items, { id: this.props.id }) || {}).image})`,
             animationDuration: `${DURATION / 1000}s`
