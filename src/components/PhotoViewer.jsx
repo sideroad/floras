@@ -84,9 +84,6 @@ class PhotoViewer extends Component {
               this.prev();
             }
           }
-          onSwipedUp={
-            () => this.props.onClose()
-          }
           onSwipedDown={
             () => this.props.onClose()
           }
