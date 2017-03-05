@@ -35,7 +35,8 @@ class PhotoViewer extends Component {
       className: this.state.className === 'leftOut' ? 'rightIn' :
                  this.state.className === 'rightOut' ? 'leftIn' :
                  this.state.className || '',
-      swiping: false
+      swiping: false,
+      info: false,
     });
   }
 
