@@ -135,13 +135,12 @@ class PhotoViewer extends Component {
             getNextImage(this.props.items, this.props.id, 5).image,
           ]}
         />
-        <div className={styles.infotip}>
-          <button
-            onClick={() => this.setState({ info: true })}
-          >
-            <i className={`${fa.fa} ${fa['fa-info-circle']}`} />
-          </button>
-        </div>
+        <button
+          className={styles.infotip}
+          onClick={() => this.setState({ info: true })}
+        >
+          <i className={`${fa.fa} ${fa['fa-info-circle']}`} />
+        </button>
         <div className={`${styles.info} ${this.state.info ? styles.display : ''}`}>
           <p>
             <a
