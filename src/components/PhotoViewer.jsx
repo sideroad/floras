@@ -5,6 +5,7 @@ import { next, prev } from 'loop-array-calc';
 import CloseButton from './CloseButton';
 import Prefetch from './Prefetch';
 
+const DURATION = 150;
 const styles = require('../css/photo-viewer.less');
 
 const getNextImage = (items, id, delta = 1) => {
@@ -44,10 +45,7 @@ class PhotoViewer extends Component {
       });
       setTimeout(() => {
         this.props.onPrevNext(getPrevImage(this.props.items, this.props.id));
-        // this.setState({
-        //   swiping: false
-        // });
-      }, 150);
+      }, DURATION);
     }
   }
 
@@ -59,10 +57,7 @@ class PhotoViewer extends Component {
       });
       setTimeout(() => {
         this.props.onPrevNext(getNextImage(this.props.items, this.props.id));
-        // this.setState({
-        //   swiping: false
-        // });
-      }, 150);
+      }, DURATION);
     }
   }
 
@@ -92,6 +87,7 @@ class PhotoViewer extends Component {
           className={`${styles.photo} ${styles[this.state.className]}`}
           style={{
             backgroundImage: `url(${(_.find(this.props.items, { id: this.props.id }) || {}).image})`,
+            animationDuration: `${DURATION / 1000}s`
           }}
         />
         <CloseButton
