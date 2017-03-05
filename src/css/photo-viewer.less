@@ -128,8 +128,8 @@
   .infotip {
     display: block;
     position: absolute;
-    bottom: 1.5em;
-    left: 2.5%;
+    top: 2%;
+    right: 2.5%;
     font-size: 2.5em;
     color: @gofun;
     height: 1.5em;
@@ -138,23 +138,24 @@
   }
 
   .info {
-    top: none;
-    bottom: 0;
+    top: 0;
     left: 0;
     width: 90%;
     padding-right: 5%;
     padding-left: 5%;
-    padding-bottom: 1em;
     background-color: @sumi;
     transition-duration: 0.25s;
     transition-property: transform;
-    transform: translateY(100%);
+    transform: translateY(-100%);
     align-items: flex-start;
-    height: 5.5em;
+  }
+
+  .info p{
+    height: auto;
   }
 
   .info.display {
-    transform: translateY(-1em);
+    transform: translateY(0%);
   }
 }
 
