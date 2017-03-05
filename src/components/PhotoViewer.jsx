@@ -39,7 +39,7 @@ class PhotoViewer extends Component {
   prev() {
     if (!this.state.swiping) {
       this.setState({
-        className: 'leftOut',
+        className: 'rightOut',
         swiping: true,
       });
       setTimeout(() => {
@@ -54,7 +54,7 @@ class PhotoViewer extends Component {
   next() {
     if (!this.state.swiping) {
       this.setState({
-        className: 'rightOut',
+        className: 'leftOut',
         swiping: true,
       });
       setTimeout(() => {
@@ -75,12 +75,12 @@ class PhotoViewer extends Component {
           key={this.props.id}
           onSwipedLeft={
             () => {
-              this.prev();
+              this.next();
             }
           }
           onSwipedRight={
             () => {
-              this.next();
+              this.prev();
             }
           }
           onSwipedUp={
