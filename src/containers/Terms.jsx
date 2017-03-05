@@ -3,30 +3,30 @@ import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import Page from '../components/Page';
-import PrivacyPolicyContents from '../components/PrivacyPolicy';
+import TermsContents from '../components/Terms';
 import uris from '../uris';
 
-const PrivacyPolicy = (props, context) =>
+const Terms = (props, context) =>
   <div>
     <Page
-      lead="Privacy Policy"
+      lead="Terms of Service"
       onClose={
         () => {
           props.push(stringify(uris.pages.root, { lang: context.lang }));
         }
       }
     >
-      <PrivacyPolicyContents
+      <TermsContents
         i18n={context.i18n}
       />
     </Page>
   </div>;
 
-PrivacyPolicy.propTypes = {
+Terms.propTypes = {
   push: PropTypes.func.isRequired,
 };
 
-PrivacyPolicy.contextTypes = {
+Terms.contextTypes = {
   lang: PropTypes.string.isRequired,
   fetcher: PropTypes.object.isRequired,
   i18n: PropTypes.object.isRequired,
@@ -35,7 +35,7 @@ PrivacyPolicy.contextTypes = {
 const connected = connect(
   () => ({}),
   { push }
-)(PrivacyPolicy);
+)(Terms);
 
 
 export default connected;

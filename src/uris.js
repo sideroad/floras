@@ -3,6 +3,6 @@ export default {
     root: '/:lang',
     place: '/:lang/places/:id',
     photos: '/:lang/places/:id/photos/:photo',
-    privacy: '/:lang/privacy'
+    terms: '/:lang/terms'
   }
 };

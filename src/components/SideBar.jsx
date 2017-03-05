@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-// import { stringify } from 'koiki';
-// import uris from '../uris';
+import { stringify } from 'koiki';
+import uris from '../uris';
 import CloseButton from '../components/CloseButton';
 
 const styles = require('../css/side-bar.less');
@@ -54,7 +54,6 @@ class SideBar extends Component {
             Flora
           </h1>
           {
-            /**
             <ul className={styles.list}>
               <li className={styles.item}>
                 <a
@@ -66,15 +65,14 @@ class SideBar extends Component {
                       this.setState({
                         opened: false
                       });
-                      this.props.push(stringify(uris.pages.privacy, { lang: this.props.lang }));
+                      this.props.push(stringify(uris.pages.terms, { lang: this.props.lang }));
                     }
                   }
                 >
-                  Privacy Policy
+                  Terms
                 </a>
               </li>
             </ul>
-            */
           }
         </div>
       </div>
