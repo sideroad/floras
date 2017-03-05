@@ -12,7 +12,7 @@ import PhotoViewer from '../components/PhotoViewer';
 const Place = (props, context) =>
   <div>
     <Page
-      lead={(props.place.name || '').replace(/ō/g, 'ou').replace(/ū/g, 'u')}
+      lead={props.name.replace(/ō/g, 'ou').replace(/ū/g, 'u')}
       onClose={
         () => props.push(stringify(uris.pages.root, { lang: context.lang }))
       }
@@ -47,9 +47,13 @@ const Place = (props, context) =>
 
 Place.propTypes = {
   push: PropTypes.func.isRequired,
-  place: PropTypes.object.isRequired,
+  name: PropTypes.string,
   photos: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
+};
+
+Place.defaultProps = {
+  name: ''
 };
 
 Place.contextTypes = {
@@ -61,7 +65,7 @@ Place.contextTypes = {
 
 const connected = connect(
   state => ({
-    place: state.place.item,
+    name: state.place.item.name,
     photos: state.photo.items,
   }),
   { push }
