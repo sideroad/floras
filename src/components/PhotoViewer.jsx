@@ -7,6 +7,7 @@ import Prefetch from './Prefetch';
 
 const DURATION = 150;
 const styles = require('../css/photo-viewer.less');
+const fa = require('../css/koiki-ui/fa/less/font-awesome.less');
 
 const getNextImage = (items, id, delta = 1) => {
   const index = _.findIndex(items, { id });
@@ -24,7 +25,8 @@ class PhotoViewer extends Component {
     super(props);
     this.state = {
       className: '',
-      swiping: false
+      swiping: false,
+      info: false,
     };
   }
 
@@ -62,12 +64,15 @@ class PhotoViewer extends Component {
   }
 
   render() {
+    const item = _.find(this.props.items, { id: this.props.id }) || { license: {} };
+    console.log(item);
     return (
       <div
         className={`${styles.photoViewer} ${this.props.isOpen ? styles.open : styles.close}`}
       >
         <Swipeable
           key={this.props.id}
+          onClick={() => this.setState({ info: false })}
           onSwipedLeft={
             () => {
               this.next();
@@ -86,7 +91,7 @@ class PhotoViewer extends Component {
           }
           className={`${styles.photo} ${styles.animate} ${styles[this.state.className]}`}
           style={{
-            backgroundImage: `url(${(_.find(this.props.items, { id: this.props.id }) || {}).image})`,
+            backgroundImage: `url(${(item).image})`,
             animationDuration: `${DURATION / 1000}s`
           }}
         />
@@ -129,6 +134,40 @@ class PhotoViewer extends Component {
             getNextImage(this.props.items, this.props.id, 5).image,
           ]}
         />
+        <div className={styles.infotip}>
+          <button
+            onClick={() => this.setState({ info: true })}
+          >
+            <i className={`${fa.fa} ${fa['fa-info-circle']}`} />
+          </button>
+        </div>
+        <div className={`${styles.info} ${this.state.info ? styles.display : ''}`}>
+          <p>
+            <a
+              className={styles.link}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>{item.title} by {item.owner}</span>
+            </a>
+          </p>
+          <p className={styles.license}>
+            {
+              item.license.url ?
+                <a
+                  className={styles.link}
+                  href={item.license.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {item.license.name}
+                </a>
+              :
+                <span>{item.license.name}</span>
+            }
+          </p>
+        </div>
       </div>
     );
   }

@@ -19,13 +19,44 @@
 
 .photo {
   position: absolute;
-  top: 15%;
+  top: 10%;
   left: 15%;
   width: 70%;
-  height: 70%;
+  height: 75%;
   background-size: cover;
   background-position: center;
   background-color: none;
+}
+
+.info {
+  position: absolute;
+  top: 85%;
+  left: 15%;
+  color: @gofun;
+  font-family: 'Tangerine';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  font-size: 1.5em;
+}
+
+.info p{
+  height: 1.5em;
+}
+
+.info span {
+  vertical-align: -webkit-baseline-middle;
+}
+
+.link {
+  color: @maso;
+  outline: none;
+  text-align: left;
+}
+
+.license span{
+  text-align: right;
 }
 
 .animate {
@@ -58,14 +89,18 @@
 }
 
 .prevButton {
-  top: 50%;
+  top: 45%;
   transform: translateY(-50%);
   left: 5%;
 }
 .nextButton {
-  top: 50%;
+  top: 45%;
   transform: translateY(-50%);
   right: 5%;
+}
+
+.infotip {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -88,6 +123,32 @@
   .prevButton,
   .nextButton {
     display: none;
+  }
+
+  .infotip {
+    display: block;
+    position: absolute;
+    bottom: 0.5%;
+    left: 2.5%;
+    font-size: 2.5em;
+    color: @gofun;
+  }
+
+  .info {
+    top: none;
+    bottom: 0;
+    left: 0;
+    width: 90%;
+    padding-right: 5%;
+    padding-left: 5%;
+    background-color: @sumi;
+    transition-duration: 0.25s;
+    transition-property: transform;
+    transform: translateY(100%);
+  }
+
+  .info.display {
+    transform: translateY(0%);
   }
 }
 
