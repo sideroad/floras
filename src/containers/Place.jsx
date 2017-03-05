@@ -12,7 +12,7 @@ import PhotoViewer from '../components/PhotoViewer';
 const Place = (props, context) =>
   <div>
     <Page
-      lead={props.place.name.replace(/ō/g, 'ou').replace(/ū/g, 'u')}
+      lead={(props.place.name || '').replace(/ō/g, 'ou').replace(/ū/g, 'u')}
       onClose={
         () => props.push(stringify(uris.pages.root, { lang: context.lang }))
       }
