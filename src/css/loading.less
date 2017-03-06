@@ -30,6 +30,7 @@
   animation-iteration-count: infinite;
   animation-timing-function:linear;
   animation-delay: 0s;
+  box-sizing: border-box;
 }
 
 .icon {
@@ -40,30 +41,47 @@
   margin: 20px;
   animation: flag 5s;
   animation-iteration-count: infinite;
-  animation-timing-function:linear;
+  animation-timing-function:ease-in-out;
   animation-delay: 0s;
 }
 
 .left {
   border-color: @maso;
   border-bottom:none;
-  border-left:none;
+  border-right:none;
+  border-top:none;
 }
 .right {
+  border-color: @toki;
+  border-bottom:none;
+  border-left:none;
+  border-top:none;
+}
+.top {
   border-color: @gofun;
   border-right:none;
+  border-left:none;
+  border-bottom:none;
+}
+.bottom {
+  border-color: @gofun;
+  border-right:none;
+  border-left:none;
   border-top:none;
 }
 
 @keyframes flag{
   0%{
     opacity: 0.2;
+    transform: scale(0.2);
   }
   50%{
     opacity: 1;
+    transform: scale(0.75);
   }
   100%{
     opacity: 0.2;
+    transform: scale(0.2);
   }
 }
 
