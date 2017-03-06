@@ -133,7 +133,7 @@ class PhotoViewer extends Component {
           ]}
         />
         <button
-          className={styles.infotip}
+          className={`${styles.infotip} needsclick`}
           onClick={() => this.setState({ info: true })}
         >
           <i className={`${fa.fa} ${fa['fa-info-circle']}`} />

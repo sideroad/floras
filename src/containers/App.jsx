@@ -27,7 +27,7 @@ App.contextTypes = {
 
 const connected = connect(
   state => ({
-    loading: state.place.loading || state.event.loading || state.photo.loading || true,
+    loading: state.place.loading || state.event.loading || state.photo.loading,
   }),
   {}
 )(App);
