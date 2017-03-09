@@ -13,7 +13,7 @@ export default function ({ app }) {
     prefix: '/bff/google',
   });
   app.use('/bff/photos', (req, res) => {
-    get(req.query.id)
+    get({ id: req.query.id, day: req.query.day })
       .then(
         (event) => {
           Promise.all([

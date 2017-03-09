@@ -16,13 +16,16 @@ const PlaceDetail = props =>
             item =>
               <Link
                 key={item.id}
-                to={
-                  stringify(uris.pages.photos, {
+                to={{
+                  pathname: stringify(uris.pages.photos, {
                     lang: props.lang,
                     id: props.id,
                     photo: item.id
-                  })
-                }
+                  }),
+                  query: {
+                    day: props.day
+                  }
+                }}
                 className={styles.link}
               >
                 <li
@@ -39,8 +42,11 @@ const PlaceDetail = props =>
   </div>;
 
 PlaceDetail.propTypes = {
+  //eslint-disable-next-line
   id: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
+  day: PropTypes.string,
 };
+
 
 export default PlaceDetail;

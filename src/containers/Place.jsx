@@ -3,7 +3,6 @@ import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
-import moment from 'moment';
 import uris from '../uris';
 import Page from '../components/Page';
 import PlaceDetail from '../components/PlaceDetail';
@@ -21,6 +20,7 @@ const Place = (props, context) =>
         id={props.params.id}
         items={props.photos}
         lang={context.lang}
+        day={props.day}
       />
     </Page>
     <PhotoViewer
@@ -29,18 +29,28 @@ const Place = (props, context) =>
       isOpen={props.params.photo !== undefined}
       onClose={
         () =>
-          props.push(stringify(uris.pages.place, {
-            lang: context.lang,
-            id: props.params.id
-          }))
+          props.push({
+            pathname: stringify(uris.pages.place, {
+              lang: context.lang,
+              id: props.params.id
+            }),
+            query: {
+              day: props.day
+            }
+          })
       }
       onPrevNext={
         photo =>
-          props.push(stringify(uris.pages.photos, {
-            lang: context.lang,
-            id: props.params.id,
-            photo: photo.id
-          }))
+          props.push({
+            pathname: stringify(uris.pages.photos, {
+              lang: context.lang,
+              id: props.params.id,
+              photo: photo.id
+            }),
+            query: {
+              day: props.day
+            }
+          })
       }
     />
   </div>;
@@ -50,10 +60,12 @@ Place.propTypes = {
   name: PropTypes.string,
   photos: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
+  day: PropTypes.string,
 };
 
 Place.defaultProps = {
-  name: ''
+  name: '',
+  day: ''
 };
 
 Place.contextTypes = {
@@ -64,29 +76,28 @@ Place.contextTypes = {
 };
 
 const connected = connect(
-  state => ({
+  (state, ownProps) => ({
     name: state.place.item.name,
     photos: state.photo.items,
+    day: ownProps.location.query.day,
   }),
   { push }
 )(Place);
 
 const asynced = asyncConnect([{
-  promise: ({ store, helpers: { fetcher }, params }) => {
+  promise: ({ helpers: { fetcher }, params, location }) => {
     const promises = [];
-    const dayOfYear = store.getState().date.dayOfYear || moment().dayOfYear();
-    const date = moment().dayOfYear(dayOfYear);
     promises.push(
       fetcher.place.get({
         placeid: params.id
       }).then(
         (res) => {
-          const location = res.body.result.geometry.location;
+          const geolocation = res.body.result.geometry.location;
           return fetcher.photo.gets({
             id: params.id,
-            lat: location.lat,
-            lng: location.lng,
-            date: date.subtract(1, 'years').subtract(3, 'days').format('YYYY-MM-DD')
+            lat: geolocation.lat,
+            lng: geolocation.lng,
+            day: location.query.day
           });
         }
       )
