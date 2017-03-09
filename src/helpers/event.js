@@ -120,8 +120,8 @@ const leaves = (url, callback) => {
                              .split('～');
         $(item).find('.name span').remove();
         return {
-          name: $(item).find('.name').text(),
-          pref: '',
+          name: _.trim($(item).find('.name').text()),
+          pref: _.trim($(item).find('.address').text()),
           start: moment(`${moment().year()}/${dates[0]}`, 'YYYY/M/D').format('YYYY-MM-DD'),
           end: moment(`${moment().year()}/${dates[1]}`, 'YYYY/M/D').format('YYYY-MM-DD'),
         };
