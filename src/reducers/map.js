@@ -2,7 +2,7 @@
 const LOAD_START = 'map/LOAD_START';
 const LOAD_SUCCESS = 'map/LOAD_SUCCESS';
 const LOAD_FAIL = 'map/LOAD_FAIL';
-const UPDATE_MAP = 'map/UPDATE_MAP';
+const UPDATE = 'map/UPDATE';
 
 const initialState = {
   items: [],
@@ -18,7 +18,7 @@ const initialState = {
 };
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case UPDATE_MAP:
+    case UPDATE:
       return {
         ...state,
         mapViewState: action.mapViewState
@@ -49,7 +49,7 @@ export default function reducer(state = initialState, action = {}) {
 
 export function update(mapViewState) {
   return {
-    type: UPDATE_MAP,
+    type: UPDATE,
     mapViewState
   };
 }

@@ -27,15 +27,17 @@ App.contextTypes = {
 
 const connected = connect(
   state => ({
-    loading: state.place.loading || state.event.loading || state.photo.loading,
+    loading: state.place.loading ||
+             state.event.loading ||
+             state.photo.loading ||
+             !state.event.initialized,
   }),
   {}
 )(App);
 
 export default asyncConnect([{
-  promise: ({ store: { dispatch } }) => {
+  promise: () => {
     const promises = [];
-    console.log(true || dispatch);
     return Promise.all(promises);
   }
 }])(connected);

@@ -12,6 +12,7 @@ import { asyncConnect } from 'redux-connect';
 import FindPlace from '../components/FindPlace';
 import SideBar from '../components/SideBar';
 import { update as updateMap } from '../reducers/map';
+import { initialized as eventInitialized } from '../reducers/event';
 import { set as setDate } from '../reducers/date';
 import config from '../config';
 import uris from '../uris';
@@ -41,6 +42,7 @@ class Home extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', () => this.onResize());
+    this.context.fetcher.event.gets();
   }
 
   onResize() {
@@ -162,6 +164,7 @@ class Home extends Component {
                 }
               }
             }
+            onWebGLInitialized={() => this.props.eventInitialized()}
           />
         </MapGL>
         <div className={styles.date}>
@@ -183,7 +186,6 @@ class Home extends Component {
               this.onStartPressDay(-1);
             }
           }
-          onTouchMove={this.onEndPressDay}
           onTouchEnd={this.onEndPressDay}
         >
           <i className={`${fa.fa} ${fa['fa-angle-left']}`} />
@@ -217,7 +219,6 @@ class Home extends Component {
               this.onStartPressDay(1);
             }
           }
-          onTouchMove={this.onEndPressDay}
           onTouchEnd={this.onEndPressDay}
         >
           <i className={`${fa.fa} ${fa['fa-angle-right']}`} />
@@ -238,6 +239,7 @@ Home.propTypes = {
   setDate: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   children: PropTypes.element,
+  eventInitialized: PropTypes.func.isRequired,
 };
 
 Home.defaultProps = {
@@ -247,7 +249,7 @@ Home.defaultProps = {
 Home.contextTypes = {
   lang: PropTypes.string.isRequired,
   fetcher: PropTypes.object.isRequired,
-  i18n: PropTypes.object.isRequired
+  i18n: PropTypes.object.isRequired,
 };
 
 const connected = connect(
@@ -258,16 +260,12 @@ const connected = connect(
     mapViewState: state.map.mapViewState,
     dayOfYear: state.date.dayOfYear,
   }),
-  { updateMap, setDate, push }
+  { eventInitialized, updateMap, setDate, push }
 )(Home);
 
 const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher } }) => {
+  promise: () => {
     const promises = [];
-    promises.push(
-      fetcher.event
-        .gets()
-    );
     return Promise.all(promises);
   }
 }])(connected);

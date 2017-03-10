@@ -106,6 +106,7 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-fastclick": "^2.1.0",
+    "react-hammerjs": "^0.5.0",
     "react-helmet": "^2.3.1",
     "react-map-gl": "^1.7.2",
     "react-redux": "^4.0.0",
