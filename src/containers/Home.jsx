@@ -32,6 +32,7 @@ class Home extends Component {
       dayOfYear: props.dayOfYear,
     };
     this.onResize = this.onResize.bind(this);
+    this.onEndPressDay = this.onEndPressDay.bind(this);
   }
 
   componentWillMount() {
@@ -50,11 +51,15 @@ class Home extends Component {
   }
 
   onStartPressDay(delta) {
-    this.keepPressId = setInterval(() => this.onPressDay(delta), 250);
+    if (this.keepPressId) {
+      clearInterval(this.keepPressId);
+    }
+    this.keepPressId = setInterval(() => this.onPressDay(delta), 200);
   }
 
   onEndPressDay() {
     clearInterval(this.keepPressId);
+    this.keepPressId = undefined;
   }
 
   onPressDay(delta) {
@@ -170,11 +175,16 @@ class Home extends Component {
               this.onStartPressDay(-1);
             }
           }
-          onMouseUp={
+          onMouseMove={this.onEndPressDay}
+          onMouseUp={this.onEndPressDay}
+          onTouchStart={
             () => {
-              this.onEndPressDay();
+              this.onPressDay(-1);
+              this.onStartPressDay(-1);
             }
           }
+          onTouchMove={this.onEndPressDay}
+          onTouchEnd={this.onEndPressDay}
         >
           <i className={`${fa.fa} ${fa['fa-angle-left']}`} />
         </button>
@@ -199,11 +209,16 @@ class Home extends Component {
               this.onStartPressDay(1);
             }
           }
-          onMouseUp={
+          onMouseMove={this.onEndPressDay}
+          onMouseUp={this.onEndPressDay}
+          onTouchStart={
             () => {
-              this.onEndPressDay();
+              this.onPressDay(1);
+              this.onStartPressDay(1);
             }
           }
+          onTouchMove={this.onEndPressDay}
+          onTouchEnd={this.onEndPressDay}
         >
           <i className={`${fa.fa} ${fa['fa-angle-right']}`} />
         </button>
