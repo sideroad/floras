@@ -7,6 +7,7 @@ import uris from '../uris';
 import Page from '../components/Page';
 import PlaceDetail from '../components/PlaceDetail';
 import PhotoViewer from '../components/PhotoViewer';
+import { start as transactionStart, end as transactionEnd } from '../reducers/transaction';
 
 const Place = (props, context) =>
   <div>
@@ -85,8 +86,9 @@ const connected = connect(
 )(Place);
 
 const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher }, params, location }) => {
+  promise: ({ helpers: { fetcher }, params, location, store: { dispatch } }) => {
     const promises = [];
+    dispatch(transactionStart());
     promises.push(
       fetcher.place.get({
         placeid: params.id
@@ -99,6 +101,14 @@ const asynced = asyncConnect([{
             lng: geolocation.lng,
             day: location.query.day
           });
+        }
+      ).then(
+        () => {
+          dispatch(transactionEnd());
+        }
+      ).catch(
+        () => {
+          dispatch(transactionEnd());
         }
       )
     );

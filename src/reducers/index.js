@@ -1,3 +1,4 @@
+import transaction from './transaction';
 import photo from './photo';
 import user from './user';
 import place from './place';
@@ -11,5 +12,6 @@ export default {
   event,
   place,
   user,
-  photo
+  photo,
+  transaction
 };

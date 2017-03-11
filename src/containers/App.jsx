@@ -30,6 +30,7 @@ const connected = connect(
     loading: state.place.loading ||
              state.event.loading ||
              state.photo.loading ||
+             state.transaction.loading ||
              !state.event.initialized,
   }),
   {}
