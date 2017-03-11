@@ -7,6 +7,8 @@ import _ from 'lodash';
 import moment from 'moment';
 import path from 'path';
 import redis from 'redis';
+import url from 'url';
+import querystring from 'querystring';
 import config from '../config';
 import constants from '../constants';
 
@@ -99,14 +101,14 @@ export function get({ id, day }) {
     );
 }
 
-const leaves = (url, callback) => {
-  if (!url || url.match(/^#/)) {
+const leaves = (targetUrl, callback) => {
+  if (!targetUrl || targetUrl.match(/^#/)) {
     callback();
     return;
   }
-  console.log(`# fetching ${url}`);
+  console.log(`# fetching ${targetUrl}`);
   jsdom.env({
-    url,
+    url: targetUrl,
     scripts: ['http://code.jquery.com/jquery.js'],
     done: (err, window) => {
       const $ = window.$;
@@ -119,11 +121,14 @@ const leaves = (url, callback) => {
                              .replace(/月下旬/g, '/25')
                              .split('～');
         $(item).find('.name span').remove();
+        const start = moment(`${moment().year()}/${dates[0]}`, 'YYYY/M/D');
+        const end = moment(`${moment().year()}/${dates[1]}`, 'YYYY/M/D');
         return {
           name: _.trim($(item).find('.name').text()),
           pref: _.trim($(item).find('.address').text()),
-          start: moment(`${moment().year()}/${dates[0]}`, 'YYYY/M/D').format('YYYY-MM-DD'),
-          end: moment(`${moment().year()}/${dates[1]}`, 'YYYY/M/D').format('YYYY-MM-DD'),
+          start: start.format('YYYY-MM-DD'),
+          max: start.add(end.diff(start, 'days') / 2, 'days').format('YYYY-MM-DD'),
+          end: end.format('YYYY-MM-DD'),
         };
       })
       .get();
@@ -132,30 +137,49 @@ const leaves = (url, callback) => {
   });
 };
 
-const sakura = (data, callback) => {
-  const [prefIndex, url] = data.split(',');
-
-  if (!url || url.match(/^#/)) {
+const sakura = (targetUrl, callback) => {
+  if (!targetUrl || targetUrl.match(/^#/)) {
     callback();
     return;
   }
-  console.log(`# fetching ${url}`);
-  jsdom.env({
-    url,
-    scripts: ['http://code.jquery.com/jquery.js'],
-    done: (err, window) => {
-      const $ = window.$;
-      const spots = $('.set-in').map((index, item) => ({
-        name: $(item).text(),
-        pref: prefs[prefIndex]
-      })).get();
-      const dates = $('.tbl01.mb10').map((index, table) => ({
-        start: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(0)').text()}`, 'YYYY/M/D').format('YYYY-MM-DD'),
-        end: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(1)').text()}`, 'YYYY/M/D').format('YYYY-MM-DD'),
-      })).get();
-      callback(err, _.merge(spots, dates));
-    }
-  });
+  const ba = querystring.parse(url.parse(targetUrl).query).ba;
+  console.log(`# fetching ${targetUrl}`);
+  request
+    .get(`http://s.n-kishou.co.jp/w/data/map.html?pa=nkishou&fla=sakura&param=kaika&ba=${ba}`)
+    .set('Content-Type', 'text/plain')
+    .end(
+      (fetchError, res) => {
+        const master = {};
+        res.text.split('\n').forEach((line, index) => {
+          const [code, name, lat, lng] = line.split(',');
+          if (index === 0 || !code) {
+            return;
+          }
+          master[`code=${code}`] = {
+            latlng: `${lat},${lng}`,
+            name
+          };
+        });
+        jsdom.env({
+          url: targetUrl,
+          scripts: ['http://code.jquery.com/jquery.js'],
+          done: (err, window) => {
+            const $ = window.$;
+            const spots = $('.set-in').map((index, item) => ({
+              name: $(item).text(),
+              pref: prefs[Number(ba) - 1],
+              latlng: master[$(item).attr('id')].latlng,
+            })).get();
+            const dates = $('.tbl01.mb10').map((index, table) => ({
+              start: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(0)').text()}`, 'YYYY/M/D').format('YYYY-MM-DD'),
+              max: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(1)').text()}`, 'YYYY/M/D').format('YYYY-MM-DD'),
+              end: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(1)').text()}`, 'YYYY/M/D').add(3, 'days').format('YYYY-MM-DD'),
+            })).get();
+            callback(err, _.merge(spots, dates));
+          }
+        });
+      }
+    );
 };
 
 const crawl = (season, evaluator) =>
@@ -189,6 +213,7 @@ const crawl = (season, evaluator) =>
                 console.log(`# fetch success: req[${spot.name}] res[${json.body.results[0].name}]`);
                 const location = json.body.results[0].geometry.location;
                 const start = moment(spot.start, 'YYYY-MM-DD').dayOfYear();
+                const max = moment(spot.max, 'YYYY-MM-DD').dayOfYear();
                 const end = moment(spot.end, 'YYYY-MM-DD').dayOfYear();
                 const type = TYPES[season];
                 const events = [];
@@ -196,27 +221,27 @@ const crawl = (season, evaluator) =>
                 const name = json.body.results[0].name;
                 const latlng = `${location.lat},${location.lng}`;
                 const popurarity = _.find(famous, { name }) ? 9 : 4;
-                _.times((end - start) + 1, (index) => {
+                _.times((max - start) + 1, (index) => {
                   events.push({
                     ...spot,
                     id,
                     name,
-                    latlng,
+                    latlng: spot.latlng || latlng,
                     day: start + index,
-                    strength: (index / (end - start)) * 9,
+                    strength: (index / (max - start)) * 9,
                     popurarity,
                     type,
                     color: constants[type].color,
                   });
                 });
-                _.times(3, (index) => {
+                _.times((end - max) + 1, (index) => {
                   events.push({
                     ...spot,
                     id,
                     name,
-                    latlng,
-                    day: end + index + 1,
-                    strength: 9 / (index + 1),
+                    latlng: spot.latlng || latlng,
+                    day: max + index + 1,
+                    strength: 9 - ((index / (end - max)) * 9),
                     popurarity,
                     type,
                     color: constants[type].color,
