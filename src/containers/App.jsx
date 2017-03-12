@@ -12,6 +12,7 @@ const App = props =>
       props.loading ? <Loading /> : ''
     }
     <Helmet {...config.app.head} title="Feel 4 seasons, Find best date in the place" />
+    <script src="/js/analytics.js" />
   </div>;
 
 App.propTypes = {
