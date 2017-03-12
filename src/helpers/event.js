@@ -8,6 +8,7 @@ import moment from 'moment';
 import path from 'path';
 import redis from 'redis';
 import url from 'url';
+import bezier from 'bezier';
 import querystring from 'querystring';
 import config from '../config';
 import constants from '../constants';
@@ -221,27 +222,20 @@ const crawl = (season, evaluator) =>
                 const name = json.body.results[0].name;
                 const latlng = `${location.lat},${location.lng}`;
                 const popurarity = _.find(famous, { name }) ? 9 : 4;
-                _.times((max - start) + 1, (index) => {
+
+                const strengths = [].concat(
+                  _.times((max - start) + 1, index => (index / (max - start)) * 9),
+                  _.times(end - max, index => 9 - ((index / (end - max)) * 9))
+                );
+
+                strengths.forEach((strength, index) => {
                   events.push({
                     ...spot,
                     id,
                     name,
                     latlng: spot.latlng || latlng,
                     day: start + index,
-                    strength: (index / (max - start)) * 9,
-                    popurarity,
-                    type,
-                    color: constants[type].color,
-                  });
-                });
-                _.times((end - max) + 1, (index) => {
-                  events.push({
-                    ...spot,
-                    id,
-                    name,
-                    latlng: spot.latlng || latlng,
-                    day: max + index + 1,
-                    strength: 9 - ((index / (end - max)) * 9),
+                    strength: bezier(strengths, (1 / strengths.length) * (index + 1)),
                     popurarity,
                     type,
                     color: constants[type].color,
