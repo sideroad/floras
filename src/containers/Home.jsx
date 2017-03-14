@@ -8,9 +8,11 @@ import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
 import { ScatterplotLayer } from 'deck.gl';
 import { asyncConnect } from 'redux-connect';
+import hash from 'object-hash';
 // import update from 'immutability-helper';
 import FindPlace from '../components/FindPlace';
 import SideBar from '../components/SideBar';
+import Trend from '../components/Trend';
 import { update as updateMap } from '../reducers/map';
 import { initialized as eventInitialized } from '../reducers/event';
 import { set as setDate } from '../reducers/date';
@@ -32,6 +34,7 @@ class Home extends Component {
       height: 1,
       dayOfYear: props.dayOfYear,
     };
+    this.idle = true;
     this.onResize = this.onResize.bind(this);
     this.onEndPressDay = this.onEndPressDay.bind(this);
   }
@@ -43,6 +46,35 @@ class Home extends Component {
   componentDidMount() {
     window.addEventListener('resize', () => this.onResize());
     this.context.fetcher.event.gets();
+    //eslint-disable-next-line no-underscore-dangle
+    const bounds = this.mapgl._map.getBounds();
+    this.context.fetcher.trend.gets({
+      //eslint-disable-next-line no-underscore-dangle
+      ne: `${bounds._ne.lat},${bounds._ne.lng}`,
+      //eslint-disable-next-line no-underscore-dangle
+      sw: `${bounds._sw.lat},${bounds._sw.lng}`,
+    });
+  }
+
+  componentWillReceiveProps() {
+    if (this.waitId) {
+      clearTimeout(this.waitId);
+    }
+
+    this.waitId = setTimeout(() => {
+      //eslint-disable-next-line no-underscore-dangle
+      const bounds = this.mapgl._map.getBounds();
+      const hashedBounds = hash(bounds);
+      if (this.hashedBounds !== hashedBounds) {
+        this.hashedBounds = hashedBounds;
+        this.context.fetcher.trend.gets({
+          //eslint-disable-next-line no-underscore-dangle
+          ne: `${bounds._ne.lat},${bounds._ne.lng}`,
+          //eslint-disable-next-line no-underscore-dangle
+          sw: `${bounds._sw.lat},${bounds._sw.lng}`,
+        }).then(() => { this.bounds = true; });
+      }
+    }, 250);
   }
 
   onResize() {
@@ -128,6 +160,7 @@ class Home extends Component {
           lang={this.context.lang}
         />
         <MapGL
+          ref={(elem) => { this.mapgl = elem; }}
           width={this.state.width}
           height={this.state.height}
           {...this.props.mapViewState}
@@ -170,6 +203,7 @@ class Home extends Component {
         <div className={styles.date}>
           {moment().dayOfYear(this.state.dayOfYear).format('MMM D')}
         </div>
+        { !__SERVER__ ? <Trend items={this.props.trends} /> : ''}
         <button
           className={styles.prevDay}
           onMouseDown={
@@ -231,6 +265,7 @@ class Home extends Component {
 
 Home.propTypes = {
   events: PropTypes.array.isRequired,
+  trends: PropTypes.array.isRequired,
   places: PropTypes.array.isRequired,
   place: PropTypes.object.isRequired,
   mapViewState: PropTypes.object,
@@ -255,6 +290,7 @@ Home.contextTypes = {
 const connected = connect(
   state => ({
     events: state.event.items,
+    trends: state.trend.items,
     places: state.place.items,
     place: state.place.item,
     mapViewState: state.map.mapViewState,

@@ -259,6 +259,34 @@ export default function ({ app }) {
     getAll()
       .then(items => res.send({ items }))
   );
+  app.get('/trends', (req, res) =>
+    getAll()
+      .then((items) => {
+        const [nelat, nelng] = req.query.ne.split(',');
+        const [swlat, swlng] = req.query.sw.split(',');
+        res.send({
+          items: _.times(365, index => ({
+            day: index + 1,
+            ..._.filter(items, (item) => {
+              const [lat, lng] = item.latlng.split(',');
+              return item.day === index + 1 &&
+                     Number(lat) <= Number(nelat) &&
+                     Number(lat) >= Number(swlat) &&
+                     Number(lng) <= Number(nelng) &&
+                     Number(lng) >= Number(swlng);
+            }).reduce((reduced, item) => {
+              if (!reduced[item.type]) {
+                //eslint-disable-next-line no-param-reassign
+                reduced[item.type] = 0;
+              }
+              //eslint-disable-next-line no-param-reassign
+              reduced[item.type] += item.strength;
+              return reduced;
+            }, {})
+          }))
+        });
+      })
+  );
   app.get('/events-crawler', (req, res) => {
     if (queued) {
       res.send({ msg: 'already queued' });

@@ -56,6 +56,8 @@
     }
   },
   "dependencies": {
+    "amcharts3": "github:amcharts/amcharts3",
+    "amcharts3-react": "github:amcharts/amcharts3-react",
     "async": "^2.0.1",
     "autobind-decorator": "^1.3.4",
     "babel-core": "^6.5.2",
@@ -98,6 +100,7 @@
     "loop-array-calc": "^1.0.0",
     "luma.gl": "^2.10.4",
     "moment": "^2.10.6",
+    "object-hash": "^1.1.7",
     "passport": "^0.3.2",
     "passport-instagram": "^1.0.0",
     "piping": "^0.3.0",

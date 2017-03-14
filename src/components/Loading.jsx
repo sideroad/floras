@@ -13,6 +13,10 @@ const Loading = () =>
       <div className={`${styles.circle} ${styles.scale} ${styles.left}`} />
       <div className={`${styles.circle} ${styles.scale} ${styles.bottom}`} />
       <div className={`${styles.circle} ${styles.scale} ${styles.right}`} />
+      <div className={`${styles.circle} ${styles.scale2} ${styles.top}`} />
+      <div className={`${styles.circle} ${styles.scale2} ${styles.left}`} />
+      <div className={`${styles.circle} ${styles.scale2} ${styles.bottom}`} />
+      <div className={`${styles.circle} ${styles.scale2} ${styles.right}`} />
       <div className={styles.icon} />
     </div>
   </div>;

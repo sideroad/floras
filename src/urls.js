@@ -10,6 +10,12 @@ export default {
       }
     }
   },
+  trend: {
+    gets: {
+      url: `${config.app.base}/trends`,
+      method: 'GET'
+    }
+  },
   photo: {
     gets: {
       url: `${config.app.base}/bff/photos`,
