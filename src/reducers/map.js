@@ -3,6 +3,7 @@ const LOAD_START = 'map/LOAD_START';
 const LOAD_SUCCESS = 'map/LOAD_SUCCESS';
 const LOAD_FAIL = 'map/LOAD_FAIL';
 const UPDATE = 'map/UPDATE';
+const IDLE = 'map/IDLE';
 
 const initialState = {
   items: [],
@@ -14,14 +15,21 @@ const initialState = {
     zoom: 5.2,
     pitch: 40,
     bearing: 0
-  }
+  },
+  idle: true,
 };
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case UPDATE:
       return {
         ...state,
-        mapViewState: action.mapViewState
+        mapViewState: action.mapViewState,
+        idle: false,
+      };
+    case IDLE:
+      return {
+        ...state,
+        idle: action.isIdle,
       };
     case LOAD_START:
       return {
@@ -51,5 +59,12 @@ export function update(mapViewState) {
   return {
     type: UPDATE,
     mapViewState
+  };
+}
+
+export function idle(isIdle) {
+  return {
+    type: IDLE,
+    isIdle,
   };
 }

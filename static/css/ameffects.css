@@ -1,0 +1,209 @@
+/*
+** PULSATE
+*/
+@-webkit-keyframes am-pulsate {
+	0% {
+		fill-opacity: 1;
+		stroke-opacity: 1;
+	}
+	50% {
+		fill-opacity: 0;
+		stroke-opacity: 0;
+	}
+	100% {
+		fill-opacity: 1;
+		stroke-opacity: 1;
+	}
+}
+@keyframes am-pulsate {
+	0% {
+		fill-opacity: 1;
+		stroke-opacity: 1;
+	}
+	50% {
+		fill-opacity: 0;
+		stroke-opacity: 0;
+	}
+	100% {
+		fill-opacity: 1;
+		stroke-opacity: 1;
+	}
+}
+
+@-webkit-keyframes am-pulsate-line {
+	0% {
+		stroke-opacity: 1;
+	}
+	50% {
+		stroke-opacity: 0;
+	}
+	100% {
+		stroke-opacity: 1;
+	}
+}
+@keyframes am-pulsate-line {
+	0% {
+		stroke-opacity: 1;
+	}
+	50% {
+		stroke-opacity: 0;
+	}
+	100% {
+		stroke-opacity: 1;
+	}
+}
+
+@-webkit-keyframes am-pulsate-fill {
+	0% {
+		fill-opacity: 1;
+	}
+	50% {
+		fill-opacity: 0;
+	}
+	100% {
+		fill-opacity: 1;
+	}
+}
+@keyframes am-pulsate-fill {
+	0% {
+		fill-opacity: 1;
+	}
+	50% {
+		fill-opacity: 0;
+	}
+	100% {
+		fill-opacity: 1;
+	}
+}
+
+/*
+** EXPLODE
+*/
+@-webkit-keyframes am-explode {
+	0% {
+		stroke-opacity: 1;
+	}
+	75% {
+		stroke-opacity: 0;
+		stroke-width: 100;
+	}
+	75.1% {
+		stroke-opacity: 0;
+		stroke-width: inherit;
+	}
+	100% {
+		stroke-opacity: 1;
+	}
+}
+@keyframes am-explode {
+	0% {
+		stroke-opacity: 1;
+	}
+	75% {
+		stroke-opacity: 0;
+		stroke-width: 100;
+	}
+	75.1% {
+		stroke-opacity: 0;
+		stroke-width: inherit;
+	}
+	100% {
+		stroke-opacity: 1;
+	}
+}
+
+/*
+** FADE IN
+*/
+@-webkit-keyframes am-fade-in {
+	0% {
+		stroke-opacity: 0;
+		fill-opacity: 0;
+	}
+	100% {
+		stroke-opacity: 1;
+		fill-opacity: 1;
+	}
+}
+@keyframes am-fade-in {
+	0% {
+		stroke-opacity: 0;
+		fill-opacity: 0;
+	}
+	100% {
+		stroke-opacity: 1;
+		fill-opacity: 1;
+	}
+}
+
+@-webkit-keyframes am-fade-out {
+	0% {
+		stroke-opacity: 1;
+		fill-opacity: 1;
+	}
+	100% {
+		stroke-opacity: 0;
+		fill-opacity: 0;
+	}
+}
+@keyframes am-fade-out {
+	0% {
+		stroke-opacity: 1;
+		fill-opacity: 1;
+	}
+	100% {
+		stroke-opacity: 0;
+		fill-opacity: 0;
+	}
+}
+
+/*
+** MOVE DASH;
+** dashoffset = dasharray * 2
+** forwards: negativ value;
+** backwards: positiv value;
+*/
+@-webkit-keyframes am-move {
+	100% {
+		stroke-dashoffset: -110px; 
+	}
+}
+@keyframes am-move {
+	100% {
+		stroke-dashoffset: -110px; 
+	}
+}
+
+@-webkit-keyframes am-move-in {
+	0% {
+		stroke-dashoffset: 500%; /* The actual path length should be applied here; path.getTotalLength(); */
+	}
+	100% {
+		stroke-dashoffset: 0px;
+	}
+}
+@keyframes am-move-in {
+	0% {
+		stroke-dashoffset: 500%; /* The actual path length should be applied here; path.getTotalLength(); */
+	}
+	100% {
+		stroke-dashoffset: 0px;
+	}
+}
+
+@-webkit-keyframes am-move-out {
+	0% {
+		stroke-dashoffset: 0px;
+	}
+	100% {
+		stroke-dashoffset: 500%; /* The actual path length should be applied here; path.getTotalLength(); */
+	}
+}
+@keyframes am-move-out {
+	0% {
+		stroke-dashoffset: 0px;
+	}
+	100% {
+		stroke-dashoffset: 500%; /* The actual path length should be applied here; path.getTotalLength(); */
+	}
+}
