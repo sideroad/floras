@@ -264,9 +264,14 @@ export default function ({ app }) {
       .then((items) => {
         const [nelat, nelng] = req.query.ne.split(',');
         const [swlat, swlng] = req.query.sw.split(',');
+        const defaults = Object.keys(constants).reduce((reduced, key) => ({
+          ...reduced,
+          [key]: 0
+        }), {});
         res.send({
           items: _.times(365, index => ({
             day: index + 1,
+            ...defaults,
             ..._.filter(items, (item) => {
               const [lat, lng] = item.latlng.split(',');
               return item.day === index + 1 &&
