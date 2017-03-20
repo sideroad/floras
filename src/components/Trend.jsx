@@ -58,7 +58,8 @@ const Trend = (props) => {
             valueBalloonsEnabled: false,
             cursorAlpha: props.dragging ? 0 : 1,
             cursorColor: '#fffffc',
-            valueLineAlpha: 0.2
+            valueLineAlpha: 0.2,
+            zoomable: false,
           }}
           valueAxes={[
             {
