@@ -262,33 +262,31 @@ export default function ({ app }) {
   app.get('/trends', (req, res) =>
     getAll()
       .then((items) => {
-        const [nelat, nelng] = req.query.ne.split(',');
-        const [swlat, swlng] = req.query.sw.split(',');
+        const [nelat, nelng] = (req.query.ne || '').split(',').map(num => Number(num));
+        const [swlat, swlng] = (req.query.sw || '').split(',').map(num => Number(num));
         const defaults = Object.keys(constants).reduce((reduced, key) => ({
           ...reduced,
           [key]: 0
         }), {});
+        const trends = _.times(365, index => ({
+          day: index + 1,
+          ...defaults
+        }));
+
+        items.forEach((item) => {
+          const day = _.find(trends, { day: item.day });
+          const [lat, lng] = item.latlng.split(',').map(num => Number(num));
+          if (day &&
+              lat <= nelat &&
+              lat >= swlat &&
+              lng <= nelng &&
+              lng >= swlng) {
+            day[item.type] += item.strength;
+          }
+        });
+
         res.send({
-          items: _.times(365, index => ({
-            day: index + 1,
-            ...defaults,
-            ..._.filter(items, (item) => {
-              const [lat, lng] = item.latlng.split(',');
-              return item.day === index + 1 &&
-                     Number(lat) <= Number(nelat) &&
-                     Number(lat) >= Number(swlat) &&
-                     Number(lng) <= Number(nelng) &&
-                     Number(lng) >= Number(swlng);
-            }).reduce((reduced, item) => {
-              if (!reduced[item.type]) {
-                //eslint-disable-next-line no-param-reassign
-                reduced[item.type] = 0;
-              }
-              //eslint-disable-next-line no-param-reassign
-              reduced[item.type] += item.strength;
-              return reduced;
-            }, {})
-          }))
+          items: trends
         });
       })
   );
