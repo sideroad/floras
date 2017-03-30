@@ -21,10 +21,12 @@
 .rc-slider-handle {
   position: absolute;
   bottom: 0;
-  width: 7.5px;
+  width: 5px;
   height: 3em;
   cursor: pointer;
-  background-color: #fffffc;
+  background-color: #7D7D7D;
+  opacity: 0.8;
+  transform: translateX(-2.5px);
 }
 .rc-slider-handle:hover {
   border-color: #EC6D71;

@@ -6,28 +6,44 @@
   left: 15%;
   width: 70%;
   height: 3em;
+  overflow: hidden;
+  border-radius: 5px;
 }
 
 .charts {
-  border-radius: 10px;
-  overflow: hidden;
   width: 100%;
   height: 100%;
   transition-property: transform;
   transition-duration: 0.2s;
+  background-color: @shironeri;
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 
-.show {
-  transform: scaleY(1);
-  &.loading {
-    transform: translateY(-25px) scaleY(1);
-  }
+.show.loading {
+  transform: translateY(-1.5em) scaleY(1);
 }
 
-.hide {
-  transform: scaleY(0);
+.hide.loading {
+  transform: translateY(-1.5em) scaleY(0);
 }
+
+.show.charts {
+  // transform: scaleY(1);
+  opacity: 1;
+}
+
+.hide.charts {
+  // transform: scaleY(0);
+  opacity: 0.5;
+}
+
 
 .circle{
   width:100px;

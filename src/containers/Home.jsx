@@ -34,7 +34,6 @@ class Home extends Component {
       width: 1,
       height: 1,
       dayOfYear: props.dayOfYear,
-      dragging: false
     };
     this.idle = true;
     autoBind(this);
@@ -160,16 +159,15 @@ class Home extends Component {
   }
 
   onChangeSlider(value) {
-    this.setState({ dayOfYear: value, dragging: true });
+    this.setState({ dayOfYear: value });
   }
 
   onAfterChangeSlider(value) {
     this.props.setDate(value);
-    this.setState({ dragging: false });
   }
 
-  onSelectTrend(value) {
-    this.setState({ dayOfYear: moment(value, 'YYYY-MM-DD').dayOfYear() });
+  onSelectTrend(dayOfYear) {
+    this.setState({ dayOfYear });
   }
 
   render() {
@@ -236,17 +234,11 @@ class Home extends Component {
         <div className={styles.date}>
           {moment().dayOfYear(this.state.dayOfYear).format('MMM D')}
         </div>
-        {
-          !__SERVER__ ?
-            <Trend
-              items={this.props.trends}
-              loading={this.props.trendLoading}
-              onSelect={this.onSelectTrend}
-              dragging={this.state.dragging}
-            />
-          :
-            ''
-        }
+        <Trend
+          items={this.props.trends}
+          loading={this.props.trendLoading}
+          onSelect={this.onSelectTrend}
+        />
         <button
           className={styles.prevDay}
           onMouseDown={this.onStartPressPrevDay}
