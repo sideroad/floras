@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Swipeable from 'react-swipeable';
 import { next, prev } from 'loop-array-calc';
 import CloseButton from './CloseButton';
+import PrevNextButton from './PrevNextButton';
 import Prefetch from './Prefetch';
 
 const DURATION = 150;
@@ -95,12 +96,11 @@ class PhotoViewer extends Component {
         />
         <CloseButton
           className={styles.closeButton}
-          icon="fa-times"
           onClick={
             () => this.props.onClose()
           }
         />
-        <CloseButton
+        <PrevNextButton
           className={styles.prevButton}
           icon="fa-angle-left"
           onClick={
@@ -109,7 +109,7 @@ class PhotoViewer extends Component {
             }
           }
         />
-        <CloseButton
+        <PrevNextButton
           className={styles.nextButton}
           icon="fa-angle-right"
           onClick={

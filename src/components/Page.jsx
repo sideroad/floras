@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
-import CloseButton from '../components/CloseButton';
+import PrevNextButton from '../components/PrevNextButton';
 
 const styles = require('../css/page.less');
 
 const Page = props =>
   <div className={styles.page}>
     <header className={styles.header}>
-      <CloseButton
+      <PrevNextButton
         icon="fa-angle-left"
         className={styles.closeButton}
         onClick={props.onClose}

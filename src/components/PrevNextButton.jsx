@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 
-const styles = require('../css/close-button.less');
+const styles = require('../css/prev-next-button.less');
+const fa = require('../css/koiki-ui/fa/less/font-awesome.less');
 
-const CloseButton = props =>
+const PrevNextButton = props =>
   <button
     className={`${styles.button} ${props.opened ? styles.open : styles.close} ${props.className}`}
     onClick={(evt) => {
@@ -10,20 +11,21 @@ const CloseButton = props =>
       props.onClick();
     }}
   >
-    <div className={styles.left} />
-    <div className={styles.right} />
+    <i className={`${fa.fa} ${fa[props.icon]}`} />
   </button>;
 
-CloseButton.propTypes = {
+PrevNextButton.propTypes = {
   className: PropTypes.string,
+  icon: PropTypes.string,
   opened: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
-CloseButton.defaultProps = {
+PrevNextButton.defaultProps = {
   opened: true,
   className: '',
+  icon: 'fa-angle-right',
   onClick: () => {},
 };
 
-export default CloseButton;
+export default PrevNextButton;

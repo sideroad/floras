@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { stringify } from 'koiki';
 import uris from '../uris';
-import CloseButton from '../components/CloseButton';
+import PrevNextButton from '../components/PrevNextButton';
 
 const styles = require('../css/side-bar.less');
 const img = require('../images/logo.png');
@@ -37,7 +37,7 @@ class SideBar extends Component {
             });
           }}
         />
-        <CloseButton
+        <PrevNextButton
           className={styles.closeButton}
           opened={this.state.opened}
           onClick={() => {
