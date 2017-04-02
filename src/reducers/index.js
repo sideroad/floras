@@ -1,3 +1,4 @@
+import best from './best';
 import trend from './trend';
 import transaction from './transaction';
 import photo from './photo';
@@ -15,5 +16,6 @@ export default {
   user,
   photo,
   transaction,
-  trend
+  trend,
+  best
 };

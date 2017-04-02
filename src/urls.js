@@ -16,6 +16,15 @@ export default {
       method: 'GET'
     }
   },
+  best: {
+    gets: {
+      url: `${config.app.base}/trends`,
+      method: 'GET',
+      cache: {
+        client: true
+      }
+    }
+  },
   photo: {
     gets: {
       url: `${config.app.base}/bff/photos`,

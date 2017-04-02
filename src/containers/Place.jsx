@@ -3,6 +3,7 @@ import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
+import moment from 'moment';
 import uris from '../uris';
 import Page from '../components/Page';
 import PlaceDetail from '../components/PlaceDetail';
@@ -19,7 +20,10 @@ const Place = (props, context) =>
     >
       <PlaceDetail
         id={props.params.id}
-        items={props.photos}
+        best={props.best}
+        trends={props.bests}
+        trendLoading={props.trendLoading}
+        photos={props.photos}
         lang={context.lang}
         day={props.day}
       />
@@ -59,9 +63,12 @@ const Place = (props, context) =>
 Place.propTypes = {
   push: PropTypes.func.isRequired,
   name: PropTypes.string,
+  best: PropTypes.object.isRequired,
+  bests: PropTypes.array.isRequired,
   photos: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
   day: PropTypes.string,
+  trendLoading: PropTypes.bool.isRequired,
 };
 
 Place.defaultProps = {
@@ -79,6 +86,15 @@ Place.contextTypes = {
 const connected = connect(
   (state, ownProps) => ({
     name: state.place.item.name,
+    best: {
+      ...state.best.item,
+      date: moment().dayOfYear(state.best.item.day).format('MMM D')
+    },
+    bests: state.best.items.map(item => ({
+      ...item,
+      date: moment().dayOfYear(item.day).format('MMM D')
+    })),
+    bestLoading: state.best.loading,
     photos: state.photo.items,
     day: ownProps.location.query.day,
   }),
@@ -111,6 +127,12 @@ const asynced = asyncConnect([{
           dispatch(transactionEnd());
         }
       )
+    );
+    promises.push(
+      fetcher.best.gets({
+        id: params.id,
+        day: location.query.day,
+      })
     );
     return Promise.all(promises);
   }

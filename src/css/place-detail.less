@@ -3,6 +3,10 @@
 .placeDetail {
   width: auto;
 }
+.best {
+  width: 320px;
+  height: 160px;
+}
 
 .button {
   width: 15em;
@@ -22,7 +26,7 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-.item {
+.photo {
   background-size: cover;
   background-position: center;
   background-color: initial;
@@ -34,29 +38,29 @@
   margin: 5px;
 }
 
-.link:hover .item{
+.link:hover .photo{
   filter: none;
   transform: scale(1.25);
 }
 
-.link {
+.item {
   z-index: 1;
 }
-.link:hover {
+.item:hover {
   z-index: 2;
 }
 
 @media (max-width: 768px) {
-  .item {
+  .photo {
     filter: none;
   }
-  .link:hover .item{
+  .link:hover .photo{
     transform: none;
   }
 }
 
 @media (max-width: 568px) {
-  .item {
+  .photo {
     width: 300px;
     height: 300px;
   }

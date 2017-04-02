@@ -1,13 +1,12 @@
 @import "variables.less";
 
 .trend{
-  position: absolute;
-  bottom: 1.5em;
-  left: 15%;
-  width: 70%;
-  height: 3em;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: 5px;
+  border: 1px solid @gofun;
+  box-sizing: border-box;
 }
 
 .charts {
@@ -15,7 +14,6 @@
   height: 100%;
   transition-property: transform;
   transition-duration: 0.2s;
-  background-color: @shironeri;
 }
 
 .loading {

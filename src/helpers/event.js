@@ -224,8 +224,10 @@ const crawl = (season, evaluator) =>
                 const popurarity = _.find(famous, { name }) ? 9 : 4;
 
                 const strengths = [].concat(
+                  0,
                   _.times((max - start) + 1, index => (index / (max - start)) * 9),
-                  _.times(end - max, index => 9 - ((index / (end - max)) * 9))
+                  _.times(end - max, index => 9 - ((index / (end - max)) * 9)),
+                  0,
                 );
 
                 strengths.forEach((strength, index) => {
@@ -259,15 +261,27 @@ export default function ({ app }) {
     getAll()
       .then(items => res.send({ items }))
   );
-  app.get('/trends', (req, res) =>
-    getAll()
-      .then((items) => {
+  app.get('/trends', (req, res) => {
+    if (req.query.id) {
+      getAll().then((items) => {
+        const type = _.find(items, { id: req.query.id, day: Number(req.query.day) }).type;
+        res.send({
+          items: items
+                  .filter(item => item.id === req.query.id && item.type === type)
+                  .map(item => ({
+                    day: item.day,
+                    [item.type]: item.strength,
+                  }))
+        });
+      });
+    } else {
+      const defaults = Object.keys(constants).reduce((reduced, key) => ({
+        ...reduced,
+        [key]: 0
+      }), {});
+      getAll().then((items) => {
         const [nelat, nelng] = (req.query.ne || '').split(',').map(num => Number(num));
         const [swlat, swlng] = (req.query.sw || '').split(',').map(num => Number(num));
-        const defaults = Object.keys(constants).reduce((reduced, key) => ({
-          ...reduced,
-          [key]: 0
-        }), {});
         const trends = _.times(365, index => ({
           day: index + 1,
           ...defaults
@@ -288,8 +302,9 @@ export default function ({ app }) {
         res.send({
           items: trends
         });
-      })
-  );
+      });
+    }
+  });
   app.get('/events-crawler', (req, res) => {
     if (queued) {
       res.send({ msg: 'already queued' });

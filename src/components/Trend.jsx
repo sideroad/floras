@@ -22,16 +22,17 @@ const Trend = props =>
             props.onSelect(item.activeLabel + 1);
           }}
         >
-          <Tooltip content={<div />} />
+          <Tooltip content={props.tooltip} />
           {
             Object.keys(constants).map(type =>
               <Area
                 key={type}
                 type="monotone"
                 dataKey={type}
-                stroke={`rgb(${constants[type].light.join(',')})`}
-                fill={`rgb(${constants[type].color.join(',')})`}
-                fillOpacity={0.3}
+                wrapperStyle={{}}
+                stroke={`rgb(${constants[type].color.join(',')})`}
+                fill={`rgb(${constants[type].light.join(',')})`}
+                fillOpacity={1}
                 isAnimationActive={false}
               />
             )
@@ -66,7 +67,13 @@ const Trend = props =>
 Trend.propTypes = {
   items: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  onSelect: PropTypes.func.isRequired,
+  onSelect: PropTypes.func,
+  tooltip: PropTypes.element,
+};
+
+Trend.defaultProps = {
+  tooltip: () => <div />,
+  onSelect: () => {},
 };
 
 export default Trend;

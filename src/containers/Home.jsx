@@ -234,11 +234,13 @@ class Home extends Component {
         <div className={styles.date}>
           {moment().dayOfYear(this.state.dayOfYear).format('MMM D')}
         </div>
-        <Trend
-          items={this.props.trends}
-          loading={this.props.trendLoading}
-          onSelect={this.onSelectTrend}
-        />
+        <div className={styles.trend}>
+          <Trend
+            items={this.props.trends}
+            loading={this.props.trendLoading}
+            onSelect={this.onSelectTrend}
+          />
+        </div>
         <button
           className={styles.prevDay}
           onMouseDown={this.onStartPressPrevDay}

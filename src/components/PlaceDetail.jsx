@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { stringify } from 'koiki';
 import { Link } from 'react-router';
+import BestDate from '../components/BestDate';
 import uris from '../uris';
 
 const styles = require('../css/place-detail.less');
@@ -9,13 +10,15 @@ const PlaceDetail = props =>
   <div
     className={styles.placeDetail}
   >
-    {
-      <ul className={styles.list}>
-        {
-          props.items.map(
-            item =>
+    <ul className={styles.list}>
+      <li className={styles.best} >
+        <BestDate item={props.best} />
+      </li>
+      {
+        props.photos.map(
+          item =>
+            <li key={item.id} className={styles.item}>
               <Link
-                key={item.id}
                 to={{
                   pathname: stringify(uris.pages.photos, {
                     lang: props.lang,
@@ -28,23 +31,24 @@ const PlaceDetail = props =>
                 }}
                 className={styles.link}
               >
-                <li
-                  className={styles.item}
+                <div
+                  className={styles.photo}
                   style={{
                     backgroundImage: `url(${item.thumbnail})`
                   }}
                 />
               </Link>
-          )
-        }
-      </ul>
-    }
+            </li>
+        )
+      }
+    </ul>
   </div>;
 
 PlaceDetail.propTypes = {
   //eslint-disable-next-line
   id: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
+  best: PropTypes.object.isRequired,
+  photos: PropTypes.array.isRequired,
   day: PropTypes.string,
 };
 

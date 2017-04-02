@@ -67,7 +67,6 @@ class PhotoViewer extends Component {
 
   render() {
     const item = _.find(this.props.items, { id: this.props.id }) || { license: {} };
-    console.log(item);
     return (
       <div
         className={`${styles.photoViewer} ${this.props.isOpen ? styles.open : styles.close}`}
