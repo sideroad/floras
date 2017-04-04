@@ -23,7 +23,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        item: _.maxBy(action.res.body.items, action.values.type),
+        item: _.maxBy(action.res.body.items, action.values.type) || {},
         items: action.res.body.items
       };
     case GETS_FAIL:

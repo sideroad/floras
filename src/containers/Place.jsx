@@ -86,7 +86,7 @@ const connected = connect(
     name: state.place.item.name,
     best: {
       ...state.best.item,
-      date: moment().dayOfYear(state.best.item.day).format('MMM D')
+      date: console.log(state.best) || moment().dayOfYear(state.best.item.day).format('MMM D')
     },
     bests: state.best.items.map(item => ({
       ...item,
@@ -102,6 +102,7 @@ const asynced = asyncConnect([{
   promise: ({ helpers: { fetcher }, params, location, store: { dispatch } }) => {
     const promises = [];
     dispatch(transactionStart());
+    console.log('nhooooooooooge', params, location);
     promises.push(
       fetcher.place.get({
         placeid: params.id

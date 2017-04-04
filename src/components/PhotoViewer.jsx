@@ -89,7 +89,7 @@ class PhotoViewer extends Component {
           }
           className={`${styles.photo} ${styles.animate} ${styles[this.state.className]}`}
           style={{
-            backgroundImage: `url(${(item).image})`,
+            backgroundImage: item.image ? `url(${item.image})` : 'none',
             animationDuration: `${DURATION / 1000}s`
           }}
         />
