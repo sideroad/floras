@@ -22,10 +22,9 @@ const Place = (props, context) =>
         id={props.params.id}
         best={props.best}
         trends={props.bests}
-        trendLoading={props.trendLoading}
         photos={props.photos}
         lang={context.lang}
-        day={props.day}
+        type={props.type}
       />
     </Page>
     <PhotoViewer
@@ -40,7 +39,7 @@ const Place = (props, context) =>
               id: props.params.id
             }),
             query: {
-              day: props.day
+              type: props.type
             }
           })
       }
@@ -53,7 +52,7 @@ const Place = (props, context) =>
               photo: photo.id
             }),
             query: {
-              day: props.day
+              type: props.type
             }
           })
       }
@@ -67,13 +66,12 @@ Place.propTypes = {
   bests: PropTypes.array.isRequired,
   photos: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
-  day: PropTypes.string,
-  trendLoading: PropTypes.bool.isRequired,
+  type: PropTypes.string,
 };
 
 Place.defaultProps = {
   name: '',
-  day: ''
+  type: ''
 };
 
 Place.contextTypes = {
@@ -94,9 +92,8 @@ const connected = connect(
       ...item,
       date: moment().dayOfYear(item.day).format('MMM D')
     })),
-    bestLoading: state.best.loading,
     photos: state.photo.items,
-    day: ownProps.location.query.day,
+    type: ownProps.location.query.type,
   }),
   { push }
 )(Place);
@@ -115,7 +112,7 @@ const asynced = asyncConnect([{
             id: params.id,
             lat: geolocation.lat,
             lng: geolocation.lng,
-            day: location.query.day
+            type: location.query.type
           });
         }
       ).then(
@@ -131,7 +128,7 @@ const asynced = asyncConnect([{
     promises.push(
       fetcher.best.gets({
         id: params.id,
-        day: location.query.day,
+        type: location.query.type,
       })
     );
     return Promise.all(promises);

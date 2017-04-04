@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import constants from '../constants';
 
 const GETS_START = 'best/GETS_START';
 const GETS_SUCCESS = 'best/GETS_SUCCESS';
@@ -19,13 +18,12 @@ export default function reducer(state = initialState, action = {}) {
         loading: true
       };
     case GETS_SUCCESS:
+      console.log(_.maxBy(action.res.body.items, action.values.type));
       return {
         ...state,
         loading: false,
         loaded: true,
-        item: _.maxBy(action.res.body.items, item =>
-          _.max(Object.keys(constants).map(type => item[type]))
-        ),
+        item: _.maxBy(action.res.body.items, action.values.type),
         items: action.res.body.items
       };
     case GETS_FAIL:

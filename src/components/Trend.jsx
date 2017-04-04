@@ -68,7 +68,7 @@ Trend.propTypes = {
   items: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   onSelect: PropTypes.func,
-  tooltip: PropTypes.element,
+  tooltip: PropTypes.func,
 };
 
 Trend.defaultProps = {

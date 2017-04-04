@@ -88,12 +88,12 @@ const getAll = () =>
   });
 
 
-export function get({ id, day }) {
+export function get({ id, type }) {
   const conditions = {
     id
   };
-  if (day) {
-    conditions.day = Number(day);
+  if (type) {
+    conditions.type = type;
   }
   return getAll()
     .then(
@@ -257,14 +257,14 @@ const crawl = (season, evaluator) =>
   });
 
 export default function ({ app }) {
-  app.get('/events', (req, res) =>
+  app.get('/events', (req, res) => {
     getAll()
-      .then(items => res.send({ items }))
-  );
+      .then(items => res.send({ items }));
+  });
   app.get('/trends', (req, res) => {
     if (req.query.id) {
       getAll().then((items) => {
-        const type = _.find(items, { id: req.query.id, day: Number(req.query.day) }).type;
+        const type = req.query.type;
         res.send({
           items: items
                   .filter(item => item.id === req.query.id && item.type === type)

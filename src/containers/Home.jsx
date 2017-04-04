@@ -45,7 +45,6 @@ class Home extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', () => this.onResize());
-    this.context.fetcher.event.gets();
     //eslint-disable-next-line no-underscore-dangle
     const bounds = this.mapgl._map.getBounds();
     this.context.fetcher.trend.gets({
@@ -152,7 +151,7 @@ class Home extends Component {
           lang: this.context.lang
         }),
         query: {
-          day: this.state.dayOfYear
+          type: info.object.type
         }
       });
     }
@@ -318,8 +317,11 @@ const connected = connect(
 )(Home);
 
 const asynced = asyncConnect([{
-  promise: () => {
+  promise: ({ helpers: { fetcher } }) => {
     const promises = [];
+    promises.push(
+      fetcher.event.gets()
+    );
     return Promise.all(promises);
   }
 }])(connected);

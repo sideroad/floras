@@ -12,7 +12,7 @@ const PlaceDetail = props =>
   >
     <ul className={styles.list}>
       <li className={styles.best} >
-        <BestDate item={props.best} />
+        <BestDate item={props.best} type={props.type} />
       </li>
       {
         props.photos.map(
@@ -26,7 +26,7 @@ const PlaceDetail = props =>
                     photo: item.id
                   }),
                   query: {
-                    day: props.day
+                    type: props.type
                   }
                 }}
                 className={styles.link}
@@ -49,7 +49,7 @@ PlaceDetail.propTypes = {
   id: PropTypes.string.isRequired,
   best: PropTypes.object.isRequired,
   photos: PropTypes.array.isRequired,
-  day: PropTypes.string,
+  type: PropTypes.string,
 };
 
 
