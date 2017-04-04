@@ -38,9 +38,8 @@ const connected = connect(
 )(App);
 
 export default asyncConnect([{
-  promise: ({ params, location }) => {
+  promise: () => {
     const promises = [];
-    console.log('aaaaaappp', params, location);
     return Promise.all(promises);
   }
 }])(connected);

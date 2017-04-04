@@ -18,7 +18,6 @@ export default function reducer(state = initialState, action = {}) {
         loading: true
       };
     case GETS_SUCCESS:
-      console.log(_.maxBy(action.res.body.items, action.values.type));
       return {
         ...state,
         loading: false,
