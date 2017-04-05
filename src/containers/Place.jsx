@@ -21,7 +21,6 @@ const Place = (props, context) =>
       <PlaceDetail
         id={props.params.id}
         best={props.best}
-        trends={props.bests}
         photos={props.photos}
         lang={context.lang}
         type={props.type}
@@ -63,7 +62,6 @@ Place.propTypes = {
   push: PropTypes.func.isRequired,
   name: PropTypes.string,
   best: PropTypes.object.isRequired,
-  bests: PropTypes.array.isRequired,
   photos: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
   type: PropTypes.string,
@@ -85,13 +83,15 @@ const connected = connect(
   (state, ownProps) => ({
     name: state.place.item.name,
     best: {
-      ...state.best.item,
-      date: moment().dayOfYear(state.best.item.day || 1).format('MMM D')
+      item: {
+        ...state.best.item,
+        date: moment().dayOfYear(state.best.item.day || 1).format('MMM D')
+      },
+      items: state.best.items.map(item => ({
+        ...item,
+        date: moment().dayOfYear(item.day).format('YYYY-MM-DD')
+      })),
     },
-    bests: state.best.items.map(item => ({
-      ...item,
-      date: moment().dayOfYear(item.day).format('MMM D')
-    })),
     photos: state.photo.items,
     type: ownProps.location.query.type,
   }),

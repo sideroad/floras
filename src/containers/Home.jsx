@@ -44,6 +44,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    this.context.fetcher.event.gets();
     window.addEventListener('resize', () => this.onResize());
     //eslint-disable-next-line no-underscore-dangle
     const bounds = this.mapgl._map.getBounds();
@@ -317,11 +318,8 @@ const connected = connect(
 )(Home);
 
 const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher } }) => {
+  promise: () => {
     const promises = [];
-    promises.push(
-      fetcher.event.gets()
-    );
     return Promise.all(promises);
   }
 }])(connected);

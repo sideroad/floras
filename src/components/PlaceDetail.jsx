@@ -12,7 +12,11 @@ const PlaceDetail = props =>
   >
     <ul className={styles.list}>
       <li className={styles.best} >
-        <BestDate item={props.best} type={props.type} />
+        <BestDate
+          item={props.best.item}
+          items={props.best.items}
+          type={props.type}
+        />
       </li>
       {
         props.photos.map(
@@ -45,8 +49,10 @@ const PlaceDetail = props =>
   </div>;
 
 PlaceDetail.propTypes = {
-  //eslint-disable-next-line
+  //eslint-disable-next-line react/no-unused-prop-types
   id: PropTypes.string.isRequired,
+  //eslint-disable-next-line react/no-unused-prop-types
+  lang: PropTypes.string.isRequired,
   best: PropTypes.object.isRequired,
   photos: PropTypes.array.isRequired,
   type: PropTypes.string,
