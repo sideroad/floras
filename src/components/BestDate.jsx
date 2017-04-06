@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Calendar } from 'koiki-ui';
 import Modal from 'react-modal';
+import moment from 'moment';
 import _ from 'lodash';
 import constants from '../constants';
 
@@ -51,7 +52,7 @@ class BestDate extends React.Component {
               this.setState({ opened: !this.state.opened });
             }}
           >
-            {this.props.item.date}
+            {moment(this.props.item.date, 'YYYY-MM-DD').format('MMM D')}
           </button>
         </p>
         <Modal
@@ -64,10 +65,13 @@ class BestDate extends React.Component {
           <Calendar
             min={_.first(this.props.items).date}
             max={_.last(this.props.items).date}
+            date={this.props.item.date}
             selected={this.props.items.map(item => ({
               date: item.date,
               style: {
-                opacity: item[this.props.type] / max
+                opacity: item[this.props.type] / max,
+                transform: `scale(${(item[this.props.type] / max) * 0.7})`,
+                backgroundColor: `rgb(${constants[this.props.type].color.join(',')})`
               }
             }))}
             styles={ui}

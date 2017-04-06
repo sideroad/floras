@@ -91,7 +91,7 @@
     "jsdom": "^9.11.0",
     "jsx-loader": "^0.13.2",
     "koiki": "^4.2.0",
-    "koiki-ui": "0.0.60",
+    "koiki-ui": "0.0.61",
     "less": "^2.5.3",
     "less-loader": "^2.2.1",
     "lodash": "^4.17.2",

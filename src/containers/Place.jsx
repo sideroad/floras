@@ -85,7 +85,7 @@ const connected = connect(
     best: {
       item: {
         ...state.best.item,
-        date: moment().dayOfYear(state.best.item.day || 1).format('MMM D')
+        date: moment().dayOfYear(state.best.item.day || 1).format('YYYY-MM-DD')
       },
       items: state.best.items.map(item => ({
         ...item,
