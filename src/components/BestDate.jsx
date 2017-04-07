@@ -1,17 +1,10 @@
 import React, { PropTypes } from 'react';
-import { Calendar } from 'koiki-ui';
-import Modal from 'react-modal';
 import moment from 'moment';
-import _ from 'lodash';
+import autoBind from 'react-autobind';
+import ModalCalendar from '../components/ModalCalendar';
 import constants from '../constants';
 
 const styles = require('../css/best-date.less');
-const ui = {
-  // eslint-disable-next-line global-require
-  fa: require('../css/koiki-ui/fa/less/font-awesome.less'),
-  // eslint-disable-next-line global-require
-  calendar: require('../css/koiki-ui/calendar.less'),
-};
 
 class BestDate extends React.Component {
   constructor(props) {
@@ -19,8 +12,7 @@ class BestDate extends React.Component {
     this.state = {
       opened: false
     };
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    autoBind(this);
   }
 
   handleOpen() {
@@ -32,7 +24,6 @@ class BestDate extends React.Component {
   }
 
   render() {
-    const max = _.maxBy(this.props.items, this.props.type)[this.props.type];
     return (
       <div
         className={styles.bestDate}
@@ -48,35 +39,17 @@ class BestDate extends React.Component {
         <p className={styles.date}>
           <button
             className={styles.button}
-            onClick={() => {
-              this.setState({ opened: !this.state.opened });
-            }}
+            onClick={this.handleOpen}
           >
             {moment(this.props.item.date, 'YYYY-MM-DD').format('MMM D')}
           </button>
         </p>
-        <Modal
-          isOpen={this.state.opened}
-          contentLabel="BestDate"
-          onRequestClose={this.handleClose}
-          className={styles.modal}
-          overlayClassName={styles.overlay}
-        >
-          <Calendar
-            min={_.first(this.props.items).date}
-            max={_.last(this.props.items).date}
-            date={this.props.item.date}
-            selected={this.props.items.map(item => ({
-              date: item.date,
-              style: {
-                opacity: item[this.props.type] / max,
-                transform: `scale(${(item[this.props.type] / max) * 0.7})`,
-                backgroundColor: `rgb(${constants[this.props.type].color.join(',')})`
-              }
-            }))}
-            styles={ui}
-          />
-        </Modal>
+        <ModalCalendar
+          opened={this.state.opened}
+          type={this.props.type}
+          items={this.props.items}
+          onClose={this.handleClose}
+        />
       </div>
     );
   }

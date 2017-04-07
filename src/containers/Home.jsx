@@ -14,6 +14,7 @@ import autoBind from 'react-autobind';
 import FindPlace from '../components/FindPlace';
 import SideBar from '../components/SideBar';
 import Trend from '../components/Trend';
+import ModalCalendar from '../components/ModalCalendar';
 import { update as updateMap, idle as idleMap } from '../reducers/map';
 import { initialized as eventInitialized } from '../reducers/event';
 import { set as setDate } from '../reducers/date';
@@ -34,6 +35,7 @@ class Home extends Component {
       width: 1,
       height: 1,
       dayOfYear: props.dayOfYear,
+      opened: false,
     };
     this.idle = true;
     autoBind(this);
@@ -158,6 +160,13 @@ class Home extends Component {
     }
   }
 
+  onSelectCalendar(date) {
+    this.setState({
+      dayOfYear: moment(date, 'YYYY-MM-DD').dayOfYear(),
+      opened: false,
+    });
+  }
+
   onChangeSlider(value) {
     this.setState({ dayOfYear: value });
   }
@@ -168,6 +177,14 @@ class Home extends Component {
 
   onSelectTrend(dayOfYear) {
     this.setState({ dayOfYear });
+  }
+
+  handleOpen() {
+    this.setState({ opened: true });
+  }
+
+  handleClose() {
+    this.setState({ opened: false });
   }
 
   render() {
@@ -231,9 +248,19 @@ class Home extends Component {
             onWebGLInitialized={() => this.props.eventInitialized()}
           />
         </MapGL>
-        <div className={styles.date}>
+        <button
+          className={styles.date}
+          onClick={this.handleOpen}
+        >
           {moment().dayOfYear(this.state.dayOfYear).format('MMM D')}
-        </div>
+        </button>
+        <ModalCalendar
+          date={moment().dayOfYear(this.state.dayOfYear).format('YYYY-MM-DD')}
+          opened={this.state.opened}
+          items={this.props.trends}
+          onClose={this.handleClose}
+          onSelect={this.onSelectCalendar}
+        />
         <div className={styles.trend}>
           <Trend
             items={this.props.trends}

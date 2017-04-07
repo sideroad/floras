@@ -3,7 +3,6 @@ import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { asyncConnect } from 'redux-connect';
-import moment from 'moment';
 import uris from '../uris';
 import Page from '../components/Page';
 import PlaceDetail from '../components/PlaceDetail';
@@ -82,16 +81,7 @@ Place.contextTypes = {
 const connected = connect(
   (state, ownProps) => ({
     name: state.place.item.name,
-    best: {
-      item: {
-        ...state.best.item,
-        date: moment().dayOfYear(state.best.item.day || 1).format('YYYY-MM-DD')
-      },
-      items: state.best.items.map(item => ({
-        ...item,
-        date: moment().dayOfYear(item.day).format('YYYY-MM-DD')
-      })),
-    },
+    best: state.best,
     photos: state.photo.items,
     type: ownProps.location.query.type,
   }),

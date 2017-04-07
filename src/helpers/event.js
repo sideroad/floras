@@ -270,7 +270,10 @@ export default function ({ app }) {
                   .filter(item => item.id === req.query.id && item.type === type)
                   .map(item => ({
                     day: item.day,
+                    date: moment().dayOfYear(item.day).format('YYYY-MM-DD'),
                     [item.type]: item.strength,
+                    type: item.type,
+                    strength: item.strength,
                   }))
         });
       });
@@ -284,6 +287,8 @@ export default function ({ app }) {
         const [swlat, swlng] = (req.query.sw || '').split(',').map(num => Number(num));
         const trends = _.times(365, index => ({
           day: index + 1,
+          date: moment().dayOfYear(index + 1).format('YYYY-MM-DD'),
+          strength: 0,
           ...defaults
         }));
 
@@ -296,6 +301,8 @@ export default function ({ app }) {
               lng <= nelng &&
               lng >= swlng) {
             day[item.type] += item.strength;
+            day.type = item.type;
+            day.strength += item.strength;
           }
         });
 
