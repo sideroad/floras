@@ -1,12 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import MapGL from 'react-map-gl';
-import DeckGL from 'deck.gl/react';
+import DeckGL, { ScatterplotLayer } from 'deck.gl';
 import Slider from 'rc-slider';
 import moment from 'moment';
 import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
-import { ScatterplotLayer } from 'deck.gl';
 import { asyncConnect } from 'redux-connect';
 import hash from 'object-hash';
 import autoBind from 'react-autobind';
@@ -195,7 +194,7 @@ class Home extends Component {
           if (Number(event.day) === this.state.dayOfYear) {
             return {
               ...event,
-              radius: event.strength,
+              radiusScale: event.strength,
               position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
             };
           }

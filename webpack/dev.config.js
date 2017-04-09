@@ -73,8 +73,10 @@ module.exports = {
     ],
     extensions: ['', '.json', '.js', '.jsx', '.properties'],
     alias: {
-      webworkify: 'webworkify-webpack-dropin',
-      'gl-matrix': path.resolve('./node_modules/gl-matrix/dist/gl-matrix.js'),
+      // webworkify: 'webworkify-webpack-dropin',
+      // 'gl-matrix': path.resolve('./node_modules/gl-matrix/dist/gl-matrix.js'),
+      // 'deck.gl': path.resolve('./node_modules/deck.gl/dist/index.js'),
+      'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
     }
   },
   plugins: [
