@@ -1,12 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import MapGL from 'react-map-gl';
-import DeckGL from 'deck.gl/react';
+import { ScatterplotLayer } from 'deck.gl';
 import Slider from 'rc-slider';
 import moment from 'moment';
 import { stringify } from 'koiki';
 import { push } from 'react-router-redux';
-import { ScatterplotLayer } from 'deck.gl';
 import { asyncConnect } from 'redux-connect';
 import hash from 'object-hash';
 import autoBind from 'react-autobind';
@@ -14,18 +12,16 @@ import autoBind from 'react-autobind';
 import FindPlace from '../components/FindPlace';
 import SideBar from '../components/SideBar';
 import Trend from '../components/Trend';
+import WorldMap from '../components/WorldMap';
 import ModalCalendar from '../components/ModalCalendar';
 import { update as updateMap, idle as idleMap } from '../reducers/map';
 import { initialized as eventInitialized } from '../reducers/event';
 import { set as setDate } from '../reducers/date';
-import config from '../config';
 import uris from '../uris';
 
 require('../css/rc-slider.css');
 const styles = require('../css/home.less');
 const fa = require('../css/koiki-ui/fa/less/font-awesome.less');
-
-const TOKEN = config.mapbox.token;
 
 // eslint-disable-next-line
 class Home extends Component {
@@ -49,7 +45,7 @@ class Home extends Component {
     this.context.fetcher.event.gets();
     window.addEventListener('resize', () => this.onResize());
     //eslint-disable-next-line no-underscore-dangle
-    const bounds = this.mapgl._map.getBounds();
+    const bounds = this.worldMap.mapgl._map.getBounds();
     this.context.fetcher.trend.gets({
       //eslint-disable-next-line no-underscore-dangle
       ne: `${bounds._ne.lat},${bounds._ne.lng}`,
@@ -67,9 +63,9 @@ class Home extends Component {
         this.props.idleMap(true);
       }, 500);
     }
-    if (nextProps.idle && !this.props.idle) {
+    if (nextProps.idle && !this.props.idle && this.worldMap) {
       //eslint-disable-next-line no-underscore-dangle
-      const bounds = this.mapgl._map.getBounds();
+      const bounds = this.worldMap.mapgl._map.getBounds();
       const hashedBounds = hash(bounds);
       if (this.hashedBounds !== hashedBounds) {
         this.hashedBounds = hashedBounds;
@@ -190,7 +186,7 @@ class Home extends Component {
   render() {
     const layers = [
       new ScatterplotLayer({
-        id: 'grid',
+        id: 'event',
         data: this.props.events.map((event) => {
           if (Number(event.day) === this.state.dayOfYear) {
             return {
@@ -204,11 +200,12 @@ class Home extends Component {
         opacity: 0.5,
         strokeWidth: 2,
         pickable: true,
+        radiusScale: 40,
         radiusMinPixels: 3,
-        radiusMaxPixels: 20,
+        radiusMaxPixels: 400,
       }),
       new ScatterplotLayer({
-        id: 'grid',
+        id: 'place',
         data: [this.props.place].filter(item => item.id),
         opacity: 0.5,
         strokeWidth: 2,
@@ -228,26 +225,17 @@ class Home extends Component {
           push={this.props.push}
           lang={this.context.lang}
         />
-        <MapGL
-          ref={(elem) => { this.mapgl = elem; }}
+        <WorldMap
+          ref={(elem) => { this.worldMap = elem; }}
+          mapViewState={this.props.mapViewState}
           width={this.state.width}
           height={this.state.height}
-          {...this.props.mapViewState}
-          mapboxApiAccessToken={TOKEN}
-          perspectiveEnabled
-          mapStyle="mapbox://styles/sideroad/ciz10g2k7000p2rq7hd9jp215"
+          layers={layers}
           onChangeViewport={this.onChangeViewport}
-        >
-          <DeckGL
-            debug
-            width={this.state.width}
-            height={this.state.height}
-            {...this.props.mapViewState}
-            layers={layers}
-            onLayerClick={this.onLayerClick}
-            onWebGLInitialized={() => this.props.eventInitialized()}
-          />
-        </MapGL>
+          onLayerClick={this.onLayerClick}
+          eventInitialized={this.props.eventInitialized}
+          onRender={this.onRenderWorldMap}
+        />
         <button
           className={styles.date}
           onClick={this.handleOpen}

@@ -13,34 +13,14 @@ var port = parseInt(process.env.PORT) + 1 || 3001;
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
-var babelrc = fs.readFileSync('./.babelrc');
-var babelrcObject = {};
-
-try {
-  babelrcObject = JSON.parse(babelrc);
-} catch (err) {
-  console.error('==>     ERROR: Error parsing your .babelrc.');
-  console.error(err);
-}
-
-var babelrcObjectDevelopment = babelrcObject.env && babelrcObject.env.development || {};
-
-// merge global and dev-only plugins
-var combinedPlugins = babelrcObject.plugins || [];
-combinedPlugins = combinedPlugins.concat(babelrcObjectDevelopment.plugins);
-
-var babelLoaderQuery = Object.assign({}, babelrcObjectDevelopment, babelrcObject, {plugins: combinedPlugins});
-delete babelLoaderQuery.env;
 module.exports = {
   devtool: 'inline-source-map',
   context: path.resolve(__dirname, '..'),
   entry: {
     'main': [
-      `webpack-dev-server/client?http://${host}:${port}/`,
-      './src/client.js'
+      path.resolve(__dirname, '../src/client.js')
     ]
   },
-  inline: true,
   output: {
     path: assetsPath,
     filename: '[name]-[hash].js',
@@ -48,33 +28,53 @@ module.exports = {
     publicPath: 'http://' + host + ':' + port + '/dist/'
   },
   module: {
-    loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader']},
-      { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.css$/, loader: 'style!css' },
-      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
+    rules: [
+      { test: /\.jsx?$/, exclude: /node_modules/, use: [{
+        loader: 'buble-loader',
+        options: {
+          objectAssign: 'Object.assign'
+        }
+      }, 'eslint-loader']},
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.less$/, use: [
+        {
+          loader: 'style-loader'
+        },
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            importLoaders: 2,
+            sourceMap: true,
+            localIdentName: '[local]___[hash:base64:5]'
+          },
+        },
+        {
+          loader: 'less-loader',
+          options: {
+            outputStyle: 'expanded',
+            sourceMap: true
+          }
+        },
+      ]},
       // { test: /\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
-      { test: webpackIsomorphicToolsPlugin.regular_expression('images'), loader: 'url-loader?limit=10240' }
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: [ { loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff' } } ]},
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: ['file-loader'] },
+      { test: webpackIsomorphicToolsPlugin.regular_expression('images'), use: ['url-loader'] }
     ],
-    postLoaders: [{
-      include: /node_modules\/mapbox-gl/,
-      loader: 'transform-loader',
-      query: 'brfs',
-    }],
   },
-  progress: true,
   resolve: {
-    modulesDirectories: [
-      'src',
+    modules: [
+      path.join(__dirname, '../src'),
       'node_modules',
-      'i18n'
+      path.join(__dirname, '../i18n'),
     ],
-    extensions: ['', '.json', '.js', '.jsx', '.properties'],
+    extensions: ['.json', '.js', '.jsx', '.properties'],
     alias: {
-      webworkify: 'webworkify-webpack-dropin',
-      'gl-matrix': path.resolve('./node_modules/gl-matrix/dist/gl-matrix.js'),
+      // webworkify: 'webworkify-webpack-dropin',
+      // 'gl-matrix': path.resolve('./node_modules/gl-matrix/dist/gl-matrix.js'),
+      // 'deck.gl': path.resolve('./node_modules/deck.gl/dist/index.js'),
+      'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
     }
   },
   plugins: [
