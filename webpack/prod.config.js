@@ -110,8 +110,8 @@ module.exports = {
     ],
     extensions: ['.json', '.js', '.jsx'],
     alias: {
-      // webworkify: 'webworkify-webpack-dropin',
-      // 'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
+      webworkify: 'webworkify-webpack-dropin',
+      'mapbox-gl$': path.resolve('./node_modules/mapbox-gl/dist/mapbox-gl.js'),
     }
   },
   plugins: [
