@@ -7,9 +7,9 @@ Prepare enviroment variables below
 
 |Variable|Description|
 |---|---|
-|FLORAS_MAPBOX_TOKEN|Mapbox token. It use to display map|
-|FLORAS_FLICKR_API_KEY|Flickr API ID. It use to display photos|
-|FLORAS_GOOGLE_API_KEY|Google Map Place API Key. It use to use place finding|
+|KOIKI_FLORAS_MAPBOX_TOKEN|Mapbox token. It use to display map|
+|KOIKI_FLORAS_FLICKR_API_KEY|Flickr API ID. It use to display photos|
+|KOIKI_FLORAS_GOOGLE_API_KEY|Google Map Place API Key. It use to use place finding|
 |REDISCLOUD_URL|Redis URL. It use to store event data|
 
 # Development

@@ -25,14 +25,14 @@ module.exports = Object.assign({
     port: Number('443')
   },
   flickr: {
-    key: process.env.FLORAS_FLICKR_API_KEY,
+    key: process.env.KOIKI_FLORAS_FLICKR_API_KEY,
   },
   googleapis: {
-    key: process.env.FLORAS_GOOGLE_API_KEY,
+    key: process.env.KOIKI_FLORAS_GOOGLE_API_KEY,
     host: 'maps.googleapis.com'
   },
   mapbox: {
-    token: process.env.FLORAS_MAPBOX_TOKEN,
+    token: process.env.KOIKI_FLORAS_MAPBOX_TOKEN,
   },
   app: {
     base,

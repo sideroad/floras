@@ -1,0 +1,20 @@
+{
+  "webpack": {
+    "prod": {
+      "resolve": {
+        "alias": {
+          "webworkify": "webworkify-webpack-dropin",
+          "mapbox-gl$": "mapbox-gl/dist/mapbox-gl.js"
+        }
+      }
+    },
+    "dev": {
+      "resolve": {
+        "alias": {
+          "webworkify": "webworkify-webpack-dropin",
+          "mapbox-gl$": "mapbox-gl/dist/mapbox-gl.js"
+        }
+      }
+    }
+  }
+}
