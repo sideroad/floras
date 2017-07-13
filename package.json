@@ -74,6 +74,6 @@
     "react-addons-test-utils": "^15.3.2"
   },
   "engines": {
-    "node": "7.4.0"
+    "node": "7.10.1"
   }
 }
