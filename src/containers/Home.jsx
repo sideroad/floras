@@ -44,8 +44,7 @@ class Home extends Component {
   componentDidMount() {
     this.context.fetcher.event.gets();
     window.addEventListener('resize', () => this.onResize());
-    //eslint-disable-next-line no-underscore-dangle
-    const bounds = this.worldMap.mapgl._map.getBounds();
+    const bounds = this.worldMap.mapgl.getMap().getBounds();
     this.context.fetcher.trend.gets({
       //eslint-disable-next-line no-underscore-dangle
       ne: `${bounds._ne.lat},${bounds._ne.lng}`,
@@ -65,7 +64,7 @@ class Home extends Component {
     }
     if (nextProps.idle && !this.props.idle && this.worldMap) {
       //eslint-disable-next-line no-underscore-dangle
-      const bounds = this.worldMap.mapgl._map.getBounds();
+      const bounds = this.worldMap.mapgl.getMap().getBounds();
       const hashedBounds = hash(bounds);
       if (this.hashedBounds !== hashedBounds) {
         this.hashedBounds = hashedBounds;
