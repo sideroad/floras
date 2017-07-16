@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import DeckGL from 'deck.gl';
-import MapGL from 'react-map-gl';
+// import MapGL from 'react-map-gl';
 import config from '../config';
 
 const TOKEN = config.mapbox.token;
@@ -14,7 +14,7 @@ class WorldMap extends Component {
     // XXX: The reason to require dynamically is to prevent server side rendering.
     //      MapGL is not compatible with server side rendering.
     // eslint-disable-next-line global-require
-    // const MapGL = require('react-map-gl');
+    const MapGL = require('react-map-gl');
 
     return (
       <MapGL
