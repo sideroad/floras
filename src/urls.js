@@ -1,12 +1,23 @@
 import config from './config';
 
 export default {
+  type: {
+    gets: {
+      url: 'https://chaus.herokuapp.com/apis/fs/types',
+      method: 'GET',
+      cache: {
+        client: true,
+        server: true,
+      }
+    }
+  },
   event: {
     gets: {
       url: `${config.app.base}/events`,
       method: 'GET',
       cache: {
-        client: true
+        client: true,
+        server: true,
       }
     }
   },

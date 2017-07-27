@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import autoBind from 'react-autobind';
 import ModalCalendar from '../components/ModalCalendar';
-import constants from '../constants';
 
 const styles = require('../css/best-date.less');
 
@@ -31,7 +30,7 @@ class BestDate extends React.Component {
         <img
           alt="type"
           className={styles.bg}
-          src={constants[this.props.type].image}
+          src={`/images/${this.props.name}.png`}
         />
         <p className={styles.lead}>
           Best time to visit
@@ -47,6 +46,7 @@ class BestDate extends React.Component {
         <ModalCalendar
           opened={this.state.opened}
           type={this.props.type}
+          types={this.props.types}
           items={this.props.items}
           onClose={this.handleClose}
         />
@@ -59,6 +59,8 @@ BestDate.propTypes = {
   item: PropTypes.object.isRequired,
   items: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
+  types: PropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default BestDate;

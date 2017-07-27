@@ -145,7 +145,7 @@ class Home extends Component {
     if (info) {
       this.props.push({
         pathname: stringify(uris.pages.place, {
-          id: info.object.id,
+          place: info.object.place,
           lang: this.context.lang
         }),
         query: {
@@ -183,6 +183,7 @@ class Home extends Component {
   }
 
   render() {
+    const types = this.props.types;
     const layers = [
       new ScatterplotLayer({
         id: 'event',
@@ -190,6 +191,7 @@ class Home extends Component {
           if (Number(event.day) === this.state.dayOfYear) {
             return {
               ...event,
+              color: types[event.type].color,
               radius: event.strength,
               position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
             };
@@ -245,6 +247,7 @@ class Home extends Component {
           date={moment().dayOfYear(this.state.dayOfYear).format('YYYY-MM-DD')}
           opened={this.state.opened}
           items={this.props.trends}
+          types={this.props.types}
           onClose={this.handleClose}
           onSelect={this.onSelectCalendar}
         />
@@ -305,6 +308,7 @@ Home.propTypes = {
   children: PropTypes.element,
   eventInitialized: PropTypes.func.isRequired,
   trendLoading: PropTypes.bool.isRequired,
+  types: PropTypes.object.isRequired,
 };
 
 Home.defaultProps = {
@@ -327,13 +331,17 @@ const connected = connect(
     mapViewState: state.map.mapViewState,
     idle: state.map.idle,
     dayOfYear: state.date.dayOfYear,
+    types: state.type.items,
   }),
   { eventInitialized, updateMap, idleMap, setDate, push }
 )(Home);
 
 const asynced = asyncConnect([{
-  promise: () => {
+  promise: ({ helpers: { fetcher } }) => {
     const promises = [];
+    promises.push(
+      fetcher.type.gets()
+    );
     return Promise.all(promises);
   }
 }])(connected);

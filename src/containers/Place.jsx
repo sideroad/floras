@@ -18,11 +18,12 @@ const Place = (props, context) =>
       }
     >
       <PlaceDetail
-        id={props.params.id}
+        place={props.params.place}
         best={props.best}
         photos={props.photos}
         lang={context.lang}
         type={props.type}
+        types={props.types}
       />
     </Page>
     <PhotoViewer
@@ -34,7 +35,7 @@ const Place = (props, context) =>
           props.push({
             pathname: stringify(uris.pages.place, {
               lang: context.lang,
-              id: props.params.id
+              place: props.params.place
             }),
             query: {
               type: props.type
@@ -46,7 +47,7 @@ const Place = (props, context) =>
           props.push({
             pathname: stringify(uris.pages.photos, {
               lang: context.lang,
-              id: props.params.id,
+              place: props.params.place,
               photo: photo.id
             }),
             query: {
@@ -64,6 +65,7 @@ Place.propTypes = {
   photos: PropTypes.array.isRequired,
   params: PropTypes.object.isRequired,
   type: PropTypes.string,
+  types: PropTypes.object.isRequired,
 };
 
 Place.defaultProps = {
@@ -84,6 +86,7 @@ const connected = connect(
     best: state.best,
     photos: state.photo.items,
     type: ownProps.location.query.type,
+    types: state.type.items,
   }),
   { push }
 )(Place);
@@ -94,12 +97,12 @@ const asynced = asyncConnect([{
     dispatch(transactionStart());
     promises.push(
       fetcher.place.get({
-        placeid: params.id
+        placeid: params.place
       }).then(
         (res) => {
           const geolocation = res.body.result.geometry.location;
           return fetcher.photo.gets({
-            id: params.id,
+            place: params.place,
             lat: geolocation.lat,
             lng: geolocation.lng,
             type: location.query.type
@@ -117,9 +120,12 @@ const asynced = asyncConnect([{
     );
     promises.push(
       fetcher.best.gets({
-        id: params.id,
+        place: params.place,
         type: location.query.type,
       })
+    );
+    promises.push(
+      fetcher.type.gets()
     );
     return Promise.all(promises);
   }

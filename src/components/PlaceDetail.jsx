@@ -16,6 +16,8 @@ const PlaceDetail = props =>
           item={props.best.item}
           items={props.best.items}
           type={props.type}
+          types={props.types}
+          name={props.types[props.best.item.type].name}
         />
       </li>
       {
@@ -26,7 +28,7 @@ const PlaceDetail = props =>
                 to={{
                   pathname: stringify(uris.pages.photos, {
                     lang: props.lang,
-                    id: props.id,
+                    place: props.place,
                     photo: item.id
                   }),
                   query: {
@@ -50,12 +52,13 @@ const PlaceDetail = props =>
 
 PlaceDetail.propTypes = {
   //eslint-disable-next-line react/no-unused-prop-types
-  id: PropTypes.string.isRequired,
+  place: PropTypes.string.isRequired,
   //eslint-disable-next-line react/no-unused-prop-types
   lang: PropTypes.string.isRequired,
   best: PropTypes.object.isRequired,
   photos: PropTypes.array.isRequired,
   type: PropTypes.string,
+  types: PropTypes.object.isRequired,
 };
 
 

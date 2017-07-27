@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { Calendar } from 'koiki-ui';
 import Modal from 'react-modal';
 import _ from 'lodash';
-import constants from '../constants';
 
 const styles = require('../css/modal-calendar.less');
 const ui = {
@@ -33,7 +32,7 @@ const ModalCalendar = (props) => {
           style: {
             opacity: item.strength ? item.strength / max : 0,
             transform: item.strength ? `scale(${(item.strength / max) * 0.7})` : '',
-            backgroundColor: item.type ? `rgb(${constants[item.type].color.join(',')})` : 'inherit'
+            backgroundColor: item.type ? `rgb(${props.types[item.type].color.join(',')})` : 'inherit'
           }
         }))}
         onSelect={props.onSelect}
@@ -49,6 +48,7 @@ ModalCalendar.propTypes = {
   items: PropTypes.array.isRequired,
   onClose: PropTypes.func.isRequired,
   onSelect: PropTypes.func,
+  types: PropTypes.object.isRequired,
 };
 
 ModalCalendar.defaultProps = {

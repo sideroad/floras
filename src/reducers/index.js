@@ -1,3 +1,4 @@
+import type from './type';
 import best from './best';
 import trend from './trend';
 import transaction from './transaction';
@@ -17,5 +18,6 @@ export default {
   photo,
   transaction,
   trend,
-  best
+  best,
+  type
 };
