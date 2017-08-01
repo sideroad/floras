@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import DeckGL from 'deck.gl';
+import DeckGL, { ScatterplotLayer } from 'deck.gl';
 import MapGL from 'react-map-gl';
 import config from '../config';
 
@@ -11,10 +11,39 @@ class WorldMap extends Component {
       return (<div />);
     }
 
-    // XXX: The reason to require dynamically is to prevent server side rendering.
-    //      MapGL is not compatible with server side rendering.
-    // eslint-disable-next-line global-require
-    // const MapGL = require('react-map-gl');
+    const types = this.props.types;
+    const dayOfYear = this.props.dayOfYear;
+    const layers = [
+      new ScatterplotLayer({
+        id: 'event',
+        data: this.props.events.map((event) => {
+          if (Number(event.day) === dayOfYear) {
+            return {
+              ...event,
+              color: types[event.type].color,
+              radius: event.strength,
+              position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
+            };
+          }
+          return undefined;
+        }).filter(item => item),
+        opacity: 0.5,
+        strokeWidth: 2,
+        pickable: true,
+        radiusScale: 40,
+        radiusMinPixels: 3,
+        radiusMaxPixels: 400,
+      }),
+      new ScatterplotLayer({
+        id: 'place',
+        data: [this.props.place].filter(item => item.id),
+        opacity: 0.5,
+        strokeWidth: 2,
+        pickable: true,
+        radiusMinPixels: 4,
+        radiusMaxPixels: 10,
+      })
+    ];
 
     return (
       <MapGL
@@ -32,7 +61,7 @@ class WorldMap extends Component {
           width={this.props.width}
           height={this.props.height}
           {...this.props.mapViewState}
-          layers={this.props.layers}
+          layers={layers}
           onLayerClick={this.props.onLayerClick}
           onWebGLInitialized={this.props.eventInitialized}
         />
@@ -45,7 +74,10 @@ WorldMap.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   mapViewState: PropTypes.object.isRequired,
-  layers: PropTypes.array.isRequired,
+  types: PropTypes.object.isRequired,
+  events: PropTypes.array.isRequired,
+  place: PropTypes.object.isRequired,
+  dayOfYear: PropTypes.number,
   eventInitialized: PropTypes.func.isRequired,
   onLayerClick: PropTypes.func.isRequired,
   onChangeViewport: PropTypes.func.isRequired

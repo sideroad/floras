@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { ScatterplotLayer } from 'deck.gl';
 import Slider from 'rc-slider';
 import moment from 'moment';
 import { stringify } from 'koiki';
@@ -183,38 +182,7 @@ class Home extends Component {
   }
 
   render() {
-    const types = this.props.types;
-    const layers = [
-      new ScatterplotLayer({
-        id: 'event',
-        data: this.props.events.map((event) => {
-          if (Number(event.day) === this.state.dayOfYear) {
-            return {
-              ...event,
-              color: types[event.type].color,
-              radius: event.strength,
-              position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
-            };
-          }
-          return undefined;
-        }).filter(item => item),
-        opacity: 0.5,
-        strokeWidth: 2,
-        pickable: true,
-        radiusScale: 40,
-        radiusMinPixels: 3,
-        radiusMaxPixels: 400,
-      }),
-      new ScatterplotLayer({
-        id: 'place',
-        data: [this.props.place].filter(item => item.id),
-        opacity: 0.5,
-        strokeWidth: 2,
-        pickable: true,
-        radiusMinPixels: 4,
-        radiusMaxPixels: 10,
-      })
-    ];
+
     return (
       <div className={styles.container}>
         <FindPlace
@@ -231,7 +199,10 @@ class Home extends Component {
           mapViewState={this.props.mapViewState}
           width={this.state.width}
           height={this.state.height}
-          layers={layers}
+          types={this.props.types}
+          events={this.props.events}
+          place={this.props.place}
+          dayOfYear={this.state.dayOfYear}
           onChangeViewport={this.onChangeViewport}
           onLayerClick={this.onLayerClick}
           eventInitialized={this.props.eventInitialized}
