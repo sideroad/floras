@@ -32,7 +32,8 @@ const ModalCalendar = (props) => {
           style: {
             opacity: item.strength ? item.strength / max : 0,
             transform: item.strength ? `scale(${(item.strength / max) * 0.7})` : '',
-            backgroundColor: item.type ? `rgb(${props.types[item.type].color.join(',')})` : 'inherit'
+            backgroundColor: item.type ? `rgb(${props.types[item.type].color.join(',')})` : 'inherit',
+            borderColor: item.type ? `rgb(${props.types[item.type].color.join(',')})` : 'inherit'
           }
         }))}
         onSelect={props.onSelect}
