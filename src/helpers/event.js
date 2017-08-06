@@ -148,6 +148,66 @@ const sites = {
         }
       );
   },
+  fireworks: (targetUrl, callback) => {
+    try {
+      if (!targetUrl || targetUrl.match(/^#/)) {
+        callback();
+        return;
+      }
+      console.log(`# fetching ${targetUrl}`);
+      jsdom.env({
+        url: targetUrl,
+        scripts: ['http://code.jquery.com/jquery.js'],
+        done: (err, window) => {
+          if (err) {
+            callback();
+            return;
+          }
+          const $ = window.$;
+          const spots = $('.list01 a').map((index, elem) => {
+            const $this = $(elem);
+            const dateMatched = $this.find('.search_result_date').text().match(/(\d\d\d\d)年(\d+)月(\d+)日/);
+            const date = moment(`${dateMatched[1]}/${dateMatched[2]}/${dateMatched[3]}`, 'YYYY/M/D').format('YYYY-MM-DD');
+            const shots = $this.find('.search_result_other_info_uchiage_num').text().match(/(\d+)?万?(\d+)発/);
+            return {
+              pref: '',
+              title: $this.find('.search_result_spot_name').text(),
+              name: $this.find('.search_result_spot_place').text(),
+              start: date,
+              max: date,
+              end: date,
+              link: `https://hanabi.walkerplus.com${$this.attr('href')}map.html`,
+              strength: (shots ? Number(`${!shots[2] ? shots[1] * 10000 : shots[1]}${shots[2]}`) : 2000) / 50
+            };
+          })
+          .get();
+
+          mapSeries(spots, (spot, mapcallback) => {
+            jsdom.env({
+              url: spot.link,
+              scripts: ['http://code.jquery.com/jquery.js'],
+              done: (maperr, mapwindow) => {
+                if (maperr) {
+                  mapcallback(maperr);
+                  return;
+                }
+                const map$ = mapwindow.$;
+                const latlng = querystring.parse(url.parse(map$('.detail_cont iframe').attr('src')).query).q.substr(1);
+                mapcallback(null, {
+                  ...spot,
+                  latlng
+                });
+              }
+            });
+          }, (_err, _spots) => {
+            callback(_err, _spots);
+          });
+        }
+      });
+    } catch (err) {
+      callback();
+    }
+  },
   autumnleaves: (targetUrl, callback) => {
     if (!targetUrl || targetUrl.match(/^#/)) {
       callback();
@@ -227,39 +287,61 @@ const crawl = (season, evaluator, type) =>
                 const max = moment(spot.max, 'YYYY-MM-DD').dayOfYear();
                 const end = moment(spot.end, 'YYYY-MM-DD').dayOfYear();
                 const place = json.body.results[0].place_id;
-                const name = json.body.results[0].name;
+                const name = spot.title || json.body.results[0].name;
                 const latlng = `${location.lat},${location.lng}`;
-                const popurarity = _.find(famous, { name }) ? 9 : 4;
+                const popurarity = spot.popurarity || _.find(famous, { name }) ? 9 : 4;
 
-                const strengths = [].concat(
-                  0,
-                  _.times((max - start) + 1, index => (index / (max - start)) * 9),
-                  _.times(end - max, index => 9 - ((index / (end - max)) * 9)),
-                  0,
-                );
-
-                remove({ place, type: type.id })
-                  .then(() => {
-                    eachOfSeries(strengths, (strength, index, eachOfCallback) => {
-                      request
-                        .post('https://chaus.herokuapp.com/apis/fs/events')
-                        .send({
-                          ...spot,
-                          place,
-                          name,
-                          latlng: spot.latlng || latlng,
-                          day: start + index,
-                          strength: bezier(strengths, (1 / strengths.length) * (index + 1)),
-                          popurarity,
-                          type: type.id
-                        })
-                        .set('Accept', 'application/json')
-                        .end(() => eachOfCallback());
-                    }, () => {
-                      callback();
-                    });
-                  }
-                );
+                const strengths = spot.strength ?
+                  [spot.strength]
+                :
+                  [].concat(
+                    0,
+                    _.times((max - start) + 1, index => (index / (max - start)) * 9),
+                    _.times(end - max, index => 9 - ((index / (end - max)) * 9)),
+                    0,
+                  );
+                request
+                  .post(`https://translation.googleapis.com/language/translate/v2?key=${config.googleapis.key}`)
+                  .send({
+                    q: [name],
+                    target: 'en'
+                  })
+                  .end(
+                    (translateError, translated) => {
+                      if (fetchError) {
+                        console.error('# translate error: ', err);
+                        setTimeout(() => callback(), 100);
+                      } else if (!translated.body.data.translations.length) {
+                        console.log(`# translate error: ${spot.name} does not found in translation API`);
+                        setTimeout(() => callback(), 100);
+                      } else {
+                        const translatedName = translated.body.data.translations[0].translatedText;
+                        console.log(`# translate success: req[${name}] res[${translatedName}]`);
+                        remove({ place, type: type.id })
+                          .then(() => {
+                            eachOfSeries(strengths, (strength, index, eachOfCallback) => {
+                              request
+                                .post('https://chaus.herokuapp.com/apis/fs/events')
+                                .send({
+                                  ...spot,
+                                  place,
+                                  name: translatedName,
+                                  latlng: spot.latlng || latlng,
+                                  day: start + index,
+                                  strength: bezier(strengths, (1 / strengths.length) * (index + 1)),
+                                  popurarity,
+                                  type: type.id
+                                })
+                                .set('Accept', 'application/json')
+                                .end(() => eachOfCallback());
+                            }, () => {
+                              callback();
+                            });
+                          }
+                        );
+                      }
+                    }
+                  );
               }
             }
           );
@@ -284,6 +366,7 @@ export default function ({ app }) {
             items: items
                     .filter(item => item.place === req.query.place && item.type === type.id)
                     .map(item => ({
+                      name: item.name,
                       day: item.day,
                       date: moment().dayOfYear(item.day).format('YYYY-MM-DD'),
                       [item.type]: item.strength,

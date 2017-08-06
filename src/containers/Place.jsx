@@ -82,7 +82,7 @@ Place.contextTypes = {
 
 const connected = connect(
   (state, ownProps) => ({
-    name: state.place.item.name,
+    name: state.best.item.name,
     best: state.best,
     photos: state.photo.items,
     type: ownProps.location.query.type,

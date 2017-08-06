@@ -227,6 +227,7 @@ class Home extends Component {
             items={this.props.trends}
             loading={this.props.trendLoading}
             onSelect={this.onSelectTrend}
+            types={this.props.types}
           />
         </div>
         <button

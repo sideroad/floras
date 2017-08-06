@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
-import constants from '../constants';
 
 const styles = require('../css/trend.less');
 
@@ -24,14 +23,14 @@ const Trend = props =>
         >
           <Tooltip content={props.tooltip} />
           {
-            Object.keys(constants).map(type =>
+            Object.keys(props.types).map(type =>
               <Area
                 key={type}
                 type="monotone"
                 dataKey={type}
                 wrapperStyle={{}}
-                stroke={`rgb(${constants[type].color.join(',')})`}
-                fill={`rgb(${constants[type].light.join(',')})`}
+                stroke={`rgb(${props.types[type].color.join(',')})`}
+                fill={`rgb(${props.types[type].light.join(',')})`}
                 fillOpacity={1}
                 isAnimationActive={false}
               />
@@ -66,6 +65,7 @@ const Trend = props =>
 
 Trend.propTypes = {
   items: PropTypes.array.isRequired,
+  types: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   onSelect: PropTypes.func,
   tooltip: PropTypes.func,
