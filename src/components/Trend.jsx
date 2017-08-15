@@ -65,7 +65,7 @@ const Trend = props =>
 
 Trend.propTypes = {
   items: PropTypes.array.isRequired,
-  types: PropTypes.array.isRequired,
+  types: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   onSelect: PropTypes.func,
   tooltip: PropTypes.func,

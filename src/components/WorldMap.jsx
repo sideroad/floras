@@ -71,8 +71,8 @@ class WorldMap extends Component {
 }
 
 WorldMap.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
   mapViewState: PropTypes.object.isRequired,
   types: PropTypes.object.isRequired,
   events: PropTypes.array.isRequired,
@@ -81,6 +81,11 @@ WorldMap.propTypes = {
   eventInitialized: PropTypes.func.isRequired,
   onLayerClick: PropTypes.func.isRequired,
   onChangeViewport: PropTypes.func.isRequired
+};
+
+WorldMap.defaultProps = {
+  width: undefined,
+  height: undefined,
 };
 
 export default WorldMap;
