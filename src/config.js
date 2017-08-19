@@ -59,8 +59,6 @@ module.exports = Object.assign({
     },
     statics: {
       link: [
-        { rel: 'shortcut icon', href: '/images/favicon.png' },
-        { rel: 'apple-touch-icon', href: '/images/app.png' },
         { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Tangerine', },
         { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/earlyaccess/hannari.css', },
         { rel: 'stylesheet', type: 'text/css', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css' },
