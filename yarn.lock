@@ -4179,9 +4179,9 @@ koiki-ui@0.0.61:
     react-tether "^0.5.5"
     react-visibility-sensor "^3.6.2"
 
-koiki@^5.3.7:
-  version "5.3.7"
-  resolved "https://registry.yarnpkg.com/koiki/-/koiki-5.3.7.tgz#b0a67a44cdd8eb95850596d29ac5b84b237c867a"
+koiki@^5.3.8:
+  version "5.3.8"
+  resolved "https://registry.yarnpkg.com/koiki/-/koiki-5.3.8.tgz#cb5277f63a56a7ded103832deabf69e639c633eb"
   dependencies:
     babel-core "^6.5.2"
     babel-loader "^6.2.1"

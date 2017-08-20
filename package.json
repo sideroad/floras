@@ -33,7 +33,7 @@
     "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.0",
     "jsdom": "^9.12.0",
-    "koiki": "^5.3.7",
+    "koiki": "^5.3.8",
     "koiki-ui": "0.0.61",
     "lodash": "^4.17.2",
     "loop-array-calc": "^1.0.0",

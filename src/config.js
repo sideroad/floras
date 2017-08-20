@@ -54,7 +54,6 @@ module.exports = Object.assign({
         { property: 'og:creator', content: 'sideroad' },
         { property: 'og:image:width', content: '300' },
         { property: 'og:image:height', content: '300' },
-        { name: 'apple-mobile-web-app-capable', content: 'yes' },
       ]
     },
     statics: {
