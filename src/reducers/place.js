@@ -23,7 +23,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         items: action.res.body.predictions.map(prediction => ({
           id: prediction.place_id,
-          name: prediction.structured_formatting.main_text,
+          name: prediction.terms.map(term => term.value).join(', '),
         }))
       };
     case GETS_FAIL:
