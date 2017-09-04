@@ -9,12 +9,13 @@ import hash from 'object-hash';
 import autoBind from 'react-autobind';
 // import update from 'immutability-helper';
 import FindPlace from '../components/FindPlace';
+import HeatMapButton from '../components/HeatMapButton';
 import SideBar from '../components/SideBar';
 import Trend from '../components/Trend';
 import WorldMap from '../components/WorldMap';
 import ModalCalendar from '../components/ModalCalendar';
 import { update as updateMap, idle as idleMap } from '../reducers/map';
-import { initialized as eventInitialized } from '../reducers/event';
+import { initialized as eventInitialized, setDate as setEventDate } from '../reducers/event';
 import { set as setDate } from '../reducers/date';
 import uris from '../uris';
 
@@ -31,6 +32,7 @@ class Home extends Component {
       height: 1,
       dayOfYear: props.dayOfYear,
       opened: false,
+      graphType: 'point',
     };
     this.idle = true;
     autoBind(this);
@@ -109,9 +111,15 @@ class Home extends Component {
   }
 
   onPressDay(delta) {
-    this.setState({ dayOfYear: this.state.dayOfYear + delta });
+    const dayOfYear = this.state.dayOfYear + delta;
+    this.setState({ dayOfYear });
+    this.props.setEventDate({ dayOfYear, types: this.props.types });
   }
-
+  onClickFilter() {
+    this.setState({
+      graphType: this.state.graphType === 'point' ? 'hexagon' : 'point'
+    });
+  }
   onChangePlace(input) {
     this.context.fetcher.place.gets({
       input
@@ -133,7 +141,7 @@ class Home extends Component {
     );
   }
 
-  onChangeViewport(mapViewState) {
+  onViewportChange(mapViewState) {
     this.props.updateMap({
       ...mapViewState,
       pitch: mapViewState.pitch > 60 ? 60 : mapViewState.pitch
@@ -155,14 +163,17 @@ class Home extends Component {
   }
 
   onSelectCalendar(date) {
+    const dayOfYear = moment(date, 'YYYY-MM-DD').dayOfYear();
     this.setState({
-      dayOfYear: moment(date, 'YYYY-MM-DD').dayOfYear(),
+      dayOfYear,
       opened: false,
     });
+    this.props.setEventDate({ dayOfYear, types: this.props.types });
   }
 
-  onChangeSlider(value) {
-    this.setState({ dayOfYear: value });
+  onChangeSlider(dayOfYear) {
+    this.setState({ dayOfYear });
+    this.props.setEventDate({ dayOfYear, types: this.props.types });
   }
 
   onAfterChangeSlider(value) {
@@ -171,6 +182,7 @@ class Home extends Component {
 
   onSelectTrend(dayOfYear) {
     this.setState({ dayOfYear });
+    this.props.setEventDate({ dayOfYear, types: this.props.types });
   }
 
   handleOpen() {
@@ -190,6 +202,10 @@ class Home extends Component {
           onChange={this.onChangePlace}
           onSelect={this.onSelectPlace}
         />
+        <HeatMapButton
+          filtered={this.state.graphType === 'hexagon'}
+          onClickFilter={this.onClickFilter}
+        />
         <SideBar
           push={this.props.push}
           lang={this.context.lang}
@@ -199,11 +215,10 @@ class Home extends Component {
           mapViewState={this.props.mapViewState}
           width={this.state.width}
           height={this.state.height}
-          types={this.props.types}
-          events={this.props.events}
+          pixels={this.props.filtered}
           place={this.props.place}
-          dayOfYear={this.state.dayOfYear}
-          onChangeViewport={this.onChangeViewport}
+          onViewportChange={this.onViewportChange}
+          graphType={this.state.graphType}
           onLayerClick={this.onLayerClick}
           eventInitialized={this.props.eventInitialized}
           onRender={this.onRenderWorldMap}
@@ -266,7 +281,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  events: PropTypes.array.isRequired,
+  // events: PropTypes.array.isRequired,
   trends: PropTypes.array.isRequired,
   places: PropTypes.array.isRequired,
   place: PropTypes.object.isRequired,
@@ -281,6 +296,8 @@ Home.propTypes = {
   eventInitialized: PropTypes.func.isRequired,
   trendLoading: PropTypes.bool.isRequired,
   types: PropTypes.object.isRequired,
+  setEventDate: PropTypes.func.isRequired,
+  filtered: PropTypes.array.isRequired,
 };
 
 Home.defaultProps = {
@@ -304,8 +321,9 @@ const connected = connect(
     idle: state.map.idle,
     dayOfYear: state.date.dayOfYear,
     types: state.type.items,
+    filtered: state.event.filtered,
   }),
-  { eventInitialized, updateMap, idleMap, setDate, push }
+  { eventInitialized, updateMap, idleMap, setDate, setEventDate, push }
 )(Home);
 
 const asynced = asyncConnect([{

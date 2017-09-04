@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import DeckGL, { ScatterplotLayer } from 'deck.gl';
+import DeckGL, { ScatterplotLayer, HexagonLayer } from 'deck.gl';
 import MapGL from 'react-map-gl';
 import config from '../config';
 
@@ -11,22 +11,10 @@ class WorldMap extends Component {
       return (<div />);
     }
 
-    const types = this.props.types;
-    const dayOfYear = this.props.dayOfYear;
-    const layers = [
+    const layers = this.props.graphType === 'point' ? [
       new ScatterplotLayer({
         id: 'event',
-        data: this.props.events.map((event) => {
-          if (Number(event.day) === dayOfYear) {
-            return {
-              ...event,
-              color: types[event.type].color,
-              radius: event.strength,
-              position: event.latlng.split(',').map(item => Number(item)).reverse().concat([0])
-            };
-          }
-          return undefined;
-        }).filter(item => item),
+        data: this.props.pixels,
         opacity: 0.5,
         strokeWidth: 2,
         pickable: true,
@@ -43,6 +31,35 @@ class WorldMap extends Component {
         radiusMinPixels: 4,
         radiusMaxPixels: 10,
       })
+    ] : [
+      new HexagonLayer({
+        id: 'hexagon',
+        fp64: true,
+        colorRange: [
+          [255, 255, 252],
+          [250, 225, 221],
+          [246, 196, 194],
+          [243, 167, 167],
+          [239, 138, 140],
+          [236, 109, 113]
+        ],
+        lightSettings: {
+          lightsPosition: [-0.144528, 49.739968, 8000, -3.807751, 54.104682, 8000],
+          ambientRatio: 0.4,
+          diffuseRatio: 0.6,
+          specularRatio: 0.2,
+          lightsStrength: [0.8, 0.0, 0.8, 0.0],
+          numberOfLights: 2
+        },
+        upperPercentile: 100,
+        coverage: 1,
+        radius: 2000,
+        elevationRange: [0, 4000],
+        elevationScale: 25,
+        extruded: true,
+        getPosition: d => [d.position[0], d.position[1]],
+        data: this.props.pixels,
+      })
     ];
 
     return (
@@ -54,7 +71,7 @@ class WorldMap extends Component {
         mapboxApiAccessToken={TOKEN}
         perspectiveEnabled
         mapStyle="mapbox://styles/sideroad/ciz10g2k7000p2rq7hd9jp215"
-        onChangeViewport={this.props.onChangeViewport}
+        onViewportChange={this.props.onViewportChange}
       >
         <DeckGL
           debug
@@ -74,13 +91,12 @@ WorldMap.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   mapViewState: PropTypes.object.isRequired,
-  types: PropTypes.object.isRequired,
-  events: PropTypes.array.isRequired,
+  pixels: PropTypes.array.isRequired,
   place: PropTypes.object.isRequired,
-  dayOfYear: PropTypes.number,
   eventInitialized: PropTypes.func.isRequired,
   onLayerClick: PropTypes.func.isRequired,
-  onChangeViewport: PropTypes.func.isRequired
+  onViewportChange: PropTypes.func.isRequired,
+  graphType: PropTypes.oneOf(['point', 'hexagon']),
 };
 
 WorldMap.defaultProps = {
