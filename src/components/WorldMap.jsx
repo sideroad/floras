@@ -53,7 +53,7 @@ class WorldMap extends Component {
         },
         upperPercentile: 100,
         coverage: 1,
-        radius: 2000,
+        radius: 5000,
         elevationRange: [0, 4000],
         elevationScale: 25,
         extruded: true,
