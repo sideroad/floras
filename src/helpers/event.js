@@ -11,6 +11,8 @@ import bezier from 'bezier';
 import querystring from 'querystring';
 import config from '../config';
 
+require('superagent-charset')(request);
+
 const prefs = [
   '北海道',
   '青森県',
@@ -104,64 +106,40 @@ const sites = {
     const ba = querystring.parse(url.parse(targetUrl).query).ba;
     console.log(`# fetching ${targetUrl}`);
     request
-      .get(`http://s.n-kishou.co.jp/w/data/map.html?pa=nkishou&fla=sakura&param=kaika&ba=${ba}`)
-      .set('Content-Type', 'text/plain')
-      .end((fetchError, res) => {
-        try {
-          const master = {};
-          res.text.split('\n').forEach((line, index) => {
-            const [code, name, lat, lng] = line.split(',');
-            if (index === 0 || !code) {
-              return;
-            }
-            master[`code=${code}`] = {
-              latlng: `${lat},${lng}`,
-              name
-            };
-          });
-          jsdom.env({
-            url: targetUrl,
-            scripts: ['http://code.jquery.com/jquery.js'],
-            done: (err, window) => {
-              if (err) {
-                callback();
-                return;
-              }
-              const $ = window.$;
-              const spots = $('#list a')
-                .map((index, item) => {
-                  const key = $(item)
-                    .attr('href')
-                    .split('?')[1]
-                    .split('&')[0];
-                  const startMonthAndDate = $(item)
-                    .find('.day .col span')
-                    .text();
-                  const endMonthAndDate = $(item)
-                    .find('.day p:eq(1) span')
-                    .text();
-                  const start = moment(`${moment().year()}年${startMonthAndDate}`, 'YYYY年M月D日').format('YYYY-MM-DD');
-                  const max = moment(`${moment().year()}年${endMonthAndDate}`, 'YYYY年M月D日').format('YYYY-MM-DD');
-                  return {
-                    name: master[key] ? master[key].name : null,
-                    pref: prefs[Number(ba) - 1],
-                    latlng: master[key] ? master[key].latlng : null,
-                    start,
-                    max,
-                    end: moment(max, 'YYYY-MM-DD')
-                      .add(3, 'days')
-                      .format('YYYY-MM-DD')
-                  };
-                })
-                .get()
-                .filter(item => item.latlng);
-              callback(err, spots);
-            }
-          });
-        } catch (err) {
-          callback();
-        }
-      });
+      .get(`https://s.n-kishou.co.jp/w/sp/sakura/sakura_data.html?&type=map&ba=${ba}`)
+      .set('Content-Type', 'application/json')
+      .charset('shift_jis')
+      .then(res =>
+        JSON.parse(res.text).indexData.reduce(
+          (acculator, value) => ({
+            ...acculator,
+            [value.code]: `${value.lat},${value.lon}`
+          }),
+          {}
+        )
+      )
+      .then(master =>
+        request
+          .get(`https://s.n-kishou.co.jp/w/sp/sakura/sakura_data.html?&ba=${ba}`)
+          .set('Content-Type', 'application/json')
+          .charset('shift_jis')
+          .then((res) => {
+            const data = JSON.parse(res.text).fctresultData;
+            return data
+              .map(item => ({
+                start: moment(item.kaika_date, 'YYYYMMDD').format('YYYY-MM-DD'),
+                max: moment(item.mankai_date, 'YYYYMMDD').format('YYYY-MM-DD'),
+                end: moment(item.mankai_date, 'YYYYMMDD')
+                  .add(3, 'days')
+                  .format('YYYY-MM-DD'),
+                name: item.spot,
+                latlng: master[item.code],
+                pref: prefs[Number(ba) - 1]
+              }))
+              .filter(item => item.latlng);
+          })
+      )
+      .then(spots => callback(null, spots));
   },
   fireworks: (targetUrl, callback) => {
     try {

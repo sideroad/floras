@@ -60,6 +60,7 @@
     "redux-router": "1.0.0-beta5",
     "serve-favicon": "^2.3.0",
     "superagent": "^3.5.0",
+    "superagent-charset": "^1.2.0",
     "webworkify-webpack-dropin": "^1.1.9"
   },
   "devDependencies": {
