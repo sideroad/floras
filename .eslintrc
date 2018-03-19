@@ -6,6 +6,8 @@
     "mocha": true
   },
   "rules": {
+    "no-mixed-operators": 0,
+    "max-len": [2, 120, 4, {"ignoreUrls": true}],
     "react/no-multi-comp": 0,
     "import/default": 0,
     "import/no-duplicates": 0,

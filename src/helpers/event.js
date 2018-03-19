@@ -58,7 +58,7 @@ const prefs = [
   '大分県',
   '宮崎県',
   '鹿児島県',
-  '沖縄県',
+  '沖縄県'
 ];
 
 let queued = false;
@@ -70,29 +70,29 @@ const cachedRequest = apiUrl =>
     if (cache[apiUrl]) {
       resolve(cache[apiUrl]);
     } else {
-      request(apiUrl)
-        .then((res) => {
-          cache[apiUrl] = res;
-          resolve(res);
-        });
+      request(apiUrl).then((res) => {
+        cache[apiUrl] = res;
+        resolve(res);
+      });
     }
   });
 
 export function getTypes() {
-  return cachedRequest('https://chaus.herokuapp.com/apis/fs/types?limit=100')
-    .then(res => res.body.items);
+  return cachedRequest('https://chaus.herokuapp.com/apis/fs/types?limit=100').then(res => res.body.items);
 }
 
 const getAll = () =>
-  cachedRequest('https://chaus.herokuapp.com/apis/fs/events?limit=1000000')
-      .then(res => res.body.items.map(item => ({ ...item, type: item.type.id })));
+  cachedRequest('https://chaus.herokuapp.com/apis/fs/events?limit=1000000').then(res =>
+    res.body.items.map(item => ({ ...item, type: item.type.id }))
+  );
 
 const remove = ({ place, type }) =>
   request('DELETE', `https://chaus.herokuapp.com/apis/fs/events?place=${place}&type=${type}`);
 
 export function get({ place, type }) {
-  return request(`https://chaus.herokuapp.com/apis/fs/events?limit=1&place=${place}&type=${type}`)
-           .then(res => res.body.items.map(item => ({ ...item, type: item.type.id }))[0]);
+  return request(`https://chaus.herokuapp.com/apis/fs/events?limit=1&place=${place}&type=${type}`).then(
+    res => res.body.items.map(item => ({ ...item, type: item.type.id }))[0]
+  );
 }
 
 const sites = {
@@ -106,47 +106,62 @@ const sites = {
     request
       .get(`http://s.n-kishou.co.jp/w/data/map.html?pa=nkishou&fla=sakura&param=kaika&ba=${ba}`)
       .set('Content-Type', 'text/plain')
-      .end(
-        (fetchError, res) => {
-          try {
-            const master = {};
-            res.text.split('\n').forEach((line, index) => {
-              const [code, name, lat, lng] = line.split(',');
-              if (index === 0 || !code) {
+      .end((fetchError, res) => {
+        try {
+          const master = {};
+          res.text.split('\n').forEach((line, index) => {
+            const [code, name, lat, lng] = line.split(',');
+            if (index === 0 || !code) {
+              return;
+            }
+            master[`code=${code}`] = {
+              latlng: `${lat},${lng}`,
+              name
+            };
+          });
+          jsdom.env({
+            url: targetUrl,
+            scripts: ['http://code.jquery.com/jquery.js'],
+            done: (err, window) => {
+              if (err) {
+                callback();
                 return;
               }
-              master[`code=${code}`] = {
-                latlng: `${lat},${lng}`,
-                name
-              };
-            });
-            jsdom.env({
-              url: targetUrl,
-              scripts: ['http://code.jquery.com/jquery.js'],
-              done: (err, window) => {
-                if (err) {
-                  callback();
-                  return;
-                }
-                const $ = window.$;
-                const spots = $('.set-in').map((index, item) => ({
-                  name: $(item).text(),
-                  pref: prefs[Number(ba) - 1],
-                  latlng: master[$(item).attr('id')] ? master[$(item).attr('id')].latlng : null,
-                })).get().filter(item => item.latlng);
-                const dates = $('.tbl01.mb10').map((index, table) => ({
-                  start: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(0)').text()}`, 'YYYY/M/D').format('YYYY-MM-DD'),
-                  max: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(1)').text()}`, 'YYYY/M/D').format('YYYY-MM-DD'),
-                  end: moment(`${moment().year()}/${$(table).find('tr:eq(1) td:eq(1)').text()}`, 'YYYY/M/D').add(3, 'days').format('YYYY-MM-DD'),
-                })).get();
-                callback(err, _.merge(spots, dates));
-              }
-            });
-          } catch (err) {
-            callback();
-          }
+              const $ = window.$;
+              const spots = $('#list a')
+                .map((index, item) => {
+                  const key = $(item)
+                    .attr('href')
+                    .split('?')[1]
+                    .split('&')[0];
+                  const startMonthAndDate = $(item)
+                    .find('.day .col span')
+                    .text();
+                  const endMonthAndDate = $(item)
+                    .find('.day p:eq(1) span')
+                    .text();
+                  const start = moment(`${moment().year()}年${startMonthAndDate}`, 'YYYY年M月D日').format('YYYY-MM-DD');
+                  const max = moment(`${moment().year()}年${endMonthAndDate}`, 'YYYY年M月D日').format('YYYY-MM-DD');
+                  return {
+                    name: master[key] ? master[key].name : null,
+                    pref: prefs[Number(ba) - 1],
+                    latlng: master[key] ? master[key].latlng : null,
+                    start,
+                    max,
+                    end: moment(max, 'YYYY-MM-DD')
+                      .add(3, 'days')
+                      .format('YYYY-MM-DD')
+                  };
+                })
+                .get()
+                .filter(item => item.latlng);
+              callback(err, spots);
+            }
+          });
+        } catch (err) {
+          callback();
         }
-      );
+      });
   },
   fireworks: (targetUrl, callback) => {
     try {
@@ -164,44 +179,59 @@ const sites = {
             return;
           }
           const $ = window.$;
-          const spots = $('.list01 a').map((index, elem) => {
-            const $this = $(elem);
-            const dateMatched = $this.find('.search_result_date').text().match(/(\d\d\d\d)年(\d+)月(\d+)日/);
-            const date = moment(`${dateMatched[1]}/${dateMatched[2]}/${dateMatched[3]}`, 'YYYY/M/D').format('YYYY-MM-DD');
-            const shots = $this.find('.search_result_other_info_uchiage_num').text().match(/(\d+)?万?(\d+)発/);
-            return {
-              pref: '',
-              title: $this.find('.search_result_spot_name').text(),
-              name: $this.find('.search_result_spot_place').text(),
-              start: date,
-              max: date,
-              end: date,
-              link: `https://hanabi.walkerplus.com${$this.attr('href')}map.html`,
-              strength: (shots ? Number(`${!shots[2] ? shots[1] * 10000 : shots[1]}${shots[2]}`) : 2000) / 50
-            };
-          })
-          .get();
+          const spots = $('.list01 a')
+            .map((index, elem) => {
+              const $this = $(elem);
+              const dateMatched = $this
+                .find('.search_result_date')
+                .text()
+                .match(/(\d\d\d\d)年(\d+)月(\d+)日/);
+              const date = moment(`${dateMatched[1]}/${dateMatched[2]}/${dateMatched[3]}`, 'YYYY/M/D').format(
+                'YYYY-MM-DD'
+              );
+              const shots = $this
+                .find('.search_result_other_info_uchiage_num')
+                .text()
+                .match(/(\d+)?万?(\d+)発/);
+              return {
+                pref: '',
+                title: $this.find('.search_result_spot_name').text(),
+                name: $this.find('.search_result_spot_place').text(),
+                start: date,
+                max: date,
+                end: date,
+                link: `https://hanabi.walkerplus.com${$this.attr('href')}map.html`,
+                strength: (shots ? Number(`${!shots[2] ? shots[1] * 10000 : shots[1]}${shots[2]}`) : 2000) / 50
+              };
+            })
+            .get();
 
-          mapSeries(spots, (spot, mapcallback) => {
-            jsdom.env({
-              url: spot.link,
-              scripts: ['http://code.jquery.com/jquery.js'],
-              done: (maperr, mapwindow) => {
-                if (maperr) {
-                  mapcallback(maperr);
-                  return;
+          mapSeries(
+            spots,
+            (spot, mapcallback) => {
+              jsdom.env({
+                url: spot.link,
+                scripts: ['http://code.jquery.com/jquery.js'],
+                done: (maperr, mapwindow) => {
+                  if (maperr) {
+                    mapcallback(maperr);
+                    return;
+                  }
+                  const map$ = mapwindow.$;
+                  const latlng = querystring
+                    .parse(url.parse(map$('.detail_cont iframe').attr('src')).query)
+                    .q.substr(1);
+                  mapcallback(null, {
+                    ...spot,
+                    latlng
+                  });
                 }
-                const map$ = mapwindow.$;
-                const latlng = querystring.parse(url.parse(map$('.detail_cont iframe').attr('src')).query).q.substr(1);
-                mapcallback(null, {
-                  ...spot,
-                  latlng
-                });
-              }
-            });
-          }, (_err, _spots) => {
-            callback(_err, _spots);
-          });
+              });
+            },
+            (_err, _spots) => {
+              callback(_err, _spots);
+            }
+          );
         }
       });
     } catch (err) {
@@ -224,26 +254,38 @@ const sites = {
             return;
           }
           const $ = window.$;
-          const spots = $('.segment').map((index, item) => {
-            const dates = $(item).find('.data')
-                                 .text()
-                                 .replace('見ごろ予想：', '')
-                                 .replace(/月上旬/g, '/5')
-                                 .replace(/月中旬/g, '/15')
-                                 .replace(/月下旬/g, '/25')
-                                 .split('～');
-            $(item).find('.name span').remove();
-            const start = moment(`${moment().year()}/${dates[0]}`, 'YYYY/M/D');
-            const end = moment(`${moment().year()}/${dates[1]}`, 'YYYY/M/D');
-            return {
-              name: _.trim($(item).find('.name').text()),
-              pref: _.trim($(item).find('.address').text()),
-              start: start.format('YYYY-MM-DD'),
-              max: start.add(end.diff(start, 'days') / 2, 'days').format('YYYY-MM-DD'),
-              end: end.format('YYYY-MM-DD'),
-            };
-          })
-          .get();
+          const spots = $('.segment')
+            .map((index, item) => {
+              const dates = $(item)
+                .find('.data')
+                .text()
+                .replace('見ごろ予想：', '')
+                .replace(/月上旬/g, '/5')
+                .replace(/月中旬/g, '/15')
+                .replace(/月下旬/g, '/25')
+                .split('～');
+              $(item)
+                .find('.name span')
+                .remove();
+              const start = moment(`${moment().year()}/${dates[0]}`, 'YYYY/M/D');
+              const end = moment(`${moment().year()}/${dates[1]}`, 'YYYY/M/D');
+              return {
+                name: _.trim(
+                  $(item)
+                    .find('.name')
+                    .text()
+                ),
+                pref: _.trim(
+                  $(item)
+                    .find('.address')
+                    .text()
+                ),
+                start: start.format('YYYY-MM-DD'),
+                max: start.add(end.diff(start, 'days') / 2, 'days').format('YYYY-MM-DD'),
+                end: end.format('YYYY-MM-DD')
+              };
+            })
+            .get();
           callback(err, spots);
         }
       });
@@ -255,11 +297,7 @@ const sites = {
 
 const crawl = (season, evaluator, type) =>
   new Promise((resolve) => {
-    const famous = [
-      { name: '弘前公園' },
-      { name: '高遠城址公園' },
-      { name: '吉野山' }
-    ];
+    const famous = [{ name: '弘前公園' }, { name: '高遠城址公園' }, { name: '吉野山' }];
     const file = fs.readFileSync(path.resolve(__dirname, `../data/${season}-urls.txt`), 'utf-8');
     mapSeries(file.split('\n'), evaluator, (err, response) => {
       if (err) {
@@ -267,13 +305,18 @@ const crawl = (season, evaluator, type) =>
         return;
       }
       const spots = _.compact(_.flatten(response));
-      mapSeries(spots, (spot, callback) => {
-        const query = `${spot.pref} ${spot.name}`;
-        console.log(`# fetch ${query} in google place API`);
-        request
-          .get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${config.googleapis.key}&language=ja`)
-          .end(
-            (fetchError, json) => {
+      mapSeries(
+        spots,
+        (spot, callback) => {
+          const query = `${spot.pref} ${spot.name}`;
+          console.log(`# fetch ${query} in google place API`);
+          request
+            .get(
+              `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${
+                config.googleapis.key
+              }&language=ja`
+            )
+            .end((fetchError, json) => {
               if (fetchError) {
                 console.error('# fetch error: ', err);
                 setTimeout(() => callback(), 100);
@@ -291,71 +334,70 @@ const crawl = (season, evaluator, type) =>
                 const latlng = `${location.lat},${location.lng}`;
                 const popurarity = spot.popurarity || _.find(famous, { name }) ? 9 : 4;
 
-                const strengths = spot.strength ?
-                  [spot.strength]
-                :
-                  [].concat(
-                    0,
-                    _.times((max - start) + 1, index => (index / (max - start)) * 9),
-                    _.times(end - max, index => 9 - ((index / (end - max)) * 9)),
-                    0,
-                  );
+                const strengths = spot.strength
+                  ? [spot.strength]
+                  : [].concat(
+                      0,
+                      _.times(max - start + 1, index => index / (max - start) * 9),
+                      _.times(end - max, index => 9 - index / (end - max) * 9),
+                      0
+                    );
                 request
                   .post(`https://translation.googleapis.com/language/translate/v2?key=${config.googleapis.key}`)
                   .send({
                     q: [name],
                     target: 'en'
                   })
-                  .end(
-                    (translateError, translated) => {
-                      if (fetchError) {
-                        console.error('# translate error: ', err);
-                        setTimeout(() => callback(), 100);
-                      } else if (!translated.body.data.translations.length) {
-                        console.log(`# translate error: ${spot.name} does not found in translation API`);
-                        setTimeout(() => callback(), 100);
-                      } else {
-                        const translatedName = translated.body.data.translations[0].translatedText;
-                        console.log(`# translate success: req[${name}] res[${translatedName}]`);
-                        remove({ place, type: type.id })
-                          .then(() => {
-                            eachOfSeries(strengths, (strength, index, eachOfCallback) => {
-                              request
-                                .post('https://chaus.herokuapp.com/apis/fs/events')
-                                .send({
-                                  ...spot,
-                                  place,
-                                  name: translatedName,
-                                  latlng: spot.latlng || latlng,
-                                  day: start + index,
-                                  strength: bezier(strengths, (1 / strengths.length) * (index + 1)),
-                                  popurarity,
-                                  type: type.id
-                                })
-                                .set('Accept', 'application/json')
-                                .end(() => eachOfCallback());
-                            }, () => {
-                              callback();
-                            });
+                  .end((translateError, translated) => {
+                    if (fetchError) {
+                      console.error('# translate error: ', err);
+                      setTimeout(() => callback(), 100);
+                    } else if (!translated.body.data.translations.length) {
+                      console.log(`# translate error: ${spot.name} does not found in translation API`);
+                      setTimeout(() => callback(), 100);
+                    } else {
+                      const translatedName = translated.body.data.translations[0].translatedText;
+                      console.log(`# translate success: req[${name}] res[${translatedName}]`);
+                      remove({ place, type: type.id }).then(() => {
+                        eachOfSeries(
+                          strengths,
+                          (strength, index, eachOfCallback) => {
+                            request
+                              .post('https://chaus.herokuapp.com/apis/fs/events')
+                              .send({
+                                ...spot,
+                                place,
+                                name: translatedName,
+                                latlng: spot.latlng || latlng,
+                                day: start + index,
+                                strength: bezier(strengths, 1 / (strengths.length * (index + 1))),
+                                popurarity,
+                                type: type.id
+                              })
+                              .set('Accept', 'application/json')
+                              .end(() => eachOfCallback());
+                          },
+                          () => {
+                            callback();
                           }
                         );
-                      }
+                      });
                     }
-                  );
+                  });
               }
-            }
-          );
-      }, () => {
-        queued = false;
-        resolve();
-      });
+            });
+        },
+        () => {
+          queued = false;
+          resolve();
+        }
+      );
     });
   });
 
 export default function ({ app }) {
   app.get('/events', (req, res) => {
-    getAll()
-      .then(items => res.send({ items }));
+    getAll().then(items => res.send({ items }));
   });
   app.get('/trends', (req, res) => {
     if (req.query.place) {
@@ -363,31 +405,36 @@ export default function ({ app }) {
         getAll().then((items) => {
           const type = _.find(types, { id: req.query.type });
           res.send({
-            items: items
-                    .filter(item => item.place === req.query.place && item.type === type.id)
-                    .map(item => ({
-                      name: item.name,
-                      day: item.day,
-                      date: moment().dayOfYear(item.day).format('YYYY-MM-DD'),
-                      [item.type]: item.strength,
-                      type: item.type,
-                      strength: item.strength,
-                    }))
+            items: items.filter(item => item.place === req.query.place && item.type === type.id).map(item => ({
+              name: item.name,
+              day: item.day,
+              date: moment()
+                .dayOfYear(item.day)
+                .format('YYYY-MM-DD'),
+              [item.type]: item.strength,
+              type: item.type,
+              strength: item.strength
+            }))
           });
         });
       });
     } else {
       getTypes().then((types) => {
-        const defaults = types.reduce((reduced, type) => ({
-          ...reduced,
-          [type.id]: 0
-        }), {});
+        const defaults = types.reduce(
+          (reduced, type) => ({
+            ...reduced,
+            [type.id]: 0
+          }),
+          {}
+        );
         getAll().then((items) => {
           const [nelat, nelng] = (req.query.ne || '').split(',').map(num => Number(num));
           const [swlat, swlng] = (req.query.sw || '').split(',').map(num => Number(num));
           const trends = _.times(365, index => ({
             day: index + 1,
-            date: moment().dayOfYear(index + 1).format('YYYY-MM-DD'),
+            date: moment()
+              .dayOfYear(index + 1)
+              .format('YYYY-MM-DD'),
             strength: 0,
             ...defaults
           }));
@@ -395,11 +442,7 @@ export default function ({ app }) {
           items.forEach((item) => {
             const day = _.find(trends, { day: item.day });
             const [lat, lng] = item.latlng.split(',').map(num => Number(num));
-            if (day &&
-                lat <= nelat &&
-                lat >= swlat &&
-                lng <= nelng &&
-                lng >= swlng) {
+            if (day && lat <= nelat && lat >= swlat && lng <= nelng && lng >= swlng) {
               day[item.type] += item.strength;
               day.type = item.type;
               day.strength += item.strength;
@@ -421,9 +464,7 @@ export default function ({ app }) {
     queued = true;
     res.send({ msg: 'crawling started' });
     getTypes().then((types) => {
-      types.map(item =>
-        crawl(item.name, sites[item.name], item)
-      );
+      types.map(item => crawl(item.name, sites[item.name], item));
     });
   });
 }

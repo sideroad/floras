@@ -34,7 +34,6 @@ class Home extends Component {
       opened: false,
       graphType: 'point',
     };
-    this.idle = true;
     autoBind(this);
   }
 

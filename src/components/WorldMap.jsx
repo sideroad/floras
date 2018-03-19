@@ -10,7 +10,6 @@ class WorldMap extends Component {
     if (__SERVER__) {
       return (<div />);
     }
-
     const layers = this.props.graphType === 'point' ? [
       new ScatterplotLayer({
         id: 'event',
