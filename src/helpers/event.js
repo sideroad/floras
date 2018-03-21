@@ -348,7 +348,7 @@ const crawl = (season, evaluator, type) =>
                                 name: translatedName,
                                 latlng: spot.latlng || latlng,
                                 day: start + index,
-                                strength: bezier(strengths, 1 / (strengths.length * (index + 1))),
+                                strength: bezier(strengths, 1 / strengths.length * (index + 1)),
                                 popurarity,
                                 type: type.id
                               })
