@@ -80,19 +80,19 @@ const cachedRequest = apiUrl =>
   });
 
 export function getTypes() {
-  return cachedRequest('https://chaus.herokuapp.com/apis/fs/types?limit=100').then(res => res.body.items);
+  return cachedRequest('https://chaus.now.sh/apis/fs/types?limit=100').then(res => res.body.items);
 }
 
 const getAll = () =>
-  cachedRequest('https://chaus.herokuapp.com/apis/fs/events?limit=1000000').then(res =>
+  cachedRequest('https://chaus.now.sh/apis/fs/events?limit=1000000').then(res =>
     res.body.items.map(item => ({ ...item, type: item.type.id }))
   );
 
 const remove = ({ place, type }) =>
-  request('DELETE', `https://chaus.herokuapp.com/apis/fs/events?place=${place}&type=${type}`);
+  request('DELETE', `https://chaus.now.sh/apis/fs/events?place=${place}&type=${type}`);
 
 export function get({ place, type }) {
-  return request(`https://chaus.herokuapp.com/apis/fs/events?limit=1&place=${place}&type=${type}`).then(
+  return request(`https://chaus.now.sh/apis/fs/events?limit=1&place=${place}&type=${type}`).then(
     res => res.body.items.map(item => ({ ...item, type: item.type.id }))[0]
   );
 }
@@ -341,7 +341,7 @@ const crawl = (season, evaluator, type) =>
                           strengths,
                           (strength, index, eachOfCallback) => {
                             request
-                              .post('https://chaus.herokuapp.com/apis/fs/events')
+                              .post('https://chaus.now.sh/apis/fs/events')
                               .send({
                                 ...spot,
                                 place,

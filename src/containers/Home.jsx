@@ -32,7 +32,7 @@ class Home extends Component {
       height: 1,
       dayOfYear: props.dayOfYear,
       opened: false,
-      graphType: 'point',
+      graphType: 'point'
     };
     autoBind(this);
   }
@@ -49,7 +49,7 @@ class Home extends Component {
       //eslint-disable-next-line no-underscore-dangle
       ne: `${bounds._ne.lat},${bounds._ne.lng}`,
       //eslint-disable-next-line no-underscore-dangle
-      sw: `${bounds._sw.lat},${bounds._sw.lng}`,
+      sw: `${bounds._sw.lat},${bounds._sw.lng}`
     });
   }
 
@@ -68,23 +68,27 @@ class Home extends Component {
       const hashedBounds = hash(bounds);
       if (this.hashedBounds !== hashedBounds) {
         this.hashedBounds = hashedBounds;
-        this.context.fetcher.trend.gets({
-          //eslint-disable-next-line no-underscore-dangle
-          ne: `${bounds._ne.lat},${bounds._ne.lng}`,
-          //eslint-disable-next-line no-underscore-dangle
-          sw: `${bounds._sw.lat},${bounds._sw.lng}`,
-        }).then(() => {
-          this.bounds = true;
-        });
+        this.context.fetcher.trend
+          .gets({
+            //eslint-disable-next-line no-underscore-dangle
+            ne: `${bounds._ne.lat},${bounds._ne.lng}`,
+            //eslint-disable-next-line no-underscore-dangle
+            sw: `${bounds._sw.lat},${bounds._sw.lng}`
+          })
+          .then(() => {
+            this.bounds = true;
+          });
       }
     }
   }
 
   onResize() {
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
+    if (typeof window !== 'undefined') {
+      this.setState({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    }
   }
 
   onStartPressDay(delta) {
@@ -125,19 +129,19 @@ class Home extends Component {
     });
   }
   onSelectPlace(item) {
-    this.context.fetcher.place.get({
-      placeid: item.id
-    }).then(
-      (res) => {
+    this.context.fetcher.place
+      .get({
+        placeid: item.id
+      })
+      .then((res) => {
         const location = res.body.result.geometry.location;
         this.props.updateMap({
           ...this.props.mapViewState,
           latitude: location.lat,
           longitude: location.lng,
-          zoom: 13,
+          zoom: 13
         });
-      }
-    );
+      });
   }
 
   onViewportChange(mapViewState) {
@@ -165,7 +169,7 @@ class Home extends Component {
     const dayOfYear = moment(date, 'YYYY-MM-DD').dayOfYear();
     this.setState({
       dayOfYear,
-      opened: false,
+      opened: false
     });
     this.props.setEventDate({ dayOfYear, types: this.props.types });
   }
@@ -193,24 +197,15 @@ class Home extends Component {
   }
 
   render() {
-
     return (
       <div className={styles.container}>
-        <FindPlace
-          places={this.props.places}
-          onChange={this.onChangePlace}
-          onSelect={this.onSelectPlace}
-        />
-        <HeatMapButton
-          filtered={this.state.graphType === 'hexagon'}
-          onClickFilter={this.onClickFilter}
-        />
-        <SideBar
-          push={this.props.push}
-          lang={this.context.lang}
-        />
+        <FindPlace places={this.props.places} onChange={this.onChangePlace} onSelect={this.onSelectPlace} />
+        <HeatMapButton filtered={this.state.graphType === 'hexagon'} onClickFilter={this.onClickFilter} />
+        <SideBar push={this.props.push} lang={this.context.lang} />
         <WorldMap
-          ref={(elem) => { this.worldMap = elem; }}
+          ref={(elem) => {
+            this.worldMap = elem;
+          }}
           mapViewState={this.props.mapViewState}
           width={this.state.width}
           height={this.state.height}
@@ -222,14 +217,15 @@ class Home extends Component {
           eventInitialized={this.props.eventInitialized}
           onRender={this.onRenderWorldMap}
         />
-        <button
-          className={styles.date}
-          onClick={this.handleOpen}
-        >
-          {moment().dayOfYear(this.state.dayOfYear).format('MMM D')}
+        <button className={styles.date} onClick={this.handleOpen}>
+          {moment()
+            .dayOfYear(this.state.dayOfYear)
+            .format('MMM D')}
         </button>
         <ModalCalendar
-          date={moment().dayOfYear(this.state.dayOfYear).format('YYYY-MM-DD')}
+          date={moment()
+            .dayOfYear(this.state.dayOfYear)
+            .format('YYYY-MM-DD')}
           opened={this.state.opened}
           items={this.props.trends}
           types={this.props.types}
@@ -257,7 +253,9 @@ class Home extends Component {
         <Slider
           step={1}
           min={1}
-          max={moment().endOf('year').dayOfYear()}
+          max={moment()
+            .endOf('year')
+            .dayOfYear()}
           value={this.state.dayOfYear}
           className={`${styles.slider} ${this.props.trendLoading ? styles.hide : styles.show}`}
           onChange={this.onChangeSlider}
@@ -296,17 +294,17 @@ Home.propTypes = {
   trendLoading: PropTypes.bool.isRequired,
   types: PropTypes.object.isRequired,
   setEventDate: PropTypes.func.isRequired,
-  filtered: PropTypes.array.isRequired,
+  filtered: PropTypes.array.isRequired
 };
 
 Home.defaultProps = {
-  mapViewState: {},
+  mapViewState: {}
 };
 
 Home.contextTypes = {
   lang: PropTypes.string.isRequired,
   fetcher: PropTypes.object.isRequired,
-  i18n: PropTypes.object.isRequired,
+  i18n: PropTypes.object.isRequired
 };
 
 const connected = connect(
@@ -320,19 +318,19 @@ const connected = connect(
     idle: state.map.idle,
     dayOfYear: state.date.dayOfYear,
     types: state.type.items,
-    filtered: state.event.filtered,
+    filtered: state.event.filtered
   }),
   { eventInitialized, updateMap, idleMap, setDate, setEventDate, push }
 )(Home);
 
-const asynced = asyncConnect([{
-  promise: ({ helpers: { fetcher } }) => {
-    const promises = [];
-    promises.push(
-      fetcher.type.gets()
-    );
-    return Promise.all(promises);
+const asynced = asyncConnect([
+  {
+    promise: ({ helpers: { fetcher } }) => {
+      const promises = [];
+      promises.push(fetcher.type.gets());
+      return Promise.all(promises);
+    }
   }
-}])(connected);
+])(connected);
 
 export default asynced;

@@ -21,7 +21,7 @@ module.exports = Object.assign({
   host: process.env.HOST || 'localhost',
   port: Number(process.env.PORT || 3000),
   api: {
-    host: 'chaus.herokuapp.com',
+    host: 'chaus.now.sh',
     port: Number('443')
   },
   flickr: {

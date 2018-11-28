@@ -1,4 +1,3 @@
-
 const GETS_START = 'type/GETS_START';
 const GETS_SUCCESS = 'type/GETS_SUCCESS';
 const GETS_FAIL = 'type/GETS_FAIL';
@@ -20,15 +19,17 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        items: action.res.body.items.reduce((items, item) =>
-          ({
+        items: action.res.body.items.reduce(
+          (items, item) => ({
             ...items,
             [item.id]: {
               ...item,
-              color: item.color.split(','),
-              light: item.light.split(','),
+              color: item.color.split(',').map(code => Number(code)),
+              light: item.light.split(',').map(code => Number(code))
             }
-          }), {})
+          }),
+          {}
+        )
       };
     case GETS_FAIL:
       return {

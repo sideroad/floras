@@ -3,7 +3,7 @@ import config from './config';
 export default {
   type: {
     gets: {
-      url: 'https://chaus.herokuapp.com/apis/fs/types',
+      url: 'https://chaus.now.sh/apis/fs/types',
       method: 'GET',
       cache: {
         client: true,
