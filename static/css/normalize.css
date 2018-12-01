@@ -440,3 +440,7 @@ a{
     font-size: 0.8em;
   }
 }
+
+html, body {
+  -webkit-tap-highlight-color: transparent;
+}

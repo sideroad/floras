@@ -7,6 +7,8 @@ import { push } from 'react-router-redux';
 import { asyncConnect } from 'redux-connect';
 import hash from 'object-hash';
 import autoBind from 'react-autobind';
+import ClickNHold from 'react-click-n-hold';
+
 // import update from 'immutability-helper';
 import FindPlace from '../components/FindPlace';
 import HeatMapButton from '../components/HeatMapButton';
@@ -34,6 +36,7 @@ class Home extends Component {
       opened: false,
       graphType: 'point'
     };
+    this.hasTapEvent = typeof window !== 'undefined' && 'ontouchstart' in window;
     autoBind(this);
   }
 
@@ -95,20 +98,30 @@ class Home extends Component {
     if (this.keepPressId) {
       clearInterval(this.keepPressId);
     }
-    this.keepPressId = setInterval(() => this.onPressDay(delta), 200);
+    this.keepPressId = setInterval(() => {
+      this.onPressDay(delta);
+    }, 300);
   }
 
   onEndPressDay() {
-    clearInterval(this.keepPressId);
+    if (this.keepPressId) {
+      clearInterval(this.keepPressId);
+    }
     this.keepPressId = undefined;
   }
 
-  onStartPressPrevDay() {
+  onStartPressPrevDay(e) {
+    if (this.hasTapEvent && e.type === 'mousedown') {
+      return;
+    }
     this.onPressDay(-1);
     this.onStartPressDay(-1);
   }
 
-  onStartPressNextDay() {
+  onStartPressNextDay(e) {
+    if (this.hasTapEvent && e.type === 'mousedown') {
+      return;
+    }
     this.onPressDay(1);
     this.onStartPressDay(1);
   }
@@ -240,16 +253,11 @@ class Home extends Component {
             types={this.props.types}
           />
         </div>
-        <button
-          className={styles.prevDay}
-          onMouseDown={this.onStartPressPrevDay}
-          onMouseMove={this.onEndPressDay}
-          onMouseUp={this.onEndPressDay}
-          onTouchStart={this.onStartPressPrevDay}
-          onTouchEnd={this.onEndPressDay}
-        >
-          <i className={`${fa.fa} ${fa['fa-angle-left']}`} />
-        </button>
+        <ClickNHold time={60} onStart={this.onStartPressPrevDay} onEnd={this.onEndPressDay}>
+          <button className={styles.prevDay}>
+            <i className={`${fa.fa} ${fa['fa-angle-left']}`} />
+          </button>
+        </ClickNHold>
         <Slider
           step={1}
           min={1}
@@ -261,16 +269,11 @@ class Home extends Component {
           onChange={this.onChangeSlider}
           onAfterChange={this.onAfterChangeSlider}
         />
-        <button
-          className={styles.nextDay}
-          onMouseDown={this.onStartPressNextDay}
-          onMouseMove={this.onEndPressDay}
-          onMouseUp={this.onEndPressDay}
-          onTouchStart={this.onStartPressNextDay}
-          onTouchEnd={this.onEndPressDay}
-        >
-          <i className={`${fa.fa} ${fa['fa-angle-right']}`} />
-        </button>
+        <ClickNHold time={60} onStart={this.onStartPressNextDay} onEnd={this.onEndPressDay}>
+          <button className={styles.nextDay}>
+            <i className={`${fa.fa} ${fa['fa-angle-right']}`} />
+          </button>
+        </ClickNHold>
         {this.props.children ? this.props.children : ''}
       </div>
     );

@@ -3,7 +3,6 @@
  */
 import 'babel-polyfill';
 import { client } from 'koiki';
-import 'react-fastclick';
 
 import routes from './routes';
 import urls from './urls';
@@ -15,3 +14,8 @@ client({
   routes,
   isDevelopment: __DEVELOPMENT__
 });
+window.oncontextmenu = function (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+};
