@@ -14,7 +14,7 @@ client({
   routes,
   isDevelopment: __DEVELOPMENT__
 });
-window.oncontextmenu = function (event) {
+window.oncontextmenu = function onContextMenu(event) {
   event.preventDefault();
   event.stopPropagation();
   return false;
