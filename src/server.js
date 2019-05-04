@@ -51,13 +51,13 @@ server({
   },
   manifest: {
     name: config.app.title,
+    short_name: config.app.title,
     description: config.app.description,
-    background_color: '#171917',
+    background_color: '#171917'
   }
 });
 
 if (config.port) {
-
   new http.Server(app).listen(config.port, (err) => {
     if (err) {
       console.error(err);
