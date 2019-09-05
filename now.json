@@ -1,8 +1,35 @@
 {
-  "version": 1,
-  "type": "docker",
-  "regions": ["sfo1"],
-  "features": {
-    "cloud": "v1"
-  }
+  "name": "floras",
+  "version": 2,
+  "alias": "floras.now.sh",
+  "builds": [
+    { "src": "package.json", "use": "@now/next" },
+    { "src": "server/*.js", "use": "@now/node@canary", "config": { "maxLambdaSize": "100mb" } }
+  ],
+  "routes": [
+    {
+      "src": "/trends",
+      "dest": "/server/trend.js"
+    },
+    {
+      "src": "/events",
+      "dest": "/server/event.js"
+    },
+    {
+      "src": "/events-crawler",
+      "dest": "/server/events-crawler.js"
+    },
+    {
+      "src": "/bff/photos",
+      "dest": "/server/bff-photos.js"
+    },
+    {
+      "src": "/bff/google/maps/api/place/(.*)",
+      "dest": "/server/bff-proxy.js"
+    },
+    {
+      "src": "/sw-dist.js",
+      "dest": "/static/sw-dist.js"
+    }
+  ]
 }

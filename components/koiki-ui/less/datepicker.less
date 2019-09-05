@@ -1,0 +1,37 @@
+@import "variables.less";
+@import "button.less";
+
+.tether {
+  z-index: 9999;
+}
+
+.button {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.date {
+  color: @sumi;
+  font-size: 0.8em;
+}
+
+.placeholder {
+  color: @hai;
+  font-size: 0.8em;
+}
+
+.calendar {
+  margin-top: 5px;
+}
+
+.opened {
+  animation: opened 0.1s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.closed {
+  animation: closed 0.1s ease-out;
+  animation-fill-mode: forwards;
+  display: none;
+}

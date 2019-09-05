@@ -1,0 +1,28 @@
+@import "variables.less";
+
+.checkbox {
+  display: none;
+}
+
+.label {
+  width: 1.5em;
+  height: 1.5em;
+  border: 3px solid @primary-border-color;
+  border-radius: 3px;
+  background-color: #FFFFFC;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.checkbox:before {
+  content: '';
+  font-size: 2em;
+  color: #38A1DB;
+}
+
+.checkbox:checked:before {
+  content: '✓';
+  color: #38A1DB;
+}

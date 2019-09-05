@@ -1,0 +1,211 @@
+@import "variables.less";
+
+.photoViewer {
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: @sumi;
+  transition-duration: 0.25s;
+  transition-property: transform;
+  transform: translateY(100%);
+}
+
+.open {
+  transform: translateY(0%);
+}
+
+.photo {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 75%;
+  background-size: contain;
+  background-position: center;
+  background-color: none;
+  background-repeat: no-repeat;
+}
+
+.info {
+  position: absolute;
+  top: 85%;
+  left: 15%;
+  color: @gofun;
+  font-family: 'Tangerine';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  font-size: 1.5em;
+}
+
+.info p{
+  height: 1.5em;
+}
+
+.info span {
+  vertical-align: -webkit-baseline-middle;
+}
+
+.link {
+  color: @maso;
+  outline: none;
+  text-align: left;
+}
+
+.license span{
+  text-align: right;
+}
+
+.animate {
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+.leftOut{
+  animation-name: left-out;
+}
+.rightOut{
+  animation-name: right-out;
+}
+.leftIn{
+  animation-name: left-in;
+}
+.rightIn{
+  animation-name: right-in;
+}
+
+.closeButton,
+.prevButton,
+.nextButton {
+  position: absolute;
+  color: @maso;
+}
+
+.closeButton {
+  top: 0.5em;
+  right: 2.5%;
+}
+
+.prevButton {
+  top: 45%;
+  transform: translateY(-50%);
+  left: 2.5%;
+}
+.nextButton {
+  top: 45%;
+  transform: translateY(-50%);
+  right: 2.5%;
+}
+
+.infotip {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .photoViewer {
+    width: 100vw;
+    height: 100vh;
+    transform: translateY(100vh);
+  }
+  .open {
+    transform: translateY(0%);
+  }
+  .photo {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .closeButton,
+  .prevButton,
+  .nextButton {
+    display: none;
+  }
+
+  .infotip {
+    display: block;
+    position: absolute;
+    top: 2%;
+    right: 2.5%;
+    font-size: 2.5em;
+    color: @gofun;
+    height: 1.5em;
+    background: none;
+    border: none;
+  }
+
+  .info {
+    top: 0;
+    left: 0;
+    width: 90%;
+    padding-right: 5%;
+    padding-left: 5%;
+    background-color: @sumi;
+    transition-duration: 0.25s;
+    transition-property: transform;
+    align-items: flex-start;
+  }
+
+  .open .info{
+    transform: translateY(-100%);
+  }
+
+  .info p{
+    height: auto;
+  }
+
+  .info.display {
+    transform: translateY(0%);
+  }
+}
+
+
+@keyframes left-out {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.75) translateX(-50%);
+  }
+  100% {
+    transform: scale(0.75) translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes right-out {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.75) translateX(50%);
+  }
+  100% {
+    transform: scale(0.75) translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes left-in {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes right-in {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
