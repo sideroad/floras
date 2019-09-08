@@ -1,0 +1,160 @@
+@import "variables.less";
+
+.logo,
+.closeButton {
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-color: initial;
+  border: none;
+  outline: none;
+}
+.logo {
+  background-image: url("/static/images/logo.png");
+  width: 3.45em;
+  height: 3.45em;
+  &.open {
+    z-index: 1;
+  	animation: open 0.3s ease-out;
+  	animation-fill-mode: forwards;
+    opacity: 0;
+  }
+  &.close {
+    z-index: 2;
+    animation: close 0.3s ease-out;
+  	animation-fill-mode: forwards;
+    opacity: 1;
+  }
+}
+
+.container {
+  position: fixed;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  font-family: 'Tangerine';
+  transition-duration: 0.2s;
+  transition-property: right;
+  z-index: 1;
+  background-color: @sumi;
+  color: @gofun;
+  padding-top: 25px;
+  &.open {
+    right: 0;
+    box-shadow: @shadow;
+  }
+  &.close {
+    right: -30%;
+  }
+}
+
+.list {
+  list-style: none;
+  width: 100%;
+  padding: 0;
+}
+
+.item {
+  width: 100%;
+  margin: 0;
+}
+
+.link {
+  color: @maso;
+  padding: 0.5em 0;
+  font-size: 2.5em;
+  text-align: center;
+  width: 100%;
+  display: block;
+  transition-duration: 0.2s;
+  transition-property: color, background-color;
+}
+
+.link:hover{
+  background-color: @maso;
+  color: @sumi;
+}
+
+.title {
+  margin: 0 0 0 16.5%;
+  font-size: 4em;
+  font-weight: normal;
+  img {
+    width: 0.9em;
+    height: 0.9em;
+  }
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: @gofun;
+  transition-duration: 0.2s;
+  transition-property: opacity;
+  &.open {
+    z-index: 1;
+    opacity: 0.2;
+  }
+  &.close {
+    z-index: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes open {
+  0% {
+    transform: rotateX(0deg);
+    z-index: 2;
+    opacity: 1;
+  }
+  50% {
+    transform: rotateX(90deg);
+    z-index: 1;
+  }
+  100% {
+    transform: rotateX(0deg);
+    z-index: 1;
+    opacity: 0;
+  }
+}
+
+@keyframes close {
+  0% {
+    transform: rotateX(0deg);
+    z-index: 1;
+    opacity: 0;
+  }
+  50% {
+    transform: rotateX(90deg);
+    z-index: 2;
+  }
+  100% {
+    transform: rotateX(0deg);
+    z-index: 2;
+    opacity: 1;
+  }
+}
+
+@media(max-width:1024px) {
+  .container {
+    width: 50%;
+    &.close {
+      right: -50%;
+    }
+  }
+}
+
+@media(max-width:768px) {
+  .container {
+    width: 100%;
+    &.close {
+      right: -100%;
+    }
+  }
+}
