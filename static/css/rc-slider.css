@@ -258,3 +258,11 @@
   padding: 2px;
   border-radius: inherit;
 }
+
+
+@media (max-width: 768px) {
+  .rc-slider-handle {
+    height: 39px;
+    margin-top: -30px;
+  }
+}
