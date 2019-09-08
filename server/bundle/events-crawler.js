@@ -2,23 +2,17 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var express = _interopDefault(require('express'));
-var cors = _interopDefault(require('cors'));
-var request = _interopDefault(require('superagent'));
-var _ = _interopDefault(require('lodash'));
 require('jsdom');
+var request = _interopDefault(require('superagent'));
 var fs = _interopDefault(require('fs-extra'));
 var mapSeries = _interopDefault(require('async/mapSeries'));
 var eachOfSeries = _interopDefault(require('async/eachOfSeries'));
+var _ = _interopDefault(require('lodash'));
 var moment = _interopDefault(require('moment'));
 var path = _interopDefault(require('path'));
 require('url');
 var bezier = _interopDefault(require('bezier'));
 require('querystring');
-var matcher = _interopDefault(require('path-to-regexp'));
-var util = _interopDefault(require('util'));
-require('isomorphic-fetch');
-var UrlPattern = _interopDefault(require('url-pattern'));
 
 function normalize(url) {
   let protocol = (url.match(/(http|https)\:\/\//) || [])[1];
@@ -110,11 +104,6 @@ function remove({ place, type }) {
     'DELETE',
     `https://chaus.herokuapp.com/apis/fs/events?place=${place}&type=${type}`
   );
-}
-function get({ place, type }) {
-  return request(
-    `https://chaus.herokuapp.com/apis/fs/events?limit=1&place=${place}&type=${type}`
-  ).then(res => res.body.items.map(item => ({ ...item, type: item.type.id }))[0]);
 }
 
 function crawl(season, evaluator, type) {
@@ -222,149 +211,6 @@ function crawl(season, evaluator, type) {
   });
 }
 
-var bffPhotos = (req, res) => {
-  getTypes().then(types =>
-    get({ place: req.query.place, type: req.query.type }).then((event) => {
-      Promise.all([
-        request.get('https://api.flickr.com/services/rest/').query({
-          method: 'flickr.photos.licenses.getInfo',
-          api_key: config.flickr.key,
-          format: 'json',
-          nojsoncallback: 1,
-        }),
-        request.get('https://api.flickr.com/services/rest/').query({
-          method: 'flickr.photos.search',
-          api_key: config.flickr.key,
-          tags: _.find(types, { id: event.type }).tag,
-          lat: req.query.lat,
-          lon: req.query.lng,
-          radius: 1,
-          radius_units: 'km',
-          extras: 'owner_name,url_z,url_l,license',
-          format: 'json',
-          media: 'photos',
-          nojsoncallback: '1',
-        }),
-      ])
-        .then((responses) => {
-          const [licenses, photos] = responses;
-          if (!photos.body.photos || !photos.body.photos.photo) {
-            res.send({
-              items: [],
-            });
-            return;
-          }
-          res.send({
-            items: photos.body.photos.photo
-              .map(item => ({
-                id: item.id,
-                title: item.title,
-                url: `https://www.flickr.com/photos/${item.owner}/${item.id}`,
-                owner: item.ownername,
-                thumbnail: item.url_z,
-                image: item.url_l,
-                license: _.find(licenses.body.licenses.license, { id: item.license }),
-              }))
-              .filter(item => item.thumbnail && item.image),
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.send({ items: [] });
-        });
-    })
-  );
-};
-
-const fetcher = (options, res, after, logger) => {
-  logger('# Proxing', ...options);
-  fetch(...options)
-    .then(
-      (apiRes) => {
-        if (apiRes.ok) {
-          apiRes
-            .json()
-            .then(json => after(json, converted => res.json(converted)), () => res.json({}));
-        } else {
-          apiRes
-            .json()
-            .then(
-              json => res.status(apiRes.status).json(json),
-              () => res.status(apiRes.status).json({})
-            );
-        }
-      },
-      err => logger('# Fetch Error ', options, err) || res.json(err)
-    )
-    .catch(err => logger('# Unexpected Error ', {}, err) || res.json(err));
-};
-
-function proxy({
-  req,
-  res,
-  protocol,
-  host,
-  prefix,
-  customizer,
-  before = (url, options, cb) => cb([url, options]),
-  after = (json, cb) => cb(json),
-  logger = (title, data, err) => console.log(title, util.inspect(data), util.inspect(err)),
-}) {
-  const apiUri = (req.originalUrl || req.url).replace(new RegExp(prefix), '');
-  const url = `${protocol}://${host}${apiUri}`;
-  const options = [
-    url,
-    {
-      method: req.method,
-      headers: {
-        ...req.headers,
-        host,
-      },
-    },
-  ];
-  if (req.body) {
-    options[1].body = JSON.stringify(req.body);
-  }
-  let customizerBefore;
-  let customizerAfter;
-  let customizerOverride;
-  if (customizer) {
-    const keys = Object.keys(Object.assign({}, req.params)).map(key => ({
-      name: key,
-      prefix: '/',
-      delimiter: '/',
-    }));
-    Object.keys(customizer).some((uri) => {
-      if (matcher(uri, keys).exec(url) && customizer[uri] && customizer[uri][req.method]) {
-        customizerBefore = customizer[uri][req.method].before;
-        customizerAfter = customizer[uri][req.method].after;
-        customizerOverride = customizer[uri][req.method].override;
-        const pattern = new UrlPattern(uri);
-        req.params = pattern.match(url);
-      }
-    });
-  }
-
-  if (customizerOverride) {
-    logger('# Proxing with override', url);
-    customizerOverride(req, res);
-  } else {
-    (customizerBefore || before)(...options, fetchOptions =>
-      fetcher(fetchOptions, res, customizerAfter || after, logger)
-    );
-  }
-}
-
-var bffProxy = (req, res) => {
-  proxy({
-    req,
-    res,
-    protocol: 'https',
-    host: config.googleapis.host,
-    prefix: '/bff/google',
-  });
-};
-
 let queued = false;
 var eventsCrawler = (req, res) => {
   if (queued) {
@@ -378,97 +224,4 @@ var eventsCrawler = (req, res) => {
   });
 };
 
-const cache$1 = {};
-
-function cachedRequest$1(apiUrl) {
-  return new Promise((resolve) => {
-    if (cache$1[apiUrl]) {
-      resolve(cache$1[apiUrl]);
-    } else {
-      request(apiUrl).then((res) => {
-        cache$1[apiUrl] = res;
-        resolve(res);
-      });
-    }
-  });
-}
-function getAll() {
-  return cachedRequest$1('https://chaus.herokuapp.com/apis/fs/events?limit=1000000').then(res =>
-    res.body.items.map(item => ({ ...item, type: item.type.id }))
-  );
-}
-
-function getTypes$1() {
-  return cachedRequest$1('https://chaus.herokuapp.com/apis/fs/types?limit=100').then(
-    res => res.body.items
-  );
-}
-
-var trend = (req, res) => {
-  if (req.query.place) {
-    getTypes$1().then((types) => {
-      getAll().then((items) => {
-        const type = _.find(types, { id: req.query.type });
-        res.send({
-          items: items
-            .filter(item => item.place === req.query.place && item.type === type.id)
-            .map(item => ({
-              name: item.name,
-              day: item.day,
-              date: moment()
-                .dayOfYear(item.day)
-                .format('YYYY-MM-DD'),
-              [item.type]: item.strength,
-              type: item.type,
-              strength: item.strength,
-            })),
-        });
-      });
-    });
-  } else {
-    getTypes$1().then((types) => {
-      const defaults = types.reduce(
-        (reduced, type) => ({
-          ...reduced,
-          [type.id]: 0,
-        }),
-        {}
-      );
-      getAll().then((items) => {
-        const [nelat, nelng] = (req.query.ne || '').split(',').map(num => Number(num));
-        const [swlat, swlng] = (req.query.sw || '').split(',').map(num => Number(num));
-        const trends = _.times(365, index => ({
-          day: index + 1,
-          date: moment()
-            .dayOfYear(index + 1)
-            .format('YYYY-MM-DD'),
-          strength: 0,
-          ...defaults,
-        }));
-
-        items.forEach((item) => {
-          const day = _.find(trends, { day: item.day });
-          const [lat, lng] = item.latlng.split(',').map(num => Number(num));
-          if (day && lat <= nelat && lat >= swlat && lng <= nelng && lng >= swlng) {
-            day[item.type] += item.strength;
-            day.type = item.type;
-            day.strength += item.strength;
-          }
-        });
-
-        res.status(200).json({
-          items: trends,
-        });
-      });
-    });
-  }
-};
-
-const app = express();
-app.use(cors());
-app.use('/trends', trend);
-app.use('/events-crawler', eventsCrawler);
-app.use('/bff/photos', bffPhotos);
-app.use('/bff/google/maps/api/place/', bffProxy);
-
-app.listen(config.port);
+module.exports = eventsCrawler;

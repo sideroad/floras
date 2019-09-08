@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="description" content="floras" />
           <meta charSet="utf-8" />
-          <meta name="theme-color" content="#e6e38e" />
+          <meta name="theme-color" content="#EC6D71" />
           <meta property="og:site_name" content="floras" />
           <meta property="og:image" content={`/static/images/favicon.${ext}`} />
           <meta property="og:locale" content="en_US" />

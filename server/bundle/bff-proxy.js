@@ -1,9 +1,73 @@
-import config from '../config';
+'use strict';
 
-import matcher from 'path-to-regexp';
-import util from 'util';
-import 'isomorphic-fetch';
-import UrlPattern from 'url-pattern';
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var matcher = _interopDefault(require('path-to-regexp'));
+var util = _interopDefault(require('util'));
+require('isomorphic-fetch');
+var UrlPattern = _interopDefault(require('url-pattern'));
+
+function normalize(url) {
+  let protocol = (url.match(/(http|https)\:\/\//) || [])[1];
+  if (/\:443$/.test(url)) {
+    protocol = protocol || 'https';
+  } else {
+    protocol = 'http';
+  }
+  return `${protocol}://${url.replace(/(\:80|\:443)$/, '')}`;
+}
+
+const title = 'flora';
+const description = 'Visualize 4 seasons';
+
+const environment = {
+  development: {
+    isProduction: false,
+    GLOBAL_HOST: 'localhost',
+    GLOBAL_PORT: 5432,
+    HOST: 'localhost',
+    PORT: '5432',
+  },
+  production: {
+    isProduction: true,
+    GLOBAL_HOST: 'floras.now.sh',
+    GLOBAL_PORT: 443,
+  },
+}[process.env.NODE_ENV || 'development'];
+
+const appHost = environment.GLOBAL_HOST;
+const appPort = Number(environment.GLOBAL_PORT || 5432);
+const base = normalize(`${appHost}:${appPort}`);
+
+var config = Object.assign(
+  {
+    host: environment.HOST || 'localhost',
+    port: Number(5432),
+    api: {
+      host: 'chaus.herokuapp.com',
+      port: Number('443'),
+    },
+    flickr: {
+      key: process.env.KOIKI_FLORAS_FLICKR_API_KEY,
+    },
+    googleapis: {
+      key: 'AIzaSyD-cN8kJmyaYkxOfYfda-MC4Llb62LpMOE',
+      host: 'maps.googleapis.com',
+    },
+    mapbox: {
+      token:
+        'pk.eyJ1Ijoic2lkZXJvYWQiLCJhIjoiY2l5ems4dHB0MDQyczJxcDh3Nmhjc2h3eCJ9.4vItskqhevUMLJv2ogNdlA',
+    },
+    app: {
+      base,
+      host: appHost,
+      port: appPort,
+      title,
+      description,
+    },
+  },
+  environment
+);
 
 const fetcher = (options, res, after, logger) => {
   logger('# Proxing', ...options);
@@ -84,7 +148,7 @@ function proxy({
   }
 }
 
-export default (req, res) => {
+var bffProxy = (req, res) => {
   proxy({
     req,
     res,
@@ -93,3 +157,5 @@ export default (req, res) => {
     prefix: '/bff/google',
   });
 };
+
+module.exports = bffProxy;

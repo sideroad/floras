@@ -12,6 +12,7 @@
   "scripts": {
     "start": "next start",
     "build": "next build && node generate-sw.js",
+    "local-server": "rollup server.js -o bundle.js --output.format=cjs && node bundle.js",
     "deploy": "sh deploy.sh",
     "now-build": "next build",
     "dev": "next"

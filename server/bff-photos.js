@@ -28,6 +28,7 @@ export default (req, res) => {
         }),
       ])
         .then((responses) => {
+          console.log(responses, config.flickr.key);
           const [licenses, photos] = responses;
           if (!photos.body.photos || !photos.body.photos.photo) {
             res.send({

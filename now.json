@@ -1,31 +1,40 @@
 {
   "name": "floras",
   "version": 2,
-  "alias": "floras.now.sh",
+  "alias": ["floras.now.sh"],
   "builds": [
     { "src": "package.json", "use": "@now/next" },
-    { "src": "server/*.js", "use": "@now/node@canary", "config": { "maxLambdaSize": "100mb" } }
+    {
+      "src": "server/bundle/*.js",
+      "use": "@now/node@canary",
+      "config": { "maxLambdaSize": "100mb" }
+    }
   ],
+  "build": {
+    "env": {
+      "KOIKI_FLORAS_FLICKR_API_KEY": "@koiki_floras_flickr_api_key"
+    }
+  },
   "routes": [
     {
       "src": "/trends",
-      "dest": "/server/trend.js"
+      "dest": "/server/bundle/trend.js"
     },
     {
       "src": "/events",
-      "dest": "/server/event.js"
+      "dest": "/server/bundle/event.js"
     },
     {
       "src": "/events-crawler",
-      "dest": "/server/events-crawler.js"
+      "dest": "/server/bundle/events-crawler.js"
     },
     {
       "src": "/bff/photos",
-      "dest": "/server/bff-photos.js"
+      "dest": "/server/bundle/bff-photos.js"
     },
     {
       "src": "/bff/google/maps/api/place/(.*)",
-      "dest": "/server/bff-proxy.js"
+      "dest": "/server/bundle/bff-proxy.js"
     },
     {
       "src": "/sw-dist.js",
