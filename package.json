@@ -36,7 +36,7 @@
     "immutable": "^3.7.6",
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^9.12.0",
-    "less": "^3.10.3",
+    "less": "^2.7.3",
     "lodash": "^4.17.2",
     "loop-array-calc": "^1.0.0",
     "luma.gl": "^6.1.0",
@@ -53,14 +53,13 @@
     "react-fastclick": "^2.1.0",
     "react-helmet": "^2.3.1",
     "react-map-gl": "^5.0.10",
-    "react-modal": "^1.7.3",
+    "react-modal": "^3.10.1",
     "react-redux": "^5.0.1",
     "react-swipeable": "^5.4.0",
     "react-tether": "^2.0.3",
     "recharts": "^1.7.1",
     "redis": "^2.6.5",
     "redux": "^3.6.0",
-    "redux-connect": "^3.0.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-router": "1.0.0-beta5",
     "serve-favicon": "^2.3.0",
@@ -69,16 +68,14 @@
     "url-pattern": "^1.0.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
     "chai": "^3.3.0",
     "eslint": "^3.6.0",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.4.1",
-    "jest": "^18.0.0",
-    "jsdom": "^9.12.0",
-    "react-addons-test-utils": "^15.4.2"
+    "jest": "^25.0.0",
+    "jsdom": "^9.12.0"
   },
   "engines": {
     "node": "10.13.0"
