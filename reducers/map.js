@@ -14,7 +14,7 @@ const initialState = {
     longitude: 136.00705539354635,
     zoom: 5.2,
     pitch: 40,
-    bearing: 0
+    bearing: 0,
   },
   idle: true,
 };
@@ -34,21 +34,21 @@ export default function reducer(state = initialState, action = {}) {
     case LOAD_START:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
-        items: action.res.items
+        items: action.body.items,
       };
     case LOAD_FAIL:
       return {
         ...state,
         loading: false,
         loaded: false,
-        error: action.error
+        error: action.body,
       };
     default:
       return state;
@@ -58,7 +58,7 @@ export default function reducer(state = initialState, action = {}) {
 export function update(mapViewState) {
   return {
     type: UPDATE,
-    mapViewState
+    mapViewState,
   };
 }
 

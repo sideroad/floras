@@ -1,24 +1,16 @@
 import config from './config';
 
 export default {
-  type: {
-    gets: {
-      url: 'https://chaus.herokuapp.com/apis/fs/types',
-      method: 'GET',
-      cache: {
-        client: true,
-        server: true,
-      },
-    },
-  },
   event: {
     gets: {
       url: '/static/events.json',
       method: 'GET',
-      cache: {
-        client: true,
-        server: true,
-      },
+      cache: true,
+    },
+    types: {
+      url: 'https://chaus.herokuapp.com/apis/fs/types',
+      method: 'GET',
+      cache: true,
     },
   },
   trend: {
@@ -31,18 +23,14 @@ export default {
     gets: {
       url: `${config.app.base}/trends`,
       method: 'GET',
-      cache: {
-        client: true,
-      },
+      cache: true,
     },
   },
   photo: {
     gets: {
       url: `${config.app.base}/bff/photos`,
       method: 'GET',
-      cache: {
-        client: true,
-      },
+      cache: true,
     },
   },
   place: {
@@ -60,9 +48,7 @@ export default {
         key: config.googleapis.key,
         language: 'en',
       },
-      cache: {
-        client: true,
-      },
+      cache: true,
     },
   },
 };

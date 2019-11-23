@@ -75,7 +75,7 @@ Place.getInitialProps = async ({ fetcher, req, store: { dispatch }, query }) => 
     .catch(() => {
       dispatch(transactionEnd());
     });
-  await fetcher.type.gets().catch(() => {
+  await fetcher.event.types().catch(() => {
     dispatch(transactionEnd());
   });
   return {
@@ -84,12 +84,12 @@ Place.getInitialProps = async ({ fetcher, req, store: { dispatch }, query }) => 
 };
 
 const connected = connect(
-  (state, ownProps) => ({
+  state => ({
     name: state.best.item.name,
     best: state.best,
     photos: state.photo.items,
     selected: state.photo.selected,
-    types: state.type.items,
+    types: state.event.types,
   }),
   { selectPhoto }
 )(Place);
