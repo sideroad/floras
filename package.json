@@ -62,10 +62,12 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-router": "1.0.0-beta5",
+    "redux-unfetch": "^1.0.11",
     "serve-favicon": "^2.3.0",
     "superagent": "^3.5.0",
     "superagent-charset": "^1.2.0",
-    "url-pattern": "^1.0.3"
+    "url-pattern": "^1.0.3",
+    "with-redux-store": "^1.0.7"
   },
   "devDependencies": {
     "chai": "^3.3.0",

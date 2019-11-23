@@ -22,7 +22,6 @@ import { update as updateMap, idle as idleMap } from '../reducers/map';
 import { initialized as eventInitialized, setDate as setEventDate } from '../reducers/event';
 import { start as transactionStart } from '../reducers/transaction';
 
-import { set as setDate } from '../reducers/date';
 import uris from '../uris';
 
 const styles = require('../css/home.less');
@@ -30,7 +29,11 @@ const styles = require('../css/home.less');
 // eslint-disable-next-line
 class Index extends Component {
   static async getInitialProps({ fetcher, req }) {
-    await fetcher.type.gets();
+    try {
+      await fetcher.event.types()
+    } catch(e) {
+      console.log(e);
+    };
     return {};
   }
   static contextType = Context;
@@ -52,6 +55,8 @@ class Index extends Component {
       ne: `${bounds._ne.lat},${bounds._ne.lng}`,
       // eslint-disable-next-line no-underscore-dangle
       sw: `${bounds._sw.lat},${bounds._sw.lng}`,
+    }).catch(e => {
+      console.log(e);
     });
   }
 
@@ -156,11 +161,6 @@ class Index extends Component {
     this.setState({ dayOfYear });
     this.props.setEventDate({ dayOfYear, types: this.props.types });
   }
-
-  onAfterChangeSlider(value) {
-    this.props.setDate(value);
-  }
-
   onSelectTrend(dayOfYear) {
     this.setState({ dayOfYear });
     this.props.setEventDate({ dayOfYear, types: this.props.types });
@@ -196,14 +196,14 @@ class Index extends Component {
           onLayerClick={this.onLayerClick}
           eventInitialized={this.props.eventInitialized}
           mapInitialized={map => {
-            this.context.fetcher.event.gets();
+            this.context.fetcher.event.gets().then((res) => console.log(res));
             const bounds = map.getBounds();
             this.context.fetcher.trend.gets({
               // eslint-disable-next-line no-underscore-dangle
               ne: `${bounds._ne.lat},${bounds._ne.lng}`,
               // eslint-disable-next-line no-underscore-dangle
               sw: `${bounds._sw.lat},${bounds._sw.lng}`,
-            });
+            }).catch((...args) => console.log(...args));
             this.map = map;
           }}
           onRender={this.onRenderWorldMap}
@@ -245,7 +245,6 @@ class Index extends Component {
           value={this.state.dayOfYear}
           className={`${styles.slider} ${this.props.trendLoading ? styles.hide : styles.show}`}
           onChange={this.onChangeSlider}
-          onAfterChange={this.onAfterChangeSlider}
         />
         <ClickNHold time={60} onStart={this.onStartPressNextDay} onEnd={this.onEndPressDay}>
           <button className={styles.nextDay}>
@@ -268,8 +267,8 @@ const connected = connect(
     place: state.place.item,
     mapViewState: state.map.mapViewState || {},
     idle: state.map.idle,
-    dayOfYear: state.date.dayOfYear,
-    types: state.type.items,
+    dayOfYear: state.event.dayOfYear,
+    types: state.event.types,
     filtered: state.event.filtered,
     loading:
       state.place.loading ||
@@ -277,7 +276,7 @@ const connected = connect(
       state.photo.loading ||
       state.transaction.loading,
   }),
-  { eventInitialized, updateMap, idleMap, setDate, setEventDate, transactionStart }
+  { eventInitialized, updateMap, idleMap, setEventDate, transactionStart }
 )(Index);
 
 export default connected;

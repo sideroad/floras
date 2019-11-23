@@ -9,6 +9,8 @@ const ui = {
   calendar: require('../css/koiki-ui/calendar.less'),
 };
 
+Modal.setAppElement('#__next');
+
 const ModalCalendar = (props) => {
   const best = _.maxBy(props.items, 'strength') || {};
   const max = best.strength;

@@ -6,28 +6,28 @@ const GETS_FAIL = 'trend/GETS_FAIL';
 const initialState = {
   items: [],
   loaded: false,
-  loading: false
+  loading: false,
 };
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case GETS_START:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case GETS_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
-        items: action.res.body.items
+        items: action.body.items,
       };
     case GETS_FAIL:
       return {
         ...state,
         loading: false,
         loaded: false,
-        error: action.error
+        error: action.body,
       };
     default:
       return state;

@@ -8,29 +8,29 @@ const initialState = {
   item: {},
   items: [],
   loaded: false,
-  loading: false
+  loading: false,
 };
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case GETS_START:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case GETS_SUCCESS:
       return {
         ...state,
         loading: false,
         loaded: true,
-        item: _.maxBy(action.res.body.items, action.values.type) || {},
-        items: action.res.body.items
+        item: _.maxBy(action.body.items, action.values.type) || {},
+        items: action.body.items,
       };
     case GETS_FAIL:
       return {
         ...state,
         loading: false,
         loaded: false,
-        error: action.error
+        error: action.body,
       };
     default:
       return state;
