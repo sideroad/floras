@@ -37,7 +37,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^9.12.0",
     "less": "^2.7.3",
-    "lodash": "^4.17.2",
+    "lodash": "^4.17.19",
     "loop-array-calc": "^1.0.0",
     "luma.gl": "^6.1.0",
     "moment": "^2.10.6",
