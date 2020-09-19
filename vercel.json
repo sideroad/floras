@@ -4,7 +4,7 @@
     "KOIKI_FLORAS_FLICKR_API_KEY": "@koiki_floras_flickr_api_key"
   },
   "functions": {
-    "trends.js": {
+    "pages/api/trends.js": {
       "maxDuration": 10
     }
   }
