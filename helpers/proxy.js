@@ -1,6 +1,6 @@
 import matcher from 'path-to-regexp';
 import util from 'util';
-import 'isomorphic-fetch';
+import 'node-fetch';
 import UrlPattern from 'url-pattern';
 
 const fetcher = (options, res, after, logger) => {

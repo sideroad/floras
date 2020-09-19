@@ -1,4 +1,4 @@
-import { getTypes, getAll, crawl } from '../helpers/event';
+import { getTypes, getAll, crawl } from '../../helpers/event';
 
 let queued = false;
 export default (req, res) => {

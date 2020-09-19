@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript } from 'next/document';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { get } from '../helpers/i18n';
 
 export default class MyDocument extends Document {
@@ -14,12 +14,8 @@ export default class MyDocument extends Document {
     const i18n = get({ headers });
 
     return (
-      <html lang={i18n.lang}>
+      <Html lang={i18n.lang}>
         <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
-          />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="description" content="floras" />
           <meta charSet="utf-8" />
@@ -33,7 +29,7 @@ export default class MyDocument extends Document {
           <meta property="og:creator" content="koiki" />
           <meta property="og:image:width" content="300" />
           <meta property="og:image:height" content="300" />
-          <link rel="manifest" href="/static/manifest.json" />
+          <link rel="manifest" href="/manifest.json" />
           <link rel="icon" href={`/static/images/favicon.${ext}`} />
           <link rel="apple-touch-icon" href={`/static/images/favicon.${ext}`} />
           <link
@@ -67,7 +63,7 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

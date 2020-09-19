@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "env": {
+    "KOIKI_FLORAS_FLICKR_API_KEY": "@koiki_floras_flickr_api_key"
+  }
+}

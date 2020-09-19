@@ -1,9 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
-import App, { Container } from 'next/app';
-import withReduxStore from 'with-redux-store';
-import Fetcher from 'redux-unfetch';
+import App from 'next/app';
+import withReduxStore from '@sideroad/with-redux-store';
+import Fetcher from '@sideroad/redux-fetch';
 import initializeStore from '../reducers/index';
 import { get } from '../helpers/i18n';
 import { Provider as ContextProvider } from '../helpers/context';
@@ -51,22 +51,24 @@ class MyApp extends App {
           fetcher,
         }}
       >
-        <Container>
-          <Provider store={store}>
-            <div className="app">
-              <Head>
-                <title>Feel 4 seasons, Find best date in the place</title>
-              </Head>
-              <Component {...pageProps} />
-              <style jsx>
-                {`
-                  .app {
-                  }
-                `}
-              </style>
-            </div>
-          </Provider>
-        </Container>
+        <Provider store={store}>
+          <div className="app">
+            <Head>
+              <title>Feel 4 seasons, Find best date in the place</title>
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+              />
+            </Head>
+            <Component {...pageProps} />
+            <style jsx>
+              {`
+                .app {
+                }
+              `}
+            </style>
+          </div>
+        </Provider>
       </ContextProvider>
     );
   }

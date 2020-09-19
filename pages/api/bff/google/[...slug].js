@@ -1,8 +1,8 @@
-import config from '../config';
+import config from '../../../../config';
 
 import matcher from 'path-to-regexp';
 import util from 'util';
-import 'isomorphic-fetch';
+import 'node-fetch';
 import UrlPattern from 'url-pattern';
 
 const fetcher = (options, res, after, logger) => {
@@ -90,6 +90,6 @@ export default (req, res) => {
     res,
     protocol: 'https',
     host: config.googleapis.host,
-    prefix: '/bff/google',
+    prefix: '/api/bff/google',
   });
 };

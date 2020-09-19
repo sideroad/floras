@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export default function ({ dates = [], format = 'D MMM', delimiter = ', ', range = ' - ' }) {
+const datesFormat = ({ dates = [], format = 'D MMM', delimiter = ', ', range = ' - ' }) => {
   const normalizes = [];
   dates.forEach((date) => {
     const normalize = normalizes[normalizes.length - 1] || [];
@@ -24,3 +24,4 @@ export default function ({ dates = [], format = 'D MMM', delimiter = ', ', range
     })
     .join(delimiter);
 }
+export default datesFormat;

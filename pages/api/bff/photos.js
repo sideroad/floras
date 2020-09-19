@@ -1,7 +1,7 @@
 import superagent from 'superagent';
 import _ from 'lodash';
-import config from '../config';
-import { get, getTypes } from '../helpers/event';
+import config from '../../../config';
+import { get, getTypes } from '../../../helpers/event';
 
 export default (req, res) => {
   getTypes().then(types =>

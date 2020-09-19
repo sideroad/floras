@@ -15,34 +15,34 @@ export default {
   },
   trend: {
     gets: {
-      url: `${config.app.base}/trends`,
+      url: `${config.app.base}/api/trends`,
       method: 'GET',
     },
   },
   best: {
     gets: {
-      url: `${config.app.base}/trends`,
+      url: `${config.app.base}/api/trends`,
       method: 'GET',
       cache: true,
     },
   },
   photo: {
     gets: {
-      url: `${config.app.base}/bff/photos`,
+      url: `${config.app.base}/api/bff/photos`,
       method: 'GET',
       cache: true,
     },
   },
   place: {
     gets: {
-      url: `${config.app.base}/bff/google/maps/api/place/autocomplete/json`,
+      url: `${config.app.base}/api/bff/google/maps/api/place/autocomplete/json`,
       method: 'GET',
       defaults: {
         key: config.googleapis.key,
       },
     },
     get: {
-      url: `${config.app.base}/bff/google/maps/api/place/details/json`,
+      url: `${config.app.base}/api/bff/google/maps/api/place/details/json`,
       method: 'GET',
       defaults: {
         key: config.googleapis.key,

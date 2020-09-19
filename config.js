@@ -7,9 +7,9 @@ const environment = {
   development: {
     isProduction: false,
     GLOBAL_HOST: 'localhost',
-    GLOBAL_PORT: 5432,
+    GLOBAL_PORT: 3000,
     HOST: 'localhost',
-    PORT: '5432',
+    PORT: '3000',
   },
   production: {
     isProduction: true,
@@ -19,13 +19,13 @@ const environment = {
 }[process.env.NODE_ENV || 'development'];
 
 const appHost = environment.GLOBAL_HOST;
-const appPort = Number(environment.GLOBAL_PORT || 5432);
+const appPort = Number(environment.GLOBAL_PORT || 3000);
 const base = normalize(`${appHost}:${appPort}`);
 
 export default Object.assign(
   {
     host: environment.HOST || 'localhost',
-    port: Number(5432),
+    port: Number(3000),
     api: {
       host: 'chaus.herokuapp.com',
       port: Number('443'),
