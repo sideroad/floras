@@ -41,7 +41,7 @@
     "loop-array-calc": "^1.0.0",
     "luma.gl": "^6.1.0",
     "moment": "^2.10.6",
-    "next": "^9.0.5",
+    "next": "^9.3.2",
     "object-hash": "^1.1.7",
     "path-to-regexp": "^3.0.0",
     "pretty-error": "^1.2.0",
