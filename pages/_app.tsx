@@ -9,7 +9,13 @@ import { get } from '../helpers/i18n';
 import { Provider as ContextProvider } from '../helpers/context';
 import urls from '../urls';
 
-class MyApp extends App {
+interface Props {
+  store: any;
+  headers: any;
+  ext: any;
+}
+
+class MyApp<Props> extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
     const headers = ctx.req ? {
@@ -27,15 +33,12 @@ class MyApp extends App {
     }
     return {
       pageProps,
-      headers: ctx.req ? ctx.req.headers : undefined,
-      ext: /iPhone|iPad/.test(ctx.req ? ctx.req.headers['user-agent'] : navigator.userAgent)
-        ? 'png'
-        : 'webp',
+      headers: ctx.req ? ctx.req.headers : undefined
     };
   }
 
   render() {
-    const { Component, pageProps, store, headers, ext } = this.props;
+    const { Component, pageProps, store, headers } = this.props;
     const i18n = get({ headers });
 
     const fetcher = new Fetcher({
@@ -47,7 +50,6 @@ class MyApp extends App {
       <ContextProvider
         value={{
           i18n,
-          ext,
           fetcher,
         }}
       >

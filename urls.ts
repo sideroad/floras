@@ -1,6 +1,6 @@
 import config from './config';
 
-export default {
+const urls = {
   event: {
     gets: {
       url: '/static/events.json',
@@ -52,3 +52,5 @@ export default {
     },
   },
 };
+
+export default urls;
