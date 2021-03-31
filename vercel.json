@@ -1,11 +1,12 @@
 {
   "version": 2,
+  "regions": ["hnd1"],
   "env": {
     "KOIKI_FLORAS_FLICKR_API_KEY": "@koiki_floras_flickr_api_key"
   },
   "functions": {
     "pages/api/trends.js": {
-      "maxDuration": 10
+      "maxDuration": 60
     }
   }
 }

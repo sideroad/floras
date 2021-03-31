@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
-import App from 'next/app';
+import App, { AppProps } from 'next/app';
 import withReduxStore from '@sideroad/with-redux-store';
 import Fetcher from '@sideroad/redux-fetch';
 import initializeStore from '../reducers/index';
@@ -9,36 +9,14 @@ import { get } from '../helpers/i18n';
 import { Provider as ContextProvider } from '../helpers/context';
 import urls from '../urls';
 
-interface Props {
+interface Props extends AppProps {
   store: any;
   headers: any;
   ext: any;
 }
 
-class MyApp<Props> extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
-    const headers = ctx.req ? {
-      'user-agent': ctx.req.headers['user-agent'],
-      cookie: ctx.req.headers.cookie,
-    } : {};
-    const fetcher = new Fetcher({
-      headers,
-      dispatch: ctx.store.dispatch,
-      urls,
-    });
-
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps({ ...ctx, fetcher });
-    }
-    return {
-      pageProps,
-      headers: ctx.req ? ctx.req.headers : undefined
-    };
-  }
-
-  render() {
-    const { Component, pageProps, store, headers } = this.props;
+function MyApp(props: Props) {
+    const { Component, pageProps, store, headers } = props;
     const i18n = get({ headers });
 
     const fetcher = new Fetcher({
@@ -73,7 +51,26 @@ class MyApp<Props> extends App {
         </Provider>
       </ContextProvider>
     );
+}
+MyApp.getInitialProps = async ({ Component, ctx }) => {
+  let pageProps = {};
+  const headers = ctx.req ? {
+    'user-agent': ctx.req.headers['user-agent'],
+    cookie: ctx.req.headers.cookie,
+  } : {};
+  const fetcher = new Fetcher({
+    headers,
+    dispatch: ctx.store.dispatch,
+    urls,
+  });
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps({ ...ctx, fetcher });
   }
+  return {
+    pageProps,
+    headers: ctx.req ? ctx.req.headers : undefined
+  };
 }
 
 export default withReduxStore(MyApp, initializeStore);

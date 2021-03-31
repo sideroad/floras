@@ -29,7 +29,7 @@ const Offline = props => (
           >
             Reload
           </a>
-          <div style={{ color: theme.color.darkPrimary }} className="pull-to-refresh" href="">
+          <div style={{ color: theme.color.darkPrimary }} className="pull-to-refresh" >
             Pull down to refresh
           </div>
         </div>

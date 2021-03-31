@@ -1,6 +1,7 @@
+import { Urls } from '@sideroad/redux-fetch';
 import config from './config';
 
-const urls = {
+const urls: Urls = {
   event: {
     gets: {
       url: '/static/events.json',

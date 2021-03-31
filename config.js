@@ -13,7 +13,7 @@ const environment = {
   },
   production: {
     isProduction: true,
-    GLOBAL_HOST: 'floras.now.sh',
+    GLOBAL_HOST: 'floras.baccal4.tokyo',
     GLOBAL_PORT: 443,
   },
 }[process.env.NODE_ENV || 'development'];

@@ -1,7 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { get } from '../helpers/i18n';
 
-export default class MyDocument extends Document {
+interface Props {
+  headers: any;
+  ext: any;
+}
+
+export default class MyDocument extends Document<Props> {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
     const ext = /iPhone|iPad/.test(ctx.req.headers['user-agent']) ? 'png' : 'webp';
