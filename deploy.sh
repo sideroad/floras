@@ -13,4 +13,4 @@ rollup server/trend.js -o server/bundle/trend.js --output.format=cjs
 
 now -e KOIKI_FLORAS_FLICKR_API_KEY=@koiki_floras_flickr_api_key
 NEW_URL=`pbpaste`
-now alias ${NEW_URL} floras.baccal4.tokyo
+now alias ${NEW_URL} floras.tokyo
