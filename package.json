@@ -54,7 +54,7 @@
     "react-swipeable": "^6.0.0",
     "react-tether": "^2.0.7",
     "recharts": "^1.8.5",
-    "redis": "^2.6.5",
+    "redis": "^3.1.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "serve-favicon": "^2.3.0",
