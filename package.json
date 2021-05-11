@@ -33,7 +33,7 @@
     "immutable": "^3.7.6",
     "jsdom": "^9.12.0",
     "less": "^3.12.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "loop-array-calc": "^1.0.0",
     "moment": "^2.10.6",
     "next": "^10.0.1",
