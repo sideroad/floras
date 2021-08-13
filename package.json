@@ -36,7 +36,7 @@
     "lodash": "^4.17.19",
     "loop-array-calc": "^1.0.0",
     "moment": "^2.10.6",
-    "next": "^10.0.1",
+    "next": "^11.1.0",
     "node-fetch": "^2.6.1",
     "object-hash": "^1.1.7",
     "path-to-regexp": "^3.0.0",
