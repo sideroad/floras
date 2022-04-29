@@ -20,7 +20,7 @@
     "@sideroad/with-redux-store": "^2.2.4",
     "@zeit/next-less": "^1.0.1",
     "accept-language": "^3.0.18",
-    "async": "^2.0.1",
+    "async": "^2.6.4",
     "babel-polyfill": "^6.3.14",
     "bezier": "^0.1.0",
     "body-parser": "^1.14.2",
