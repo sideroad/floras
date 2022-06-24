@@ -31,7 +31,7 @@
     "deck.gl": "^8.2.8",
     "fs-extra": "^2.0.0",
     "immutable": "^3.7.6",
-    "jsdom": "^9.12.0",
+    "jsdom": "^16.5.0",
     "less": "^3.12.2",
     "lodash": "^4.17.19",
     "loop-array-calc": "^1.0.0",
@@ -70,7 +70,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.15.0",
     "jest": "^25.0.0",
-    "jsdom": "^9.12.0",
+    "jsdom": "^16.5.0",
     "prettier": "^1.18.2",
     "typescript": "^4.0.5"
   },
